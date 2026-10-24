@@ -13,7 +13,7 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function b64u8(b){const s=atob(b),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);return u;}
 function dl(b64,mime,fname){const blob=new Blob([b64u8(b64)],{type:mime});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
 function esc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function showErr(src,o){$('#errTxt').textContent=src+': '+(o.error||'')+(o.trace?'\n\n'+o.trace:'');$('#errPanel').hidden=false;}
+function showErr(src,o){$('#errTxt').textContent=T(src)+': '+translateDiagnostic(o.error||'')+(o.trace?'\n\n'+o.trace:'');$('#errPanel').hidden=false;}
 $('#errClose').onclick=()=>{$('#errPanel').hidden=true;};
 $('#errCopy').onclick=()=>{try{navigator.clipboard.writeText($('#errTxt').textContent);}catch(e){}};
 async function pyCall(name){const args=Array.prototype.slice.call(arguments,1);await sleep(12);
@@ -23,9 +23,10 @@ async function pyCall(name){const args=Array.prototype.slice.call(arguments,1);a
  if(!o.ok){showErr(name,o);throw new Error(o.error||name);}return o;}
 
 /* ---------- arranque ---------- */
-function setBoot(p,msg){$('#bootFill').style.width=p+'%';if(msg)$('#bootMsg').textContent=msg;}
+function setBoot(p,msg){$('#bootFill').style.width=p+'%';if(msg)$('#bootMsg').textContent=T(msg);}
 function bootTail(m){const t=String(m).trim();if(!t)return;const el=$('#bootLog');el.textContent=(el.textContent+'\n'+t).split('\n').slice(-6).join('\n');el.scrollTop=1e9;}
 async function boot(){try{
+ translateDOM();
  if(location.protocol.startsWith('http')) {try { const rr=await fetch('/api/ping'); const p=await rr.json(); nativeMode=p.ok===true; } catch(e){} }
  if(nativeMode){caps.xlsx=true; const p=await pyCall('js_ping'); $('#envChip').textContent='spm1d '+p.spm1d+' · Python local · '+p.engine; $('#boot').remove(); $('#app').hidden=false; await laboratoryReady(); return;}
  if(typeof loadPyodide==='undefined') await new Promise((resolve,reject)=>{const sc=document.createElement('script');sc.src=IDX+'pyodide.js';sc.onload=resolve;sc.onerror=()=>reject(new Error('Pyodide download failed. Use Python local mode or connect to the internet.'));document.head.append(sc);});
@@ -49,7 +50,7 @@ async function boot(){try{
  $('#envChip').textContent='spm1d '+ping.spm1d+' · motor '+ping.engine+(caps.xlsx?' · XLSX ✓':' · solo CSV');
  setBoot(100,'Listo');await sleep(300);
  const b=$('#boot');if(b)b.remove();$('#app').hidden=false; await laboratoryReady();
-}catch(e){const eb=$('#bootErr');eb.hidden=false;eb.textContent='No se pudo iniciar: '+((e&&e.message)?e.message:e)+'\n\nSugerencias:\n· La primera carga requiere conexión a internet (después queda en caché).\n· Recarga con Ctrl+F5.\n· Prueba en Chrome, Edge o Firefox actualizados.\n· Abre la consola (F12) y copia el error si persiste.';console.error(e);}}
+}catch(e){const eb=$('#bootErr');eb.hidden=false;eb.textContent='Unable to start: '+((e&&e.message)?e.message:e)+'\n\nSuggestions:\n· Use the Python launcher for local mode.\n· Browser-only mode needs internet for its first runtime download.\n· Reload with Ctrl+F5.\n· Use a current Chrome, Edge or Firefox.\n· Open the console (F12) and copy the error if it persists.';console.error(e);}}
 
 /* ---------- utilidades de datos ---------- */
 function varLabel(v){const r=((S.p&&S.p.varmap)||[]).find(x=>x.variable===v)||{};return (JES[r.joint]||'—')+'·'+(PES[r.plane]||'—')+' — '+v;}
@@ -154,7 +155,7 @@ function collectCfg(){const p=S.p,d=$('#design').value,probs=[]; if(!p)return {c
  Object.values(slots).filter(v=>v.length>1).forEach(v=>probs.push('Variables duplicadas en una articulación/plano: '+v.join(', ')+'.'));
  const collisions=(p.quality&&p.quality.subject_group_collisions)||[];
  if(collisions.length)probs.push('Un mismo ID aparece en varios grupos: '+collisions.slice(0,8).join(', ')+'.');
- return {cfg:cfg,probs:probs};}
+ return {cfg:cfg,probs:probs.map(translateString)};}
 
 /* ---------- ejecución ---------- */
 function setRun(p,msg){$('#runFill').style.width=p+'%';$('#runMsg').textContent=msg;}
@@ -170,7 +171,7 @@ $('#btnRun').onclick=async()=>{const r=collectCfg(),eb=$('#cfgErr');
    $('#runLog').textContent+=v+'  '+line+'\n';$('#runLog').scrollTop=1e9;}
   setRun(96,'Componiendo tabla y textos…');
   const d=await pyCall('js_run_done');S.d=d;S.cfg=r.cfg;
-  S.title='GaitSPM · '+DESIGNS[r.cfg.design].split(' (')[0]+' · α = '+r.cfg.alpha;
+  S.title='GaitSPM · '+T(DESIGNS[r.cfg.design]).split(' (')[0]+' · α = '+r.cfg.alpha;
   const corr=d.correction==='bonferroni'?'Bonferroni α/m':'sin ajuste';
   $('#sigChip').textContent=d.nsig+'/'+d.ntot+' confirmadas · '+corr;
   await renderInforme();await fillDetalle();await fillTextos();
@@ -188,7 +189,7 @@ async function renderInforme(){const d=S.d;if(!d)return;
   t.rows.map(rw=>'<tr'+((ci>=0&&['Sí','Yes'].includes(rw[ci]))?' class="sig"':'')+'>'+rw.map(c=>'<td>'+esc(c)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
  const wl=d.warnings||[],el2=d.errors||[],wb=$('#warnBox');
  if(wl.length||el2.length){wb.hidden=false;wb.querySelector('summary').textContent='⚠ Avisos ('+wl.length+') y errores ('+el2.length+')';
-  $('#warnList').innerHTML=el2.map(x=>'<div class="w err">'+esc(x)+'</div>').join('')+wl.map(x=>'<div class="w">'+esc(x)+'</div>').join('');}
+  $('#warnList').innerHTML=el2.map(x=>'<div class="w err">'+esc(translateDiagnostic(x))+'</div>').join('')+wl.map(x=>'<div class="w">'+esc(translateDiagnostic(x))+'</div>').join('');}
  else wb.hidden=true;
  $('#dlXlsx').disabled=!caps.xlsx;$('#dlXlsx').title=caps.xlsx?'':'openpyxl no disponible en esta carga';}
 $('#incSpm').onchange=()=>{if(S.d)refreshRepImg();};
@@ -233,10 +234,12 @@ async function showPair(v,l){const img=$('#phImg');img.classList.add('busy');
 /* ---------- textos ---------- */
 async function fillTextos(){const tx=await pyCall('js_texts');S.tx=tx;
  $('#txtEmpty').hidden=true;$('#txtBox').hidden=false;
+ for(const id of ['mtEs','rtEs'])$('#'+id).closest('.box').hidden=LANG==='en';
+ for(const id of ['mtEn','rtEn'])$('#'+id).closest('.box').hidden=LANG==='es';
  $('#mtEs').value=tx.mt_es;$('#mtEn').value=tx.mt_en;$('#rtEs').value=tx.rt_es;$('#rtEn').value=tx.rt_en;
  $('#refs').innerHTML=tx.citas.map(c=>'<li>'+esc(c)+'</li>').join('');}
 $('#btnTxt').onclick=()=>{const t=S.tx;if(!t)return;
- const s='MÉTODOS (ES)\n'+t.mt_es+'\n\nMETHODS (EN)\n'+t.mt_en+'\n\nRESULTADOS (ES)\n'+t.rt_es+'\n\nRESULTS (EN)\n'+t.rt_en+'\n';
+ const s=LANG==='en'?'METHODS\n'+t.mt_en+'\n\nRESULTS\n'+t.rt_en+'\n':'MÉTODOS\n'+t.mt_es+'\n\nRESULTADOS\n'+t.rt_es+'\n';
  dl(btoa(unescape(encodeURIComponent(s))),'text/plain','gaitspm_textos.txt');};
 $$('.copybtn').forEach(b=>{b.onclick=()=>{const ta=$(b.dataset.for);ta.select();
  try{if(navigator.clipboard)navigator.clipboard.writeText(ta.value);else document.execCommand('copy');}catch(e){}
@@ -267,7 +270,7 @@ function renderUpload(up){$('#datosEmpty').hidden=true;$('#upBox').hidden=false;
  $('#stRadios').innerHTML=['wide','long','transposed'].map(s=>'<label class="chk"><input type="radio" name="est" value="'+s+'"'+(s===def?' checked':'')+'>'+lbl[s]+'</label>').join('');
  $('#stHint').hidden=(up.structure!=='unknown');
  $('#stRadios').onchange=renderMap;renderMap();}
-function mapErr(m){const e=$('#mapErr');if(m){e.hidden=false;e.textContent=m;}else e.hidden=true;}
+function mapErr(m){const e=$('#mapErr');if(m){e.hidden=false;e.textContent=translateString(m);}else e.hidden=true;}
 function guessSel(opts,keys){for(let i=0;i<keys.length;i++){for(let j=0;j<opts.length;j++){const c=opts[j];
  if(c!=='—'&&String(c).toLowerCase().indexOf(keys[i])>=0)return c;}}return '—';}
 function selHtml(id,label,opts,def,req){return '<label class="fld">'+label+(req?' *':'')+'<select id="'+id+'">'+

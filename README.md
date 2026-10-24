@@ -1,73 +1,89 @@
-# GaitSPM 1.4.2 · empieza aquí
+# GaitSPM 1.4.2
 
-Aplicación local para explorar y analizar cinemática de la marcha en tu navegador. Incluye modos **Guiado** y **Laboratorio**, interfaz ES/EN y ocho ejemplos sintéticos. Basada en GaitSPM 1.3.0 recuperado; motor spm1d 0.4.53.
+Local kinematic gait analysis with **spm1d 0.4.53**, a **Guided mode** and a **Laboratory mode**. English is the default interface language; use **ES** to switch to Spanish. Your explicit language choice is remembered in the browser.
 
-## Iniciar en tu ordenador
+[Guía en español](LEEME_PRIMERO.md) · [Automated checks](https://github.com/AngelGF8/GaitSPM/actions)
 
-1. Descomprime todo el ZIP en una carpeta local con permiso de escritura. No ejecutes desde dentro del ZIP.
-2. Necesitas Python 3.11 o posterior; la versión comprobada es **Python 3.12**. El lanzador crea un entorno `.venv` e instala las dependencias. La primera instalación necesita internet.
-3. Mac: abre `Iniciar_GaitSPM.command`. Si el sistema no lo permite, abre Terminal en la carpeta y ejecuta `bash Iniciar_GaitSPM.command`.
-4. Windows: ejecuta `Iniciar_GaitSPM.bat`. Linux: `bash iniciar_gaitspm.sh`.
-5. Se abre `http://127.0.0.1:4173` en tu navegador. Deja la consola abierta; Ctrl+C detiene el servidor. Si el puerto está ocupado: `python3 launch.py --port 4175` (Windows: `py -3 launch.py --port 4175`).
+## Start on your computer
 
-También puedes ejecutar directamente `python3 launch.py`. El análisis se realiza en tu ordenador. Tras instalar las dependencias, el modo local no necesita internet. No hay cuentas ni servicio remoto de análisis. El archivo subido se guarda temporalmente en el equipo y se limpia al cerrar normalmente el servidor; no uses un equipo compartido para datos identificables. La aplicación no sustituye un sistema de gestión clínica.
+1. Download the repository using **Code → Download ZIP**, or clone it. Extract the complete folder before running.
+2. Install **Python 3.12**, the version used by the automated checks.
+3. Run the appropriate launcher:
+   - **Windows:** double-click `Iniciar_GaitSPM.bat`, or run `py -3 launch.py`.
+   - **macOS:** open `Iniciar_GaitSPM.command`. If it does not open, run `bash Iniciar_GaitSPM.command` from Terminal in the project folder.
+   - **Linux:** run `bash iniciar_gaitspm.sh`, or `python3 launch.py`.
+4. First-time setup creates a local `.venv` and installs the dependencies. Internet access is required for this installation.
+5. The application opens at **http://127.0.0.1:4173**. Keep the terminal open; press **Ctrl+C** to stop. If the port is occupied, add `--port 4175` to the Python command.
 
-## Primer recorrido
+Analysis runs on your computer. After dependencies are installed, native local mode does not need internet access. There is no remote analysis service or application account. Uploaded files are stored temporarily on the computer and cleaned up when the server shuts down normally. The application is not a clinical records system.
 
-En **Modo guiado**, pulsa **Cargar ejemplo** en una tarjeta; revisa los participantes y el mapeo; abre **Configurar y analizar** y ejecuta. Las recetas se aplican al ejemplo original. Los casos 07/08 seleccionan automáticamente el grupo de pacientes y las condiciones repetidas.
+## First analysis
 
-Para probar la carga de archivos, usa CSV o Excel de esa misma tarjeta, o los archivos incluidos en `datasets/synthetic/`. El Excel tiene `Guide`, `Metrics`, `Curves_Wide` y `Participants`; la aplicación selecciona `Curves_Wide`. Revisa los campos y pulsa **Aplicar**. Los archivos originales se reconocen para proponer su configuración; si cambias los datos, configura el análisis manualmente.
+In **Guided mode**, choose **Load example**, inspect the participant counts and joint mapping, then select **Configure and analyse**. Review the design, groups, variables and units before running.
 
-En datos propios, confirma grados, segmentación de ciclos y mapeo articular. Los nodos 0–100 son porcentaje del ciclo ya segmentado: la aplicación no detecta eventos de marcha ni transforma señales de sensores en ángulos articulares. Consulta `docs/GUIA_EJEMPLOS.md` para resultados esperados y limitaciones.
+To try file import, download a card's CSV or Excel file and upload it. The same files are included in `datasets/synthetic/`. Each workbook contains `Guide`, `Metrics`, `Curves_Wide` and `Participants`; the importer selects `Curves_Wide`. Review the detected columns and select **Apply mapping**.
 
-## Ocho ejemplos, seis contextos clínicos
+Unmodified examples are recognised and offered their predefined analysis settings. Edited or external data require manual configuration. **Nodes 0–100 represent an already segmented gait cycle.** GaitSPM does not detect gait events or convert raw sensor signals into joint angles.
 
-| Ejemplo | Contexto | Participantes | Diseño recomendado |
-|---|---|---|---|
-| 01 | Síndrome de pinzamiento femoroacetabular (FAIS) | 30 casos + 30 controles | Dos grupos, Welch |
-| 02 | Artrosis de rodilla | 30 + 30 | Dos grupos, Welch |
-| 03 | Artrosis de cadera | 30 + 30 | Dos grupos, Welch |
-| 04 | Esclerosis múltiple | 30 + 30 | Dos grupos, Welch |
-| 05 | Artroplastia de cadera | 30 + 30 | Dos grupos, Welch |
-| 06 | Reconstrucción de LCA | 30 + 30 | Dos grupos, Welch |
-| 07 | EM: fatiga y recuperación hipotéticas | 30 + 30, tres condiciones | ANOVA de medidas repetidas en 30 casos |
-| 08 | LCA: repetición técnica sin efecto sistemático | 30 + 30, dos condiciones | t pareada en 30 casos |
+The report shows mean curves, variability bands, SPM fields, cluster intervals, analysed sample sizes and an interpretation based on the current results. Figures, tables and report text use the selected language. Methods and Results text can be copied or exported; the analysis configuration can be saved as JSON.
 
-Son **datos simulados**, no pacientes reales. Cada archivo contiene 60 IDs únicos. Hay 480 participantes sintéticos diferentes entre los ocho ejemplos; las condiciones repetidas conservan sus IDs. Solo se incluyen ángulos articulares en grados, sin fuerzas, momentos ni EMG. La covariable `technical_score` es aleatoria y no tiene significado clínico.
+## Eight examples, six clinical contexts
 
-Los seis primeros mantienen los anclajes escalares documentados en 1.3; se simulan las formas de las curvas. Los dos últimos añaden situaciones didácticas de las mismas patologías. No emparejes los participantes de 03 con 05: son ejemplos independientes, no un seguimiento quirúrgico.
+| Example | Context | Simulated participants | Default analysis |
+|---|---|---:|---|
+| 01 | Femoroacetabular impingement syndrome (FAIS) | 30 cases + 30 controls | Independent groups, Welch |
+| 02 | Knee osteoarthritis | 30 + 30 | Independent groups, Welch |
+| 03 | Hip osteoarthritis | 30 + 30 | Independent groups, Welch |
+| 04 | Multiple sclerosis | 30 + 30 | Independent groups, Welch |
+| 05 | Hip arthroplasty | 30 + 30 | Independent groups, Welch |
+| 06 | ACL reconstruction | 30 + 30 | Independent groups, Welch |
+| 07 | MS: hypothetical fatigue and recovery | 30 + 30, three repeated conditions | Repeated-measures ANOVA in the 30 cases |
+| 08 | ACL: technical retest without a systematic shift | 30 + 30, two repeated conditions | Paired t-test in the 30 cases |
 
-## Compatibilidad 1.4.2
+These are **synthetic data**, not real patient records. Every example contains 60 unique participant IDs; there are 480 distinct simulated participants across the eight examples. Repeated conditions retain the same IDs and do not increase the sample size.
 
-Lectura y generación de fuentes con UTF-8 explícito, independiente de la configuración regional de Windows. El workflow de GitHub comprueba Linux, Windows y macOS: creación de un entorno `.venv` nuevo mediante `launch.py`, arranque sin abrir navegador, carga HTTP y análisis de ejemplos, CSV externo y pruebas DOM. La comprobación visual, el selector de archivos y el doble clic en los lanzadores siguen requiriendo una prueba manual. Estado de las ejecuciones: https://github.com/AngelGF8/GaitSPM/actions.
+Only joint angles in degrees are included: no forces, moments or EMG. The random `technical_score` covariate has no clinical meaning. The first six examples retain documented scalar anchors inherited from version 1.3, while their waveform shapes are simulated. Examples 07–08 are hypothetical teaching scenarios. Examples 03 and 05 are independent datasets and must not be paired as a surgical follow-up.
 
-## Auditoría adicional 1.4.1
+Source attribution and simulation assumptions are included with each dataset. Further guidance is available in the Spanish [example guide](docs/GUIA_EJEMPLOS.md).
 
-Se probó un CSV público independiente de MovementRx: 20 curvas reales de referencia, con adaptación explícita de encabezados e IDs. No se modificó ningún ángulo. Los grupos TestA/TestB son etiquetas arbitrarias de prueba, no grupos clínicos. El recorrido HTTP de carga, mapeo, Welch y exportaciones pasó; el estadístico coincidió con SciPy con error máximo 1,25×10⁻¹⁴. CSV de prueba: `tests/fixtures/movementrx/movementrx_import_test.csv`. Fuente, licencia y conversión: `tests/fixtures/movementrx/README.md`.
+## Supported input and validation
 
-Se corrigieron IDs con ceros iniciales, interpretación de NA como ID, cabeceras y tokens duplicados, errores de subida ocultos, mapeos pendientes y reutilización de resultados tras una carga o configuración fallida. Informe completo: `audit-v1.4.1/INFORME.md`.
+- Wide CSV/Excel: metadata plus `Variable_0` through `Variable_100` columns.
+- Long format: subject, variable, node and value, with optional group, condition, side and trial columns.
+- Transposed format: 0–100 nodes in rows and participant/variable metadata encoded in column names.
+- Semicolon-delimited CSV with decimal commas and quoted delimiters.
+- Participant IDs such as `001`, `1` and `NA` remain distinct.
+- Duplicate headers, invalid identity mappings and incomplete curves are checked.
+- Failed uploads or invalid analysis settings invalidate previous results.
 
-## Qué cambia
+Each participant contributes one observation for the selected design. Repeated trials and left/right measurements must not be treated as independent participants.
 
-- Recorrido de cuatro pasos, galería de ocho ejemplos y cambio entre modo guiado y laboratorio.
-- Interpretación calculada con el resultado actual: n analizado, intervalos del ciclo, p de clúster, diferencias descriptivas y exclusiones. Exportación JSON con configuración y versiones.
-- CSV español con coma decimal y delimitadores entre comillas; Excel con hoja de guía antes de los datos.
-- Validación de roles, lateralidad, covariables y datos incompletos; evita completar artificialmente una curva combinando huecos de lados o ensayos distintos.
-- Filtro de grupo en comparaciones pareadas de lados, invalidación de resultados al cambiar datos/configuración y bloqueo durante el cálculo.
-- Lanzadores locales y spm1d incluido; exportaciones de gráficos y tablas conservadas.
+## Independent external CSV test
 
-## Interpretación y límites
+The repository includes a public **MovementRx** reference file containing **20 real kinematic curves with 101 nodes**. Its original bytes, attribution, licence and adaptation script are preserved under [tests/fixtures/movementrx](tests/fixtures/movementrx).
 
-SPM1D analiza campos de curvas continuas; sus clústeres no equivalen a pruebas independientes de cada nodo. El ajuste Bonferroni entre variables es adicional al control sobre el campo temporal. Un resultado no significativo no demuestra equivalencia. Los IC95 dibujados son puntuales y las diferencias dentro de clústeres son descriptivas, calculadas tras seleccionarlos.
+The original CSV has no participant IDs and is rejected accordingly. The documented adaptation adds IDs and metadata and renames node columns **without changing any angle value**. Arbitrary labels `TestA` and `TestB` divide the rows into 10 + 10 only to exercise the software; they are not clinical groups.
 
-Las recetas fijan α=0,05, pruebas bilaterales cuando procede y Bonferroni entre variables. No se debe cambiar de método buscando significación. La prueba de normalidad es orientativa; el modo automático no certifica supuestos. Las permutaciones de etiquetas entre grupos no ofrecen una alternativa Welch para varianzas desiguales. ANOVA de medidas repetidas depende de los supuestos de esfericidad: spm1d no aplica corrección de no esfericidad para ese diseño. Los post hoc son los que localizan pares tras el contraste global.
+The real HTTP upload, mapping, Welch analysis and CSV/XLSX/PNG/SVG/PDF exports were tested. The Welch statistic agreed with SciPy to a maximum absolute difference of approximately 1.25 × 10⁻¹⁴. This software test is not a clinical comparison.
 
-La documentación oficial del motor se encuentra en https://spm1d.org/doc/Stats1D/anova.html y https://spm1d.org/doc/Stats1D/ . El informe `audit-v1.4/INFORME.md` distingue comprobaciones ejecutadas y pendientes. Esta revisión es una auditoría técnica interna, no validación clínica ni certificación.
+## Statistical interpretation
 
-## Código y pruebas
+SPM1D analyses continuous fields. Cluster p-values are not independent pointwise tests. Across-variable Bonferroni correction is additional to inference over the temporal field.
 
-Edita `app/gaitspm_app.py` para modificar el motor; `app/sync_html_engine.py` genera `gaitspm_engine.py` y el HTML desde las mismas fuentes. La interfaz está en `app/web/`; el servidor local es `app/serve.py`. Consulta `tests/README.md`.
+A nonsignificant result does not establish equivalence or absence of an effect. The displayed 95% confidence bands are pointwise. Mean differences within selected clusters are descriptive. Statistical significance alone does not establish clinical relevance.
 
-El modo Streamlit se conserva como alternativa de desarrollo (`requirements-streamlit.txt`) pero no se ha probado en esta versión. Abrir directamente `app/gaitspm.html` activa la alternativa Pyodide, que requiere descargar su runtime y no se ha validado aquí. El camino recomendado es el lanzador local.
+Normality checks and the exploratory automatic mode do not certify model assumptions. Label permutations are not a Welch alternative for unequal variances. Repeated-measures ANOVA depends on its sphericity assumptions; spm1d does not implement a nonsphericity correction for this design. Use post hoc comparisons to identify pairs after an omnibus test.
 
-Autor: Ángel González de la Flor. Licencia GPL v3. El estado de preparación para GitHub se documenta en audit-v1.4.1/INFORME.md.
+Refer to the official [spm1d statistics documentation](https://spm1d.org/doc/Stats1D/) and [ANOVA notes](https://spm1d.org/doc/Stats1D/anova.html). This is a technical software review, not clinical validation or certification.
+
+## Development and verification
+
+Edit `app/gaitspm_app.py` for engine changes. Run `python app/sync_html_engine.py` to regenerate the native engine and self-contained HTML. Interface sources are under `app/web/`; `app/serve.py` implements the local HTTP server.
+
+Version 1.4.2 uses explicit UTF-8 for source text and adds a launcher test. GitHub Actions checks **Linux, Windows and macOS with Python 3.12**, including a fresh launcher-created virtual environment, HTTP startup, the statistical tests, the external CSV and eight offline DOM workflows. Check the [actual workflow results](https://github.com/AngelGF8/GaitSPM/actions) for the commit you use.
+
+**Remaining limits:** automated HTTP and DOM tests do not verify visual rendering, the browser file picker, mobile layout or desktop double-click behaviour. The optional Streamlit interface and direct-file Pyodide fallback are not validated by this workflow. Use the native Python launcher.
+
+See [test instructions](tests/README.md), [publication status](docs/GITHUB_READY.md), and the historical audit reports in `audit-v1.4/` and `audit-v1.4.1/`.
+
+Author: **Ángel González de la Flor**. Licensed under **GPL v3**; see [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).

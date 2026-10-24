@@ -1,5 +1,7 @@
 # GaitSPM 1.4.2 · empieza aquí
 
+El idioma inicial es inglés; pulsa **ES** para cambiar al español. La elección se recuerda en este navegador.
+
 Aplicación local para explorar y analizar cinemática de la marcha en tu navegador. Incluye modos **Guiado** y **Laboratorio**, interfaz ES/EN y ocho ejemplos sintéticos. Basada en GaitSPM 1.3.0 recuperado; motor spm1d 0.4.53.
 
 ## Iniciar en tu ordenador

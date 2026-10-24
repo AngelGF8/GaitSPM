@@ -1,0 +1,5 @@
+# Preserve source and CSV bytes across platform checkouts.
+* text=auto eol=lf
+*.xlsx binary
+*.png binary
+*.zip binary

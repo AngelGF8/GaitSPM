@@ -35,19 +35,27 @@ def main():
         target=ROOT/'.venv'
         python=target/('Scripts/python.exe' if os.name=='nt' else 'bin/python')
         if not python.exists():
-            print('Preparando entorno local / Preparing local environment...',flush=True)
+            print('Preparing the local environment...',flush=True)
             venv.EnvBuilder(with_pip=True).create(target)
         if not check_dependencies(python):
-            print('Instalando dependencias. Esta primera instalación necesita internet.',flush=True)
+            print('Installing dependencies. First-time setup requires internet access.',flush=True)
             subprocess.run([str(python),'-m','pip','install','-r',str(ROOT/'requirements.txt')],check=True)
-        os.execv(str(python),[str(python),str(Path(__file__).resolve()),'--use-current','--port',str(a.port)]+(['--no-browser'] if a.no_browser else []))
+        command=[str(python),str(Path(__file__).resolve()),'--use-current','--port',str(a.port)]+(['--no-browser'] if a.no_browser else [])
+        if os.name == 'nt':
+            # Windows execv detaches a new process. Keep a parent that owns and
+            # waits for the server so launcher shutdown can close the whole tree.
+            try:
+                raise SystemExit(subprocess.call(command))
+            except KeyboardInterrupt:
+                return
+        os.execv(str(python),command)
     if not check_dependencies(python):raise SystemExit('Install requirements.txt in the active environment first.')
     sys.path.insert(0,str(ROOT/'app'))
     import serve
     try:server=serve.ThreadingHTTPServer(('127.0.0.1',a.port),serve.Handler)
-    except OSError as exc:raise SystemExit(f'No se puede abrir el puerto {a.port}. Prueba --port 4175. {exc}')
+    except OSError as exc:raise SystemExit(f'Cannot open port {a.port}. Try --port 4175. {exc}')
     url=f'http://127.0.0.1:{a.port}'
-    print('GaitSPM: '+url+'\nDeja esta ventana abierta. Ctrl+C para cerrar.',flush=True)
+    print('GaitSPM: '+url+'\nKeep this window open. Press Ctrl+C to stop.',flush=True)
     if not a.no_browser:
         timer=threading.Timer(.6,webbrowser.open,args=(url,));timer.daemon=True;timer.start()
     try:server.serve_forever()
