@@ -47,7 +47,7 @@ except ModuleNotFoundError:
     import spm1d
 import streamlit as st
 
-VERSION = "1.4.1"
+VERSION = "1.4.2"
 NODES = np.arange(101)
 
 # ----------------------------------------------------------------------------

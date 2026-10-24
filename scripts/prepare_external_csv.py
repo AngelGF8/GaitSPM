@@ -38,7 +38,7 @@ def main():
       'participants':20,'nodes':101,'variable':'KneeSagittal','units':'degrees',
       'adaptation':'Original 101 measurement columns renamed to KneeSagittal_0..100; added row IDs, side L, REFERENCE condition and arbitrary alternating TestA/TestB labels. No alteration of curve values or signs. Original knee sign convention retained.',
       'interpretation_limit':'TestA/TestB are artificial test labels within the same reference cohort, not diagnoses or interventions. Statistical outputs serve only to test software; they are not clinical findings.'}
-    (DIRECTORY/'provenance.json').write_text(json.dumps(info,indent=2)+'\n')
+    (DIRECTORY/'provenance.json').write_text(json.dumps(info,indent=2)+'\n', encoding="utf-8")
     print(json.dumps({'path':str(out),'participants':20,'groups':{'TestA':10,'TestB':10},'max_value_change':float(abs(curves-reloaded).max())}))
 
 if __name__=='__main__':main()

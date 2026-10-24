@@ -2,7 +2,7 @@
 import base64,io,re,sys,zipfile,shutil
 from pathlib import Path
 root=Path(__file__).resolve().parents[1];packages=Path(sys.argv[1])
-vendor=root/'app/web/vendor-scripts.html';html=vendor.read_text()
+vendor=root/'app/web/vendor-scripts.html';html=vendor.read_text(encoding="utf-8")
 notices=root/'docs/licenses';notices.mkdir(exist_ok=True)
 for package,files,script in [
     ('spm1d-0.4.53.dist-info',['licenses/LICENSE.txt','METADATA'],'spm1d-zip'),

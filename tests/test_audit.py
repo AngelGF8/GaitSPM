@@ -136,9 +136,9 @@ class AuditTests(unittest.TestCase):
 
     def test_10_html_engine_identity(self):
         import re
-        html=(ROOT/'app/gaitspm.html').read_text()
+        html=(ROOT/'app/gaitspm.html').read_text(encoding="utf-8")
         embedded=re.search(r'<script[^>]*id="py-engine"[^>]*>(.*?)</script>',html,re.S).group(1)
-        self.assertEqual(embedded.strip(),(ROOT/'app/gaitspm_engine.py').read_text().strip())
+        self.assertEqual(embedded.strip(),(ROOT/'app/gaitspm_engine.py').read_text(encoding="utf-8").strip())
 
 
 if __name__=='__main__':unittest.main(verbosity=2)

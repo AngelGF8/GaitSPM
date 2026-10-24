@@ -1,4 +1,4 @@
-# GaitSPM 1.4.1
+# GaitSPM 1.4.2
 
 Local browser application for kinematic gait analysis with spm1d 0.4.53. Guided and Laboratory modes; Spanish and English UI.
 
@@ -11,3 +11,5 @@ Use Load example, or load the included CSV/XLSX files and apply the mapping. Exc
 See LEEME_PRIMERO.md, docs/GUIA_EJEMPLOS.md and audit-v1.4/INFORME.md. Numerical, parser, HTTP and offline DOM checks were run; rendered browser/mobile validation was blocked by the environment and remains pending. Optional Streamlit/Pyodide paths and fresh Mac/Windows installations were not tested in this release.
 
 Author: Ángel González de la Flor. GPL v3; third-party notices included. See audit-v1.4.1/INFORME.md for the pre-publication audit.
+
+Version 1.4.2 makes source text I/O explicitly UTF-8. CI now covers Linux, Windows and macOS, including a fresh launcher-created virtual environment and HTTP startup. This does not test browser rendering or desktop double-click behavior. Check the actual run status in GitHub Actions.

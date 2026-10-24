@@ -1,4 +1,4 @@
-# GaitSPM 1.4.1 · empieza aquí
+# GaitSPM 1.4.2 · empieza aquí
 
 Aplicación local para explorar y analizar cinemática de la marcha en tu navegador. Incluye modos **Guiado** y **Laboratorio**, interfaz ES/EN y ocho ejemplos sintéticos. Basada en GaitSPM 1.3.0 recuperado; motor spm1d 0.4.53.
 
@@ -36,6 +36,10 @@ En datos propios, confirma grados, segmentación de ciclos y mapeo articular. Lo
 Son **datos simulados**, no pacientes reales. Cada archivo contiene 60 IDs únicos. Hay 480 participantes sintéticos diferentes entre los ocho ejemplos; las condiciones repetidas conservan sus IDs. Solo se incluyen ángulos articulares en grados, sin fuerzas, momentos ni EMG. La covariable `technical_score` es aleatoria y no tiene significado clínico.
 
 Los seis primeros mantienen los anclajes escalares documentados en 1.3; se simulan las formas de las curvas. Los dos últimos añaden situaciones didácticas de las mismas patologías. No emparejes los participantes de 03 con 05: son ejemplos independientes, no un seguimiento quirúrgico.
+
+## Compatibilidad 1.4.2
+
+Lectura y generación de fuentes con UTF-8 explícito, independiente de la configuración regional de Windows. El workflow de GitHub comprueba Linux, Windows y macOS: creación de un entorno `.venv` nuevo mediante `launch.py`, arranque sin abrir navegador, carga HTTP y análisis de ejemplos, CSV externo y pruebas DOM. La comprobación visual, el selector de archivos y el doble clic en los lanzadores siguen requiriendo una prueba manual. Estado de las ejecuciones: https://github.com/AngelGF8/GaitSPM/actions.
 
 ## Auditoría adicional 1.4.1
 

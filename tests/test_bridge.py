@@ -7,8 +7,8 @@ import serve
 class BridgeTests(unittest.TestCase):
     def test_bridge_all_bases_languages_exports(self):
         ns=dict(E.__dict__)
-        exec((ROOT/'app/simulation.py').read_text(),ns)
-        exec((ROOT/'app/bridge.py').read_text(),ns)
+        exec((ROOT/'app/simulation.py').read_text(encoding="utf-8"),ns)
+        exec((ROOT/'app/bridge.py').read_text(encoding="utf-8"),ns)
         def call(name,*args):
             r=json.loads(ns[name](*args));self.assertTrue(r['ok'],r);return r
         for item in synthetic_catalog():

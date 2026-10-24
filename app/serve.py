@@ -30,8 +30,8 @@ def get_session(token):
         if len(SESSIONS) >= 24:
             raise ValueError('Too many active sessions')
         ns = dict(engine.__dict__)
-        exec((ROOT / 'simulation.py').read_text(), ns)
-        exec((ROOT / 'bridge.py').read_text(), ns)
+        exec((ROOT / 'simulation.py').read_text(encoding="utf-8"), ns)
+        exec((ROOT / 'bridge.py').read_text(encoding="utf-8"), ns)
         tmp = tempfile.TemporaryDirectory(prefix='gaitspm-')
         ns['UPLOAD_PATH'] = str(Path(tmp.name) / 'upload.bin')
         SESSIONS[token] = {'ns': ns, 'tmp': tmp, 'time': now}

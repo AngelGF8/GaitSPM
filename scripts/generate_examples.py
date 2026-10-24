@@ -51,14 +51,14 @@ def main():
             'p-values and cluster locations are calculated from these synthetic arrays, not from the cited publications.',
         ]
         meta={**d,'seed':SEED,'anchors':spec['anchors'],'n_subjects':60,'n_nodes':101,'synthetic':True,'assumptions':assumptions}
-        (out/'metadata.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
+        (out/'metadata.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n', encoding="utf-8")
         intro=f'# {d["title_es"]} / {d["title_en"]}\n\n30 casos + 30 controles; {d["n_conditions"]} condición/es. DATOS SINTÉTICOS.\n\n'
         source=f'Parámetros heredados de v1.3: [{d["citation"]}]({d["url"]}).' if d['url'] else 'Escenario didáctico hipotético añadido en v1.4. Sin efectos clínicos publicados.'
-        (out/'README.md').write_text(intro+source+'\n\n'+d['population']+'\n\nConfiguración recomendada: `'+json.dumps(d['recipe'],ensure_ascii=False)+'`.\n\nCargar '+key+'.csv o la hoja Curves_Wide de '+key+'.xlsx. El modo guiado reconoce las bases originales y propone la configuración. Los archivos editados requieren revisión manual.\n\n'+'\n'.join('- '+x for x in assumptions)+'\n')
+        (out/'README.md').write_text(intro+source+'\n\n'+d['population']+'\n\nConfiguración recomendada: `'+json.dumps(d['recipe'],ensure_ascii=False)+'`.\n\nCargar '+key+'.csv o la hoja Curves_Wide de '+key+'.xlsx. El modo guiado reconoce las bases originales y propone la configuración. Los archivos editados requieren revisión manual.\n\n'+'\n'.join('- '+x for x in assumptions)+'\n', encoding="utf-8")
         payload.append({'spec':meta,'wide':[wide.columns.tolist()]+wide.values.tolist(),'people':[m.columns.tolist()]+m.values.tolist(),'checks':checks})
     dest=ROOT/'datasets/synthetic';pd.DataFrame(all_checks).to_csv(dest/'calibration_all.csv',index=False,float_format='%.8f')
-    (dest/'catalog.json').write_text(json.dumps(synthetic_catalog(),ensure_ascii=False,indent=2))
-    (ROOT/'datasets/workbook_inputs.json').write_text(json.dumps(payload,ensure_ascii=False,allow_nan=False))
+    (dest/'catalog.json').write_text(json.dumps(synthetic_catalog(),ensure_ascii=False,indent=2), encoding="utf-8")
+    (ROOT/'datasets/workbook_inputs.json').write_text(json.dumps(payload,ensure_ascii=False,allow_nan=False), encoding="utf-8")
     print(f'{len(payload)} examples; 480 unique synthetic participants; 30 per group; {len(all_checks)} calibrated moments')
 
 if __name__=='__main__':main()

@@ -4,7 +4,7 @@ title: "GaitSPM: local guided kinematic SPM1D analysis"
 authors:
   - family-names: "González de la Flor"
     given-names: "Ángel"
-version: 1.4.1
+version: 1.4.2
 date-released: 2026-10-24
 license: GPL-3.0-only
 type: software

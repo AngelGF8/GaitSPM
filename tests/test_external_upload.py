@@ -100,7 +100,7 @@ class ExternalUploadTests(unittest.TestCase):
             post('/api/upload',b'not_a_csv');call('js_parse_upload','invalid.csv','',ok=False)
             self.assertNotIn('updf',ns['STATE']);self.assertNotIn('canon',ns['STATE'])
             call('js_apply_wide',json.dumps({'subject':'subject'}),ok=False)
-            evidence={'source':json.loads((FIX/'provenance.json').read_text()),
+            evidence={'source':json.loads((FIX/'provenance.json').read_text(encoding="utf-8")),
               'transport':'Actual loopback HTTP upload and API calls; no mocked backend',
               'native_original':'Rejected for missing participant ID; not directly compatible',
               'adapted_csv':'Accepted after explicit header and metadata adaptation; curve values unchanged',
@@ -108,7 +108,7 @@ class ExternalUploadTests(unittest.TestCase):
               'quality':mapped['quality'],'max_abs_t_error_vs_scipy':float(abs(computed['z']-expected).max()),
               'summary':summary,'exports_bytes':formats,'operations':sequence,
               'clinical_claim':False,'browser_rendering_tested':False}
-            (OUT/'external-evidence.json').write_text(json.dumps(evidence,indent=2)+'\n')
+            (OUT/'external-evidence.json').write_text(json.dumps(evidence,indent=2)+'\n', encoding="utf-8")
             print('External CSV: original identity omission rejected; adapted 20×101 accepted; Welch matches SciPy; exports and state invalidation passed.')
         finally:
             server.shutdown();server.server_close();thread.join()
