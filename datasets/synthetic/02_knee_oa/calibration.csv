@@ -1,0 +1,7 @@
+dataset,variable,metric,group,n,target_mean,target_sd,simulated_mean,simulated_sd,units,source
+02_knee_oa,HipFlexion,node_0,Control,30,27.57000000,4.66000000,27.57000000,4.66000000,deg,https://doi.org/10.1016/j.medengphy.2008.02.006
+02_knee_oa,HipFlexion,node_0,KOA,30,22.77000000,7.47000000,22.77000000,7.47000000,deg,https://doi.org/10.1016/j.medengphy.2008.02.006
+02_knee_oa,KneeFlexion,node_12,Control,30,17.26000000,9.01000000,17.26000000,9.01000000,deg,https://doi.org/10.1016/j.medengphy.2008.02.006
+02_knee_oa,KneeFlexion,node_12,KOA,30,9.78000000,6.44000000,9.78000000,6.44000000,deg,https://doi.org/10.1016/j.medengphy.2008.02.006
+02_knee_oa,AnkleDorsiflexion,node_45,Control,30,6.82000000,5.60000000,6.82000000,5.60000000,deg,https://doi.org/10.1016/j.medengphy.2008.02.006
+02_knee_oa,AnkleDorsiflexion,node_45,KOA,30,6.99000000,4.62000000,6.99000000,4.62000000,deg,https://doi.org/10.1016/j.medengphy.2008.02.006

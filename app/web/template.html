@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>GaitSPM · SPM1D en el navegador</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230072BD'/%3E%3Cpath d='M2 12h12M4 9v3M7 6v6M10 8v4M13 5v7' stroke='%23fff' stroke-width='1.2'/%3E%3C/svg%3E">
+<style>
+:root{--ink:#0A0D12;--mut:#667085;--paper:#F4F6F8;--panel:#FFFFFF;--line:#D9DEE7;
+--blue:#0B2545;--blue-d:#173F6B;--orange:#0B2545;--salbg:#EEF3F8;
+--err:#C81E1E;--ok:#1F7A3D;
+--mono:ui-monospace,"SF Mono","Cascadia Mono","JetBrains Mono",Consolas,"Liberation Mono",monospace;
+--sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font:14px/1.5 var(--sans);color:var(--ink);background:var(--paper)}
+.mono{font-family:var(--mono)}.mut{color:var(--mut)}.tiny{font-size:11.5px}
+button,select,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* ---------- regla 0–100 % (firma) ---------- */
+.ruler{position:relative;height:16px;background:#fff;border:1px solid var(--line);border-radius:2px}
+.ruler::before{content:"";position:absolute;inset:0;
+background:repeating-linear-gradient(90deg,transparent 0,transparent calc(10% - 1px),var(--line) calc(10% - 1px),var(--line) 10%)}
+.ruler i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--blue),var(--blue-d));transition:width .25s ease}
+.ruler b{position:absolute;top:100%;margin-top:3px;font:600 10px/1 var(--mono);color:var(--mut)}
+.ruler .r0{left:0}.ruler .r50{left:50%;transform:translateX(-50%)}.ruler .r100{right:0}
+.ruler.small{height:10px}
+.hd-ruler{height:8px;border-left:0;border-right:0;border-radius:0}
+.hd-ruler b{display:none}
+
+/* ---------- arranque ---------- */
+#boot{position:fixed;inset:0;background:var(--paper);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.boot-card{width:min(560px,100%);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:30px 30px 24px;box-shadow:0 14px 45px rgba(11,37,69,.10)}
+.wordmark{font-weight:750;letter-spacing:-.02em;font-size:22px}
+.wordmark.big{font-size:34px}
+.wm-sub{font:600 11px/1 var(--mono);color:var(--mut);letter-spacing:.04em;margin-left:10px}
+.boot-card .ruler{margin:22px 0 26px}
+#bootMsg{font:600 12.5px/1.4 var(--mono);margin-bottom:8px}
+.log{white-space:pre-wrap;color:var(--mut);font-size:11px;max-height:96px;overflow:auto;border-left:2px solid var(--line);padding-left:10px}
+.note{margin-top:16px;font-size:12px;color:var(--mut)}
+.errbox{background:#FBEDEC;border:1px solid #EEC9C6;color:var(--err);border-radius:6px;padding:10px 12px;font-size:12.5px;white-space:pre-wrap;margin-top:12px}
+
+/* ---------- estructura ---------- */
+header#hd{display:flex;align-items:center;justify-content:space-between;padding:17px 28px;background:var(--panel);border-bottom:1px solid var(--line)}
+.chip{display:inline-block;border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 10px;font-size:11.5px}
+.chip b{color:var(--blue-d)}
+.chip.orange{border-color:#B7C5D6;background:#F4F7FA;color:var(--blue);font-weight:700}
+.shell{display:grid;grid-template-columns:310px 1fr;gap:22px;padding:22px 28px;max-width:1560px;margin:0 auto}
+aside .blk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:17px;margin-bottom:16px;box-shadow:0 3px 14px rgba(11,37,69,.04)}
+.blk h2{display:flex;align-items:center;gap:9px;font-size:13px;letter-spacing:.02em;text-transform:uppercase;color:var(--mut);margin-bottom:12px}
+.stepno{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:50%;background:var(--blue);color:#fff;font:700 11px/1 var(--mono)}
+main{min-width:0}
+footer{padding:14px 22px 26px;color:var(--mut);font-size:11px;text-align:center}
+
+/* ---------- controles ---------- */
+.btn{display:block;width:100%;border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 12px;cursor:pointer;text-align:center;margin-top:8px;transition:background .12s,border-color .12s,transform .12s}
+.btn:hover{border-color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700;box-shadow:0 3px 9px rgba(11,37,69,.16)}
+.btn.primary:hover{background:var(--blue-d)}
+.btn.ghost{color:var(--ink)}
+.btn.link{border:0;background:none;color:var(--blue-d);text-decoration:underline;padding:4px 0;width:auto;margin-top:4px}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.sm{display:inline-block;width:auto;padding:6px 11px;margin:0 6px 6px 0;font-size:12.5px}
+.fld{display:block;margin-top:10px;font-size:12.5px;color:var(--mut)}
+.fld.inline{display:inline-block;min-width:280px}
+.fld select,.fld input[type=number],.fld input[type=text]{display:block;width:100%;margin-top:4px;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink)}
+.fld input[type=range]{display:block;width:100%;margin-top:7px;accent-color:var(--blue)}
+.colorgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px 9px;margin-top:7px}
+.colorrow{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid var(--line);border-radius:7px;padding:6px 8px;background:#fff;font-size:11px;color:var(--mut)}
+.colorrow input[type=color]{width:38px;height:27px;border:0;background:none;padding:0;cursor:pointer}
+.fld small{display:block;margin-top:4px;font-size:11px}
+.fld.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px 12px}
+.chk{display:flex;gap:7px;align-items:center;font-size:12.5px;color:var(--ink);margin-top:8px;cursor:pointer}
+.checks{max-height:210px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:4px 10px 10px;margin-top:4px;background:#fff}
+.checks .chk{margin-top:7px}
+.hint{font-size:12px;color:var(--mut);margin-top:8px}
+.datachip{margin-top:12px;font-size:11.5px;color:var(--blue-d);border-left:3px solid var(--blue);padding-left:9px}
+
+/* ---------- pestañas y paneles ---------- */
+#tabs{display:flex;gap:5px;border-bottom:1px solid var(--line);margin-bottom:16px;background:#fff;border-radius:11px 11px 0 0;padding:0 8px}
+#tabs button{border:0;background:none;padding:13px 14px 11px;cursor:pointer;color:var(--mut);font-weight:650;border-bottom:3px solid transparent;margin-bottom:-1px}
+#tabs button.on{color:var(--ink);border-bottom-color:var(--blue)}
+.tab{display:none}.tab.on{display:block}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px;box-shadow:0 3px 14px rgba(11,37,69,.04)}
+.empty{background:var(--panel);border:1px dashed #BFC8D4;border-radius:12px;padding:44px 20px;text-align:center;color:var(--mut)}
+.figwrap{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0;box-shadow:0 3px 14px rgba(11,37,69,.04)}
+.figwrap img{display:block;max-width:100%;height:auto;margin:0 auto;transition:opacity .15s}
+.figwrap img.busy{opacity:.35}
+h3{font-size:14px;margin:16px 0 8px}
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 4px;margin-bottom:4px}
+.toolbar .spacer{flex:1}
+.chiprow{margin:8px 0}
+.chiprow .chip{margin:0 6px 6px 0}
+
+/* ---------- tablas ---------- */
+.tbl{overflow:auto;border:1px solid var(--line);border-radius:10px;background:#fff}
+.tbl table{border-collapse:collapse;width:100%;font-size:12px}
+.tbl th,.tbl td{padding:6px 9px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;font-family:var(--mono)}
+.tbl th{position:sticky;top:0;background:#F0F3F6;font-family:var(--sans);font-size:11.5px;color:#344054}
+.tbl tr.sig td{background:var(--salbg)}
+.tbl tr:last-child td{border-bottom:0}
+
+/* ---------- textos ---------- */
+.txtgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.txtgrid .box{position:relative}
+.txtgrid textarea{width:100%;height:190px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;resize:vertical;font-size:12.5px}
+.copybtn{position:absolute;top:26px;right:8px;font-size:11px;border:1px solid var(--line);background:#fff;border-radius:5px;padding:2px 8px;cursor:pointer}
+.lab{font-size:11.5px;color:var(--mut);font-weight:600;margin-bottom:3px;display:block}
+.refs{margin:6px 0 0 18px;font-size:12px;color:var(--mut)}
+.refs li{margin-top:5px}
+
+/* ---------- avisos / errores ---------- */
+details{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin-top:12px}
+details summary{cursor:pointer;font-weight:600;color:var(--mut)}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(105px,1fr));gap:10px;margin:13px 0 16px}
+.metric{border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:#fff}
+.metric b{display:block;font-size:21px;line-height:1.15;color:var(--ink);letter-spacing:-.02em}
+.metric span{display:block;margin-top:4px;color:var(--mut);font-size:11px}
+.quality{border-left:3px solid var(--blue);background:#F4F7FA;padding:9px 11px;border-radius:5px;font-size:12px;margin:8px 0 14px}
+.w{font-size:12px;margin-top:6px;color:var(--mut)}.w.err{color:var(--err)}
+#errPanel{position:fixed;inset:auto 0 0 0;z-index:60;padding:14px}
+.errcard{max-width:960px;margin:0 auto;background:#fff;border:1px solid #EEC9C6;border-left:4px solid var(--err);border-radius:10px;box-shadow:0 -6px 24px rgba(27,36,49,.12);padding:12px 14px}
+.errhead{display:flex;gap:12px;align-items:center;font-weight:650;color:var(--err);margin-bottom:6px}
+.errhead .btn{margin:0}
+#errTxt{max-height:200px;overflow:auto;font-size:11px;white-space:pre-wrap;color:var(--ink)}
+#runLog{max-height:120px}
+
+@media (max-width:980px){.shell{grid-template-columns:1fr}.txtgrid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}}
+</style>
+<style>/*LAB_CSS*/</style></head>
+<body>
+
+<div id="boot">
+  <div class="boot-card">
+    <div class="wordmark big">GaitSPM</div>
+    <div class="wm-sub">STATISTICAL PARAMETRIC MAPPING · MARCHA 0–100 %</div>
+    <div class="ruler"><i id="bootFill"></i><b class="r0">0</b><b class="r50">50</b><b class="r100">100 %</b></div>
+    <div id="bootMsg">Iniciando…</div>
+    <div id="bootLog" class="log mono"></div>
+    <p class="note">La primera carga descarga desde CDN el runtime científico (Python·WebAssembly, NumPy, SciPy, Pandas y Matplotlib) y puede tardar unos minutos. Después, el cálculo y los datos cargados permanecen en el navegador. También puedes iniciar la versión local con Python, sin descargas durante el análisis.</p>
+    <div id="bootErr" class="errbox" hidden></div>
+  </div>
+</div>
+
+<div id="app" hidden>
+<header id="hd">
+  <div><span class="wordmark">GaitSPM</span><span class="wm-sub">SPM1D · MARCHA 0–100 %</span></div>
+  <span id="envChip" class="chip mono">…</span>
+</header>
+<div class="ruler hd-ruler"><i style="width:0"></i></div>
+
+<div class="shell">
+<aside>
+  <section class="blk">
+    <h2><span class="stepno">1</span>Datos</h2>
+    <label class="btn ghost" for="file">Elegir CSV / Excel…</label>
+    <input id="file" type="file" accept=".csv,.txt,.tsv,.xlsx,.xlsm" hidden>
+    <button id="btnDemo" class="btn ghost" hidden>Demo FAI cam vs controles</button>
+    <button id="btnTpl" class="btn link">Descargar plantillas CSV</button>
+    <div id="dataChip" class="datachip mono" hidden></div>
+  </section>
+  <section class="blk" id="cfgBlk" hidden>
+    <h2><span class="stepno">2</span>Análisis</h2>
+    <label class="fld">Objetivo<select id="design"></select></label>
+    <div id="dyn"></div>
+    <details id="advStats"><summary>Opciones estadísticas avanzadas</summary>
+    <div class="fld two">
+      <label>α<input id="alpha" type="number" min="0.001" max="0.2" step="0.01" value="0.05"></label>
+      <label class="chk" id="ttWrap" style="margin-top:24px"><input id="twoTailed" type="checkbox" checked>Bilateral</label>
+    </div>
+    <label class="fld">Inferencia<select id="mode">
+      <option value="param" selected>Paramétrico (RFT)</option>
+      <option value="nonparam">No paramétrico (SnPM)</option>
+      <option value="auto">Auto exploratorio (RFT → SnPM)</option></select></label>
+    <label class="fld" id="iterWrap" hidden>Iteraciones SnPM<input id="iters" type="number" min="1000" max="50000" step="1000" value="5000"><small class="mut">Más iteraciones aumentan la resolución de p y el tiempo de cálculo.</small></label>
+    <label class="fld" id="seedWrap" hidden>Semilla SnPM<input id="seed" type="number" min="0" max="2147483647" step="1" value="2026"></label>
+    <label class="fld" id="autoWrap" hidden>Umbral auto · % de nodos K² con p&lt;0,05<input id="autoCut" type="number" min="5" max="100" step="5" value="20"></label>
+    <label class="fld">Corrección entre variables<select id="fieldCorrection">
+      <option value="bonferroni" selected>Bonferroni · α/m</option>
+      <option value="none">Sin ajuste · outcomes separados</option></select></label>
+    <label class="chk" id="evWrap"><input id="equalVar" type="checkbox" checked>Varianzas iguales</label>
+    <label class="chk" id="phWrap" hidden><input id="posthoc" type="checkbox" checked>Post-hoc por pares (Bonferroni)</label>
+    </details>
+    <div class="fld two">
+      <label>Banda de referencia<select id="band"></select></label>
+      <label>±DE<select id="bandK"><option>1</option><option>2</option></select></label>
+    </div>
+    <label class="fld">Idioma de las figuras<select id="lang"><option value="es">Español</option><option value="en">English</option></select></label>
+    <details id="figStyle"><summary>Personalización de las figuras</summary>
+      <label class="fld">Banda alrededor de la media<select id="intervalMode">
+        <option value="sd" selected>±DE · dispersión descriptiva</option>
+        <option value="ci95">IC 95 % de la media</option></select></label>
+      <div class="fld">Colores de curva e intervalo<div id="lineColors" class="colorgrid"></div></div>
+      <label class="fld">Opacidad de la banda<input id="intervalAlpha" type="range" min="0" max="0.7" step="0.01" value="0.18"></label>
+      <label class="chk"><input id="intervalEdges" type="checkbox">Mostrar líneas límite de la banda</label>
+      <div class="colorgrid">
+        <label class="colorrow">Banda de referencia<input id="referenceColor" type="color" value="#dbdbdb"></label>
+        <label class="colorrow">Relleno del clúster<input id="clusterColor" type="color" value="#db3d26"></label>
+      </div>
+      <label class="fld">Opacidad del clúster<input id="clusterAlpha" type="range" min="0" max="1" step="0.05" value="0.55"></label>
+      <label class="chk"><input id="clusterBars" type="checkbox">Mostrar barras del clúster (% del ciclo)</label>
+      <p class="hint">Los valores predeterminados mantienen el estilo MATLAB. Los cambios visuales no recalculan la inferencia.</p>
+      <button id="btnStyleApply" class="btn sm" type="button">Aplicar al informe</button>
+    </details>
+    <div class="fld">Variables<div id="varsBox" class="checks"></div></div>
+    <div id="cfgErr" class="errbox" hidden></div>
+    <button id="btnRun" class="btn primary">Ejecutar análisis SPM</button>
+    <div id="runWrap" hidden>
+      <div class="ruler small" style="margin-top:12px"><i id="runFill"></i></div>
+      <div id="runMsg" class="mono tiny" style="margin-top:8px"></div>
+      <div id="runLog" class="log mono tiny" style="margin-top:6px"></div>
+    </div>
+  </section>
+</aside>
+
+<main>
+  <nav id="tabs">
+    <button data-t="datos" class="on">Datos y mapeo</button>
+    <button data-t="informe">Informe SPM</button>
+    <button data-t="detalle">Detalle</button>
+    <button data-t="textos">Textos</button>
+  </nav>
+
+  <section class="tab on" id="t-datos">
+    <div class="empty" id="datosEmpty">Sube tu Excel/CSV consolidado o carga la demo para empezar.<br>
+      <small>Formatos: ancho (bloques Variable_0…100), largo (sujeto·variable·punto·valor) o transpuesto (filas 0–100). CSV español (; y coma decimal) autodetectado.</small></div>
+    <div class="card" id="upBox" hidden>
+      <div id="upInfo" class="mono tiny mut"></div>
+      <label class="fld inline" id="sheetWrap" hidden>Hoja de Excel<select id="sheetSel"></select></label>
+      <div class="tbl" id="prevWrap" style="margin-top:10px"></div>
+      <div class="fld">Estructura de los datos<div id="stRadios" class="grid2" style="margin-top:6px"></div></div>
+      <p class="hint" id="stHint" hidden>No se reconoció la estructura automáticamente: elígela y mapea manualmente.</p>
+      <div id="mapBox" style="margin-top:8px"></div>
+      <div id="mapErr" class="errbox" hidden></div>
+    </div>
+    <div class="card" id="canonBox" hidden>
+      <h3 style="margin-top:0">Base canónica</h3>
+      <div id="cMetrics" class="metrics"></div>
+      <div id="cQuality" class="quality"></div>
+      <div class="tbl" style="max-height:320px">
+        <table><thead><tr><th>Variable</th><th>Articulación</th><th>Plano</th></tr></thead><tbody id="vmBody"></tbody></table>
+      </div>
+      <button id="btnVm" class="btn sm" disabled>Guardar clasificación</button>
+      <div id="covHint" class="hint"></div>
+    </div>
+  </section>
+
+  <section class="tab" id="t-informe">
+    <div class="empty" id="infEmpty">Ejecuta un análisis para generar el informe 4×3.</div>
+    <div id="infBox" hidden>
+      <div class="toolbar">
+        <label class="chk" style="margin:0"><input id="incSpm" type="checkbox" checked>Paneles SPM</label>
+        <span id="sigChip" class="chip orange"></span>
+        <span class="spacer"></span>
+        <button id="dlPng3" class="btn sm">PNG 300</button>
+        <button id="dlPng6" class="btn sm">PNG 600</button>
+        <button id="dlSvg" class="btn sm">SVG</button>
+        <button id="dlPdf" class="btn sm">PDF</button>
+        <button id="dlCsv" class="btn sm">Tabla CSV</button>
+        <button id="dlXlsx" class="btn sm">Tabla XLSX</button>
+      </div>
+      <div class="figwrap"><img id="repImg" alt="Informe SPM 4×3"></div>
+      <h3>Tabla de clústeres</h3>
+      <div class="tbl" id="tabWrap" style="max-height:340px"></div>
+      <details id="warnBox" hidden><summary></summary><div id="warnList"></div></details>
+    </div>
+  </section>
+
+  <section class="tab" id="t-detalle">
+    <div class="empty" id="detEmpty">Ejecuta un análisis para explorar cada variable.</div>
+    <div id="detBox" hidden>
+      <div class="toolbar">
+        <label class="fld inline" style="margin:0">Variable<select id="detVar"></select></label>
+        <span class="spacer"></span>
+        <button id="dlDet6" class="btn sm">PNG 600</button>
+        <button id="dlDetSvg" class="btn sm">SVG</button>
+      </div>
+      <div id="detChips" class="chiprow mono"></div>
+      <div class="figwrap"><img id="detImg" alt="Detalle de la variable"></div>
+      <div id="phBox" hidden>
+        <h3>Post-hoc (Bonferroni)</h3>
+        <label class="fld inline">Contraste<select id="phSel"></select></label>
+        <div class="figwrap"><img id="phImg" alt="Contraste post-hoc"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tab" id="t-textos">
+    <div class="empty" id="txtEmpty">Los textos de Métodos y Resultados aparecerán tras el análisis.</div>
+    <div id="txtBox" hidden>
+      <h3 style="margin-top:0">Métodos</h3>
+      <div class="txtgrid">
+        <div class="box"><span class="lab">Español</span><textarea id="mtEs" readonly></textarea><button class="copybtn" data-for="#mtEs">Copiar</button></div>
+        <div class="box"><span class="lab">English</span><textarea id="mtEn" readonly></textarea><button class="copybtn" data-for="#mtEn">Copiar</button></div>
+      </div>
+      <h3>Resultados</h3>
+      <div class="txtgrid">
+        <div class="box"><span class="lab">Español</span><textarea id="rtEs" readonly></textarea><button class="copybtn" data-for="#rtEs">Copiar</button></div>
+        <div class="box"><span class="lab">English</span><textarea id="rtEn" readonly></textarea><button class="copybtn" data-for="#rtEn">Copiar</button></div>
+      </div>
+      <button id="btnTxt" class="btn sm" style="margin-top:12px">Descargar textos (.txt)</button>
+      <h3>Referencias</h3><ol id="refs" class="refs"></ol>
+    </div>
+  </section>
+</main>
+</div>
+
+<footer class="mono">GaitSPM 1.4 · Laboratory · Matplotlib / spm1d</footer>
+</div>
+
+<div id="errPanel" hidden><div class="errcard">
+  <div class="errhead">Error de Python<span class="spacer" style="flex:1"></span>
+    <button id="errCopy" class="btn sm">Copiar</button><button id="errClose" class="btn sm">Cerrar</button></div>
+  <pre id="errTxt" class="mono"></pre>
+</div></div>

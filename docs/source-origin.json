@@ -1,0 +1,21 @@
+{
+  "version": "1.2.0",
+  "archive": "gaitspm_artefactos_v1.2.0.zip",
+  "sha256": "0b27cd8c6e14dd337ce05c764a5b1909831bd45836037284e9dfbba2842537d6",
+  "files": {
+    "requirements.txt": "33a152344d2ec0a49a36322af8bf54267c9bbbdf6c3e39211ad265c207831b92",
+    "gaitspm.html": "cd9fc0a1fb6ad9d6c138063a586a9757199b942982c754f00577ae065a858519",
+    "gaitspm_app.py": "e6e9c7b88e2e8510635b6587b25612eba8105366f3e4847e9bd07d25f7e46fd4",
+    "sync_html_engine.py": "2680373ab065ab7fea3fdba450505451a0ae7f756a8cd5eb2e095b5f1994c306"
+  },
+  "application_modified": true,
+  "current_version": "1.4.1",
+  "phase": "audited-awaiting-github-destination",
+  "note": "Hashes above identify the untouched v1.2.0 source archive, not the current files.",
+  "base_release": {
+    "version": "1.3.0",
+    "archive": "GaitSPM_v1.3.0.zip",
+    "sha256": "6dcfe7dadb6bd398bec985796908ced10bab81ed488a3c67bb5ca0a32ddae1b3",
+    "recovered_date": "2026-10-24"
+  }
+}

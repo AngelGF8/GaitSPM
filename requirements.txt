@@ -1,0 +1,7 @@
+# Native local browser application. Tested with Python 3.12.14.
+# spm1d 0.4.53 is included in vendor/; no separate install required.
+numpy==2.3.5
+scipy==1.17.0
+pandas==2.2.3
+matplotlib==3.10.8
+openpyxl==3.1.5

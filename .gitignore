@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example
+data_private/
+audit-v1.4/workbooks/
+*.inspect.ndjson

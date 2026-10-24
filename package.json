@@ -1,0 +1,14 @@
+{
+  "name": "gaitspm-laboratory",
+  "version": "1.4.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "python launch.py",
+    "build": "python app/sync_html_engine.py",
+    "test:ui": "node tests/test_ui.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "26.1.0"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "source_repository": "https://github.com/aalhossary/MovementRx",
+  "commit": "70f97b52b55e476fa52f9e733a98cefe55532c18",
+  "source_path": "spmclient/res/refData/kinematic/L_KneeX_Ang_Ref.csv",
+  "source_git_blob": "b971c393d1fa5219e49ba7755ce784189e36c4f8",
+  "original_sha256": "6297b70e0eb8f8e30b4f2bfde60b985fff3b596c1d1671e8dac91a8fa01dc3ae",
+  "adapted_sha256": "1bddee6d7eff3daf6c6c61d0c0a20e93aa9bad855a747c11878ab4b331c292ed",
+  "article": "https://doi.org/10.1038/s41598-023-29635-4",
+  "attribution": "Alhossary A, Pataky T, Ang WT, Chua KSG, Kwong WH, Donnelly CJ. MovementRx (2023).",
+  "upstream_license": "GNU GPL v3, LICENSE retained",
+  "participants": 20,
+  "nodes": 101,
+  "variable": "KneeSagittal",
+  "units": "degrees",
+  "adaptation": "Original 101 measurement columns renamed to KneeSagittal_0..100; added row IDs, side L, REFERENCE condition and arbitrary alternating TestA/TestB labels. No alteration of curve values or signs. Original knee sign convention retained.",
+  "interpretation_limit": "TestA/TestB are artificial test labels within the same reference cohort, not diagnoses or interventions. Statistical outputs serve only to test software; they are not clinical findings."
+}

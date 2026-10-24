@@ -1,0 +1,10 @@
+[
+  {
+    "package": "openpyxl",
+    "version": "3.1.5"
+  },
+  {
+    "package": "et_xmlfile",
+    "version": "2.0.0"
+  }
+]

@@ -1,0 +1,5 @@
+dataset,variable,metric,group,n,target_mean,target_sd,simulated_mean,simulated_sd,units,source
+06_acl,HipFlexion,node_0,Control,30,26.10000000,7.40000000,26.10000000,7.40000000,deg,https://pmc.ncbi.nlm.nih.gov/articles/PMC4313379/
+06_acl,HipFlexion,node_0,ACLR,30,20.00000000,7.40000000,20.00000000,7.40000000,deg,https://pmc.ncbi.nlm.nih.gov/articles/PMC4313379/
+06_acl,KneeFlexion,node_12,Control,30,20.10000000,5.10000000,20.10000000,5.10000000,deg,https://pmc.ncbi.nlm.nih.gov/articles/PMC4313379/
+06_acl,KneeFlexion,node_12,ACLR,30,18.50000000,5.00000000,18.50000000,5.00000000,deg,https://pmc.ncbi.nlm.nih.gov/articles/PMC4313379/

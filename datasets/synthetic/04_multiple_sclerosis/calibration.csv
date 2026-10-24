@@ -1,0 +1,7 @@
+dataset,variable,metric,group,n,target_mean,target_sd,simulated_mean,simulated_sd,units,source
+04_multiple_sclerosis,HipFlexion,ROM,Control,30,38,5,38.00000000,5.00000000,deg,https://doi.org/10.3389/fnhum.2016.00620
+04_multiple_sclerosis,HipFlexion,ROM,MS,30,35,11,35.00000000,11.00000000,deg,https://doi.org/10.3389/fnhum.2016.00620
+04_multiple_sclerosis,KneeFlexion,ROM,Control,30,56,5,56.00000000,5.00000000,deg,https://doi.org/10.3389/fnhum.2016.00620
+04_multiple_sclerosis,KneeFlexion,ROM,MS,30,46,15,46.00000000,15.00000000,deg,https://doi.org/10.3389/fnhum.2016.00620
+04_multiple_sclerosis,AnkleDorsiflexion,ROM,Control,30,33,7,33.00000000,7.00000000,deg,https://doi.org/10.3389/fnhum.2016.00620
+04_multiple_sclerosis,AnkleDorsiflexion,ROM,MS,30,26,6,26.00000000,6.00000000,deg,https://doi.org/10.3389/fnhum.2016.00620

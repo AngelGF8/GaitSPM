@@ -1,0 +1,7 @@
+dataset,variable,metric,group,n,target_mean,target_sd,simulated_mean,simulated_sd,units,source
+01_fai,HipFlexion,ROM,Control,30,46.86000000,3.79000000,46.86000000,3.79000000,deg,https://doi.org/10.1186/s12891-025-08727-4
+01_fai,HipFlexion,ROM,FAIS,30,46.11000000,5.82000000,46.11000000,5.82000000,deg,https://doi.org/10.1186/s12891-025-08727-4
+01_fai,HipAdduction,ROM,Control,30,15.83000000,2.81000000,15.83000000,2.81000000,deg,https://doi.org/10.1186/s12891-025-08727-4
+01_fai,HipAdduction,ROM,FAIS,30,15.35000000,2.11000000,15.35000000,2.11000000,deg,https://doi.org/10.1186/s12891-025-08727-4
+01_fai,HipRotation,ROM,Control,30,16.23000000,4.99000000,16.23000000,4.99000000,deg,https://doi.org/10.1186/s12891-025-08727-4
+01_fai,HipRotation,ROM,FAIS,30,20.99000000,8.77000000,20.99000000,8.77000000,deg,https://doi.org/10.1186/s12891-025-08727-4
