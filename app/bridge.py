@@ -1,6 +1,6 @@
 # ============================================================================
-# Puente JS <-> motor GaitSPM (mismo espacio de nombres que engine_web.py).
-# Todas las funciones js_* reciben y devuelven JSON (str).
+# JavaScript <-> GaitSPM engine bridge (shared engine namespace).
+# All js_* functions receive and return JSON strings.
 # ============================================================================
 import json, base64, traceback
 import io as _io
@@ -360,7 +360,7 @@ def js_templates():
             "long": base64.b64encode(ld.to_csv(index=False).encode()).decode()}
 
 
-# estilo global de figuras (una vez)
+# global figure styling (once)
 apply_matlab_style()
 from matplotlib.font_manager import fontManager
 _installed_fonts = {f.name for f in fontManager.ttflist}

@@ -108,7 +108,7 @@ def apply_matlab_style():
 
 
 # ----------------------------------------------------------------------------
-# Textos de figuras (ES/EN)
+# Figure labels (ES/EN)
 # ----------------------------------------------------------------------------
 LBL = {
     "es": {
@@ -228,7 +228,7 @@ def _to_numeric(values, errors='coerce'):
 
 
 def find_curve_blocks(cols):
-    """Bloques de columnas 'Variable_0 … Variable_100' (formato ancho)."""
+    """Column blocks 'Variable_0 … Variable_100' (wide format)."""
     pat = re.compile(r"^(?P<base>.*?)[\s_\-\.]*?(?P<idx>\d{1,3})$")
     groups = {}
     for c in cols:
@@ -263,7 +263,7 @@ def detect_structure(df: pd.DataFrame):
 
 
 def resample1(x, y):
-    """Reinterpola una curva a la rejilla 0–100 (101 nodos)."""
+    """Resample a curve onto the 0–100 grid (101 nodes)."""
     x = np.asarray(x, float)
     y = np.asarray(y, float)
     ok = np.isfinite(x) & np.isfinite(y)
@@ -284,7 +284,7 @@ def resample1(x, y):
 
 
 def resample_rows(idxs, M):
-    """Reinterpola cada fila de M (obs × puntos) a 101 nodos."""
+    """Resample each row of M (observations × points) to 101 nodes."""
     idxs = np.asarray(idxs, float)
     if idxs.max() > 100 and idxs.max() > idxs.min():
         x = (idxs - idxs.min()) / (idxs.max() - idxs.min()) * 100.0
@@ -323,7 +323,7 @@ def split_side(name: str):
 
 
 def merge_side_tokens(canon: pd.DataFrame):
-    """Extrae el lado codificado en el nombre de la variable."""
+    """Extract the side encoded in a variable name."""
     ren, sides = {}, {}
     for v in canon["variable"].unique():
         s, base = split_side(v)
@@ -440,7 +440,7 @@ def _finalize_canon(canon: pd.DataFrame):
 
 
 def canonical_quality(canon: pd.DataFrame):
-    """Indicadores de calidad que deben revisarse antes del análisis."""
+    """Quality indicators to review before analysis."""
     keys = ["subject", "group", "condition", "side", "variable"]
     curves = (canon.groupby(keys, observed=True)['node']
               .agg(n_nodes='nunique', node_min='min', node_max='max'))
@@ -631,7 +631,7 @@ def prepare_between(canon, variable, groups_sel, cond, side_mode):
 
 
 def prepare_levels(canon, variable, factor, levels, cond, group, side_mode):
-    """Alinea sujetos comunes a través de niveles pareados (condición o lado)."""
+    """Align shared participants across paired levels (condition or side)."""
     mats = {}
     for lv in levels:
         if factor == "condition":
@@ -740,11 +740,11 @@ def eta2_curve(Ys):
 
 
 def eta2p_rm_curve(Ys):
-    """ηp² nodo a nodo para un diseño intra-sujeto de una vía.
+    """Nodewise partial eta squared for a one-way within-subject design.
 
-    ``Ys`` contiene una matriz sujetos×nodos por condición y debe estar
-    alineada por sujeto. El denominador excluye la variabilidad estable entre
-    sujetos: SS_condición / (SS_condición + SS_error).
+    ``Ys`` contains one participants×nodes matrix per condition and must be
+    aligned by participant. The denominator excludes stable between-subject
+    variability: SS_condition / (SS_condition + SS_error).
     """
     X = np.stack(Ys, axis=1)  # sujetos × condiciones × nodos
     grand = X.mean(axis=(0, 1), keepdims=True)
@@ -758,7 +758,7 @@ def eta2p_rm_curve(Ys):
 
 
 def rm_model_residuals(Ys):
-    """Residuos del modelo RM tras retirar condición y sujeto."""
+    """RM model residuals after removing condition and participant effects."""
     X = np.stack(Ys, axis=1)
     grand = X.mean(axis=(0, 1), keepdims=True)
     cond_mean = X.mean(axis=0, keepdims=True)
@@ -1150,7 +1150,7 @@ def compute_band(canon, var, cfg):
 
 
 def adjust_pvalues(pvalues, method="holm"):
-    """Ajusta una familia de p-valores sin dependencias externas."""
+    """Adjust a family of p-values without external dependencies."""
     p = np.asarray(pvalues, float)
     if method == "none" or len(p) == 0:
         return np.clip(p, 0, 1)
@@ -1196,7 +1196,7 @@ def apply_field_correction(results, cfg):
 
 
 def confirmed_clusters(res):
-    """Clústeres que mantienen la inferencia definida para la familia."""
+    """Clusters retaining significance under the selected familywise inference."""
     if res.get("field_correction", "none") == "none" and res.get("effect_count", 1) == 1:
         return res.get("clusters", [])
     return [c for c in res.get("clusters", [])
@@ -1240,7 +1240,7 @@ def _bounded_style_float(value, fallback):
 
 
 def plot_style(cfg=None):
-    """Normaliza la personalización de figuras conservando MATLAB por defecto."""
+    """Normalize figure options while retaining the default MATLAB styling."""
     cfg = cfg or {}
     supplied = cfg.get("line_colors")
     if not isinstance(supplied, (list, tuple)):
@@ -1269,7 +1269,7 @@ def plot_style(cfg=None):
 
 
 def _interval_halfwidth(group, mode):
-    """Semianchura de la banda: DE descriptiva o IC95% de la media."""
+    """Band half-width: descriptive SD or 95% confidence interval for the mean."""
     sd = np.asarray(group["sd"], float)
     n = int(group.get("n", 0))
     if mode != "ci95" or n < 2:
@@ -1504,7 +1504,7 @@ def fig_detail(res, band, lang, cfg):
 
 
 def fig_pair(res, ph, lang, cfg=None):
-    """Figura de un contraste post-hoc (medias del par + su SPM{t})."""
+    """Post hoc contrast figure (pair means and their SPM{t})."""
     apply_matlab_style()
     fig = plt.figure(figsize=(7.6, 6.2))
     gs = gridspec.GridSpec(2, 1, figure=fig, height_ratios=[1.6, 1], hspace=0.12,
@@ -1828,15 +1828,15 @@ DEMO_CONDS = ["PRE", "POST", "SEG"]
 
 
 def demo_dataset(n_per_group=12, seed=42):
-    """Marcha sintética realista (12 variables PiG × 3 grupos × 3 condiciones × 2 lados).
+    """Synthetic gait demonstration (12 PiG variables × 3 groups × 3 conditions × 2 sides).
 
-    Efectos inyectados en «FAI cam» (mitad de magnitud en «Cam asintomático»):
-      · ↓ extensión de cadera terminal (~40–65 % del ciclo)
-      · ↓ aducción de cadera en apoyo (~15–40 %)
-      · ↓ rotación interna de cadera durante el apoyo
-      · ligera anteversión pélvica constante
-    Otros: POST/SEG ↑ dorsiflexión (~45 %); lado R ↑ flexión de rodilla en
-    oscilación; «velocidad» escala el pico de flexión de rodilla en oscilación.
+    Effects injected into «FAI cam» (half the magnitude in «Cam asintomático»):
+      · ↓ terminal hip extension (~40–65% of the cycle)
+      · ↓ hip adduction during stance (~15–40%)
+      · ↓ hip internal rotation during stance
+      · slight constant anterior pelvic tilt
+    Other effects: POST/SEG ↑ dorsiflexion (~45%); side R ↑ swing-phase knee
+    flexion; «velocidad» scales peak knee flexion during swing.
     """
     from scipy.ndimage import gaussian_filter1d
     rng = np.random.default_rng(seed)
@@ -1896,7 +1896,7 @@ def demo_dataset(n_per_group=12, seed=42):
 
 
 def demo_wide_df(canon, meta):
-    """Exporta el demo en formato ancho (1 fila por sujeto·condición·lado)."""
+    """Export the demo in wide format (one row per participant/condition/side)."""
     piv = canon.pivot_table(index=["subject", "group", "condition", "side"],
                             columns=["variable", "node"], values="value", observed=True)
     piv.columns = [f"{v}_{n}" for v, n in piv.columns]
