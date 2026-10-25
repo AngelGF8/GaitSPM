@@ -1,18 +1,28 @@
-# GaitSPM
+<h1 align="center">GaitSPM</h1>
+<p align="center"><strong>From gait curves to SPM — without writing analysis code.</strong><br>Participant-aware analysis · MATLAB-style figures · CSV / Excel → SPM → export</p>
 
-Development: **1.5.0.dev0** · Last released citation: **1.4.2**
+<p align="center">
+  <a href="https://github.com/AngelGF8/GaitSPM/actions/workflows/tests.yml"><img alt="Native tests: Linux, Windows and macOS" src="https://github.com/AngelGF8/GaitSPM/actions/workflows/tests.yml/badge.svg"></a>
+  <a href="https://github.com/AngelGF8/GaitSPM/actions/workflows/pages.yml"><img alt="Documentation and Pages deployment" src="https://github.com/AngelGF8/GaitSPM/actions/workflows/pages.yml/badge.svg"></a>
+  <a href="LICENSE"><img alt="Licence: GPL v3" src="https://img.shields.io/badge/License-GPLv3-0969da"></a>
+  <a href="requirements.txt"><img alt="Python 3.12" src="https://img.shields.io/badge/Python-3.12-3776ab?logo=python&amp;logoColor=white"></a>
+  <a href="https://spm1d.org/"><img alt="Powered by spm1d 0.4.53" src="https://img.shields.io/badge/spm1d-0.4.53-6f42c1"></a>
+  <a href="CHANGELOG.md"><img alt="Development version 1.5.0.dev0" src="https://img.shields.io/badge/Development-1.5.0.dev0-8250df"></a>
+</p>
 
-[![Tests](https://github.com/AngelGF8/GaitSPM/actions/workflows/tests.yml/badge.svg)](https://github.com/AngelGF8/GaitSPM/actions/workflows/tests.yml)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
-[![Python 3.12](https://img.shields.io/badge/Python-3.12-blue)](requirements.txt)
+<p align="center">
+  <a href="https://angelgf8.github.io/GaitSPM/app/"><img src="docs/assets/try-browser.svg" width="600" alt="Probar ahora en el navegador — abrir GaitSPM"></a>
+</p>
+<p align="center"><a href="https://angelgf8.github.io/GaitSPM/">Documentation</a> · <a href="LEEME_PRIMERO.md">Guía en español</a> · <a href="#start-on-your-computer">Run locally</a> · <a href="ROADMAP.md">Roadmap</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
 
-![Load data, inspect mapping, configure and view SPM results](docs/assets/workflow.gif)
+## See the workflow
 
-<p align="center"><a href="https://AngelGF8.github.io/GaitSPM/app/"><img src="https://img.shields.io/badge/Probar_ahora_en_el_navegador-Pyodide-102c4f?style=for-the-badge" alt="Probar ahora en el navegador"></a></p>
+<p align="center"><a href="https://angelgf8.github.io/GaitSPM/app/"><img src="docs/assets/workflow.gif" width="960" alt="Animated walkthrough: load data, inspect mapping, configure the analysis and view SPM fields"></a></p>
+<p align="center"><strong>1. Load curves → 2. Check participants → 3. Choose a design → 4. Explore and export</strong></p>
 
-**Hosting pending:** the button is the intended Pages address; enable Pages and deploy the documentation workflow before it becomes available. The GIF uses existing synthetic-example screenshots, not a recording of the new models. DOI, JOSS and Streamlit badges will be added only after their public records or deployments exist.
+The animation uses real interface screenshots of synthetic teaching examples. Browser mode downloads its scientific runtime on first use and processes uploaded data in your browser. Native Python remains the reference environment for the automated numerical checks.
 
-[Documentation](docs/index.md) · [Statistical designs](docs/statistics.md) · [Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md) · [Contribute](CONTRIBUTING.md)
+[Statistical designs](docs/statistics.md) · [Software validation](docs/validation-guide.md) · [Changelog](CHANGELOG.md) · Last released citation: **1.4.2**
 
 ## Unreleased statistical extensions
 
@@ -32,22 +42,30 @@ See the [validation methodology](docs/validation-guide.md). Research manuscripts
 
 | Aspect | GaitSPM | spm1d by code | Commercial software |
 |---|---|---|---|
-| Installation | Native Python launcher; browser deployment planned | Python or MATLAB environment | Product dependent |
+| Installation | Browser via GitHub Pages or native Python launcher | Python or MATLAB environment | Product dependent |
 | Code needed for routine analysis | Graphical controls | Analysis scripts | Product dependent |
 | Privacy | Native local or browser processing; hosted Streamlit would be remote | Depends on where scripts run | Deployment and vendor dependent |
-| Tests available | Guided subset plus adjusted/factorial models with stated limits | Broader programmable upstream API | Check the specific product and version |
+| Statistical designs | Guided subset plus adjusted/factorial models with stated limits | Broader programmable upstream API | Check the specific product and version |
 | Price / licence | No licence fee; GPL v3 | Open-source upstream; MATLAB runtime has separate licensing | Vendor dependent; no universal price claim |
 
 ## Interface gallery
 
-Existing MATLAB-style screenshots, using synthetic examples:
+Six views of the MATLAB-style interface. Click a screenshot to inspect it at full size. All examples shown are synthetic.
 
-| Import and mapping | Configure |
-|---|---|
-| ![Participant mapping](capturas/03_control_calidad_mapeo.png) | ![Analysis settings](capturas/04_configuracion_analisis.png) |
-| ![SPM results](capturas/06_resultados_figura_spm.png) | ![Variable detail](capturas/07_detalle_variable.png) |
-| ![Methods and results](capturas/08_textos_metodos_resultados.png) | ![Repeated-measures ANOVA](capturas/12_anova_medidas_repetidas.png) |
-
+<table>
+  <tr>
+    <td width="50%" align="center"><strong>01 · Import and participant mapping</strong><br><br><a href="capturas/03_control_calidad_mapeo.png"><img src="capturas/03_control_calidad_mapeo.png" alt="01 · Import and participant mapping" width="460"></a></td>
+    <td width="50%" align="center"><strong>02 · Configure your analysis</strong><br><br><a href="capturas/04_configuracion_analisis.png"><img src="capturas/04_configuracion_analisis.png" alt="02 · Configure your analysis" width="460"></a></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center"><strong>03 · Curves and SPM fields</strong><br><br><a href="capturas/06_resultados_figura_spm.png"><img src="capturas/06_resultados_figura_spm.png" alt="03 · Curves and SPM fields" width="460"></a></td>
+    <td width="50%" align="center"><strong>04 · Inspect a variable</strong><br><br><a href="capturas/07_detalle_variable.png"><img src="capturas/07_detalle_variable.png" alt="04 · Inspect a variable" width="460"></a></td>
+  </tr>
+  <tr>
+    <td width="50%" align="center"><strong>05 · Methods and results text</strong><br><br><a href="capturas/08_textos_metodos_resultados.png"><img src="capturas/08_textos_metodos_resultados.png" alt="05 · Methods and results text" width="460"></a></td>
+    <td width="50%" align="center"><strong>06 · Repeated-measures ANOVA</strong><br><br><a href="capturas/12_anova_medidas_repetidas.png"><img src="capturas/12_anova_medidas_repetidas.png" alt="06 · Repeated-measures ANOVA" width="460"></a></td>
+  </tr>
+</table>
 
 Local kinematic gait analysis with **spm1d 0.4.53**, a **Guided mode** and a **Laboratory mode**. English is the default interface language; use **ES** to switch to Spanish. Your explicit language choice is remembered in the browser.
 

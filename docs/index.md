@@ -4,7 +4,7 @@ GaitSPM turns participant-level gait curves into SPM1D analyses using the upstre
 
 [Open browser application](app/index.html) · [Clinical guide](guide.md) · [Software validation](validation-guide.md)
 
-The browser application becomes available here after the Pages workflow is deployed. It downloads Pyodide dependencies on first use; uploaded data are processed in your browser. Native local mode works offline after installation. A hosted Streamlit deployment would process uploads on its server.
+The browser application is hosted on GitHub Pages. It downloads Pyodide dependencies on first use; uploaded data are processed in your browser. Native local mode works offline after installation. A hosted Streamlit deployment would process uploads on its server.
 
 ## Quick start
 

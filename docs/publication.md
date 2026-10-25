@@ -18,7 +18,7 @@ Streamlit Community Cloud: create an app from this repository with entrypoint `a
 
 Repository settings: add topics `biomechanics`, `gait-analysis`, `spm1d`, `statistical-parametric-mapping`, `pyodide`, `streamlit`; enable Discussions; add a concise description and the verified documentation URL. Upload `docs/assets/social-preview.png` in General settings. Use the `good first issue` label on scoped, actionable contributor tasks.
 
-At inspection on 2026-10-25, GitHub reported Pages and Discussions disabled, no topics, and repository creation on 2026-10-24. This local update does not by itself change those settings.
+GitHub Pages was activated and deployed on 2026-10-25. Discussions and repository topics remain separate settings. The repository was created on 2026-10-24.
 
 ## Journal preparation
 

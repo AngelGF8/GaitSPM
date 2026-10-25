@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="92" viewBox="0 0 640 92" role="img" aria-labelledby="title desc">
+<title id="title">Probar ahora en el navegador</title><desc id="desc">Abre GaitSPM en GitHub Pages. No necesitas instalar Python.</desc>
+<rect width="640" height="92" rx="14" fill="#238636"/>
+<rect x="1" y="1" width="638" height="90" rx="13" fill="none" stroke="#2ea043" stroke-width="2"/>
+<circle cx="46" cy="46" r="19" fill="none" stroke="white" stroke-width="2"/>
+<ellipse cx="46" cy="46" rx="8" ry="19" fill="none" stroke="white" stroke-width="1.5"/>
+<path d="M27 46h38M30 37h32M30 55h32" fill="none" stroke="white" stroke-width="1.5"/>
+<text x="87" y="40" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="700" fill="white">Probar ahora en el navegador</text>
+<text x="87" y="67" font-family="Arial,Helvetica,sans-serif" font-size="17" fill="#e6ffed">Sin instalar Python · Pyodide · Datos en tu navegador</text>
+</svg>

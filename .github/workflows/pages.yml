@@ -36,3 +36,8 @@ jobs:
     steps:
       - uses: actions/deploy-pages@v4
         id: deployment
+      - uses: actions/checkout@v4
+      - name: Check public documentation and app URLs
+        env:
+          PAGES_URL: ${{ steps.deployment.outputs.page_url }}
+        run: python scripts/check_pages.py "$PAGES_URL"
