@@ -330,7 +330,7 @@ body{font-size:13px}button,select,input,textarea{font-family:var(--sans)}[hidden
 </main>
 </div>
 
-<footer class="mono">GaitSPM 1.4 · Laboratory · Matplotlib / spm1d</footer>
+<footer class="mono">GaitSPM · Laboratory · Matplotlib / spm1d</footer>
 </div>
 
 <div id="errPanel" hidden><div class="errcard">
@@ -3211,6 +3211,7 @@ function goTab(t){$$('#tabs button').forEach(b=>b.classList.toggle('on',b.datase
 let LANG='en', PANEL_PAGE=0, CATALOG=[], ACTIVE_DATASET=null, panelRequest=0;
 const BAND_COLORS=STYLE_COLORS.slice();
 const I18N={
+'Grupos (2+)':'Groups (2+)','Condiciones / Conditions':'Conditions',
 'Análisis':'Analysis','Lados':'Sides','Promediar L y R':'Average L and R','Solo L':'Left only','Solo R':'Right only','Cada sujeto aporta una observación; no se permite pseudo-replicación L/R.':'One observation per subject; L/R pseudo-replication is not allowed.',
 'Esclerosis múltiple':'Multiple sclerosis','FAI sintomático':'Symptomatic FAI','Laboratorio':'Laboratory','Análisis de la marcha':'Gait analysis','Explora curvas, contrasta hipótesis y prepara tus figuras.':'Explore waveforms, test hypotheses and prepare your figures.',
 'Datos':'Data','Resultados':'Results','Informe SPM':'SPM report','Datos y mapeo':'Data & mapping','Detalle':'Detail','Textos':'Text','Ajustes':'Settings','Configuración del análisis':'Analysis settings','Cerrar':'Close','Configurar':'Configure','Archivo':'Dataset','Sin datos':'No data','Diseño':'Design','Participantes':'Participants','Variables':'Variables','Método':'Method','Local · sesión privada':'Local · private session','En el navegador':'In browser',
@@ -3276,7 +3277,7 @@ async function setLanguage(lang){if(!['es','en'].includes(lang)||LANG===lang)ret
 async function laboratoryReady(){
  try{const saved=localStorage.getItem('gaitspm-language');if(['es','en'].includes(saved))LANG=saved;}catch(e){}
  document.documentElement.lang=LANG;$('#lang').value=LANG;
- const rail=document.createElement('nav');rail.className='rail';rail.setAttribute('aria-label','Navigation');rail.innerHTML='<div class="rail-logo">G<span style="font-size:12px;letter-spacing:0">SPM</span></div>'+[['datos','▦','Datos'],['informe','⌁','Resultados'],['detalle','⊕','Detalle'],['textos','≡','Textos']].map(([id,icon,title])=>'<button data-t="'+id+'"'+(id==='datos'?' class="on"':'')+'><span aria-hidden="true" class="icon">'+icon+'</span>'+title+'</button>').join('')+'<button id="openSettings"><span class="icon" aria-hidden="true">⚙</span>Ajustes</button><div class="rail-bottom">GAITSPM 1.4 · LAB</div>';document.body.append(rail);rail.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>goTab(b.dataset.t));$('#openSettings').onclick=openSettings;
+ const rail=document.createElement('nav');rail.className='rail';rail.setAttribute('aria-label','Navigation');rail.innerHTML='<div class="rail-logo">G<span style="font-size:12px;letter-spacing:0">SPM</span></div>'+[['datos','▦','Datos'],['informe','⌁','Resultados'],['detalle','⊕','Detalle'],['textos','≡','Textos']].map(([id,icon,title])=>'<button data-t="'+id+'"'+(id==='datos'?' class="on"':'')+'><span aria-hidden="true" class="icon">'+icon+'</span>'+title+'</button>').join('')+'<button id="openSettings"><span class="icon" aria-hidden="true">⚙</span>Ajustes</button><div class="rail-bottom">GAITSPM · LAB</div>';document.body.append(rail);rail.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>goTab(b.dataset.t));$('#openSettings').onclick=openSettings;
  const head=document.createElement('div');head.className='head-actions';head.append($('#envChip'));head.insertAdjacentHTML('beforeend','<div class="lang-switch" aria-label="Language"><button data-lang="en" class="on">EN</button><button data-lang="es">ES</button></div>');$('#hd').append(head);head.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>setLanguage(b.dataset.lang));
  const dialog=document.createElement('dialog');dialog.id='settingsDialog';dialog.innerHTML='<div class="drawer-head"><span>Configuración del análisis</span><button id="closeSettings">Cerrar</button></div>';document.body.append(dialog);dialog.append($('aside'));$('#closeSettings').onclick=()=>dialog.close();dialog.addEventListener('click',e=>{if(e.target===dialog&&e.clientX<dialog.getBoundingClientRect().left)dialog.close();});
  const main=$('main');main.insertAdjacentHTML('afterbegin','<div class="page-title"><div><div class="eyebrow">GAITSPM / Laboratorio</div><h1 id="pageHeading">Bases de ejemplo</h1><p>Explora curvas, contrasta hipótesis y prepara tus figuras.</p></div><div class="local-status"><span class="status-dot"></span>'+(nativeMode?'Local · sesión privada':'En el navegador')+'</div></div><div class="ribbon"><div><span>Archivo</span><b id="rDataset">Sin datos</b></div><div><span>Diseño</span><b id="rDesign">—</b></div><div><span>Participantes</span><b id="rN">—</b></div><div><span>Variables</span><b id="rVars">—</b></div><div><span>Método</span><b id="rMethod">—</b></div><div class="ribbon-end"><button id="rConfigure">Configurar ↗</button></div></div>');$('#rConfigure').onclick=openSettings;
@@ -3380,7 +3381,7 @@ async function showInterpretation(){
 const baseLaboratoryReady=laboratoryReady;
 laboratoryReady=async function(){
  await baseLaboratoryReady();
- $('.rail-bottom').textContent='GAITSPM 1.4';
+ $('.rail-bottom').textContent='GAITSPM';
  $('.head-actions').insertAdjacentHTML('afterbegin','<div class="mode-switch"><button id="modeLab"></button><button id="modeGuided"></button></div>');
  $('main').insertAdjacentHTML('afterbegin','<section id="guidePanel" class="guide-panel" aria-label="Guided workflow"><nav id="guideSteps"></nav><div class="guide-content"><div><p id="guideMessage"></p><small id="guideContext"></small></div><button id="guideNext"></button></div></section>');
  $('#canonBox').insertAdjacentHTML('beforeend','<p id="groupCounts" class="quality no-translate"></p><label class="units-check"><input id="unitsConfirmed" type="checkbox"><span>Confirmo ángulos en grados, ciclos correctamente segmentados y mapeo articular revisado.</span></label>');

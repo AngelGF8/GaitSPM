@@ -86,7 +86,7 @@ async function showInterpretation(){
 const baseLaboratoryReady=laboratoryReady;
 laboratoryReady=async function(){
  await baseLaboratoryReady();
- $('.rail-bottom').textContent='GAITSPM 1.4';
+ $('.rail-bottom').textContent='GAITSPM';
  $('.head-actions').insertAdjacentHTML('afterbegin','<div class="mode-switch"><button id="modeLab"></button><button id="modeGuided"></button></div>');
  $('main').insertAdjacentHTML('afterbegin','<section id="guidePanel" class="guide-panel" aria-label="Guided workflow"><nav id="guideSteps"></nav><div class="guide-content"><div><p id="guideMessage"></p><small id="guideContext"></small></div><button id="guideNext"></button></div></section>');
  $('#canonBox').insertAdjacentHTML('beforeend','<p id="groupCounts" class="quality no-translate"></p><label class="units-check"><input id="unitsConfirmed" type="checkbox"><span>Confirmo ángulos en grados, ciclos correctamente segmentados y mapeo articular revisado.</span></label>');

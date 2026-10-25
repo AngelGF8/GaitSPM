@@ -34,6 +34,7 @@ const fs=require('node:fs');
  await page.locator('#canonBox').scrollIntoViewIfNeeded();
  await shot('03_control_calidad_mapeo.png');
  await page.locator('#guideNext').click();
+ await page.waitForFunction(()=>!document.querySelector('#settingsDialog').innerText.includes('Grupos'));
  await shot('04_configuracion_analisis.png');
  await run();
  await page.locator('.rail [data-t=informe]').click();
