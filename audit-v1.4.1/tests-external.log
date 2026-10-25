@@ -1,9 +1,0 @@
-test_external_csv_real_http_roundtrip (__main__.ExternalUploadTests.test_external_csv_real_http_roundtrip) ... ok
-test_identity_fields_survive_import (__main__.ExternalUploadTests.test_identity_fields_survive_import) ... ok
-test_transposed_duplicate_or_missing_identity_tokens_rejected (__main__.ExternalUploadTests.test_transposed_duplicate_or_missing_identity_tokens_rejected) ... ok
-
-----------------------------------------------------------------------
-Ran 3 tests in 1.655s
-
-OK
-External CSV: original identity omission rejected; adapted 20×101 accepted; Welch matches SciPy; exports and state invalidation passed.

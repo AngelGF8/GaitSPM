@@ -55,6 +55,8 @@ Local kinematic gait analysis with **spm1d 0.4.53**, a **Guided mode** and a **L
 
 ## Start on your computer
 
+For a stable release, prefer its `GaitSPM_v*.zip` application asset. GitHub’s automatic source archive also includes developer tools and tests.
+
 1. Download the repository using **Code → Download ZIP**, or clone it. Extract the complete folder before running.
 2. Install **Python 3.12**, the version used by the automated checks.
 3. Run the appropriate launcher:
@@ -133,6 +135,6 @@ Version 1.4.2 uses explicit UTF-8 for source text and adds a launcher test. GitH
 
 **Remaining limits:** automated HTTP and DOM tests do not verify visual rendering, the browser file picker, mobile layout or desktop double-click behaviour. The optional Streamlit interface and direct-file Pyodide fallback are not validated by this workflow. Use the native Python launcher.
 
-See [test instructions](tests/README.md), [publication status](docs/GITHUB_READY.md), and the historical audit reports in `audit-v1.4/` and `audit-v1.4.1/`.
+See [test instructions](tests/README.md), [release and hosting guidance](docs/publication.md), and the [changelog](CHANGELOG.md). Historical audit files remain available in Git history.
 
 Author: **Ángel González de la Flor**. Licensed under **GPL v3**; see [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).

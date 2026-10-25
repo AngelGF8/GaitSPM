@@ -97,7 +97,7 @@ class ReleaseTests(unittest.TestCase):
                 matrix.append({'dataset':key,'variable':r['variable'],'design':cfg['design'],'n_included':r['n'],'clusters':len(r['clusters'])})
             en=call('js_set_language','en');done_en=call('js_run_done')
             fixtures[key]={'payload':p,'cfg':cfg,'done':done,'done_en':done_en,'explain':explanation,'texts':texts}
-        out=ROOT/'audit-v1.4';out.mkdir(exist_ok=True)
+        out=ROOT/'.test-output';out.mkdir(exist_ok=True)
         (out/'ui-fixtures.json').write_text(json.dumps({'catalog':synthetic_catalog(),'examples':fixtures}), encoding="utf-8")
         pd.DataFrame(matrix).to_csv(out/'example-results.csv',index=False)
 

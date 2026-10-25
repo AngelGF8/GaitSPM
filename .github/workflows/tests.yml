@@ -26,6 +26,7 @@ jobs:
       - run: python tests/test_bridge.py
       - run: python tests/test_release.py
       - run: python tests/test_external_upload.py
+      - run: python tests/test_package.py
       - uses: actions/setup-node@v4
         with:
           node-version: '22'

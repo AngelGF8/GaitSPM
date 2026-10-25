@@ -22,6 +22,6 @@ La prueba compara Welch entre esas etiquetas para verificar el programa, no para
 2. Aplica subject → ID, group → grupo, condition → condición, side → lado.
 3. Comprueba 20 participantes, TestA=10/TestB=10, 101 nodos y KneeSagittal → rodilla/sagital; confirma unidades y mapeo.
 4. Selecciona dos grupos independientes, TestA/TestB, REFERENCE, solo L, paramétrico, varianzas iguales desactivado (Welch), bilateral, α=0,05, Bonferroni.
-5. Ejecuta y exporta. La figura obtenida durante la auditoría está en `audit-v1.4.1/external-result.png`.
+5. Ejecuta y exporta. La ejecución genera `.test-output/external/external-result.png`; esta salida temporal no se versiona.
 
 Recrear la adaptación: `python scripts/prepare_external_csv.py`. Prueba reproducible de carga HTTP real: `python tests/test_external_upload.py`.

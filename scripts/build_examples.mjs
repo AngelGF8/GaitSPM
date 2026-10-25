@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import {Workbook,SpreadsheetFile} from '@oai/artifact-tool';
 const root=process.argv[2];
 const payload=JSON.parse(await fs.readFile(root+'/datasets/workbook_inputs.json','utf8'));
-const previewDir=process.argv[3]||root+'/audit-v1.4/workbooks';
+const previewDir=process.argv[3]||root+'/.test-output/workbooks';
 await fs.mkdir(previewDir,{recursive:true});
 const navy='#102C4F';
 function col(n){let s='';while(n){n--;s=String.fromCharCode(65+n%26)+s;n=Math.floor(n/26);}return s;}

@@ -14,11 +14,11 @@ npm install
 npm run test:ui
 ```
 
-`test_release.py` genera fixtures con resultados reales para `test_ui.cjs`. La prueba DOM usa jsdom y un puente simulado con esas salidas; no abre navegador ni verifica píxeles. Los tests Python validan por separado estadísticas, importación y puente real.
+`test_release.py` genera en `.test-output/` los fixtures con resultados reales para `test_ui.cjs`. La prueba DOM usa jsdom y un puente simulado con esas salidas; no abre navegador ni verifica píxeles. Los tests Python validan por separado estadísticas, importación y puente real.
 
-`test_browser.cjs` es una comprobación opcional Playwright preparada para un entorno con Chromium. No se ejecutó satisfactoriamente en esta revisión. `test_streamlit.py` y `run_matrix.py` son utilidades heredadas, no evidencia de pruebas 1.4; Streamlit requiere requisitos opcionales. Los resultados de la versión actual se documentan en audit-v1.4/INFORME.md.
+`test_browser.cjs` es una comprobación opcional Playwright preparada para un entorno con Chromium. No se ejecutó satisfactoriamente en esta revisión. `test_streamlit.py` y `run_matrix.py` son utilidades heredadas, no evidencia de pruebas 1.4; Streamlit requiere requisitos opcionales. Las salidas regenerables se guardan en `.test-output/`, excluido de Git.
 
-Prueba externa: tests/fixtures/movementrx/README.md. Informe adicional: audit-v1.4.1/INFORME.md.
+Prueba externa: tests/fixtures/movementrx/README.md.
 
 ## Launcher and platform checks
 

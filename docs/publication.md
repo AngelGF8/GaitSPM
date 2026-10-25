@@ -6,13 +6,13 @@
 
 1. Run all native, UI and concordance checks on the exact release commit; record the software test status.
 2. Build documentation and review the browser and Streamlit workflows with synthetic data.
-3. Update version, citation and changelog; tag the stable version. The release workflow runs tests and prepares an archive plus a draft GitHub release. The workflow attaches the verified artifacts; publish the draft after review.
+3. Update version, citation and changelog; tag the stable version. The release workflow runs tests and prepares a user application ZIP plus a draft GitHub release. The ZIP excludes tests, development scripts, historical logs and research materials; its checksums are generated inside the archive. GitHub also provides the complete source archive. The workflow attaches the verified artifacts; publish the draft after review.
 4. Enable the repository in the author's Zenodo account and archive the GitHub release. Verify its version DOI and concept DOI before adding the badge or identifier to citation metadata. See [Zenodo GitHub integration](https://help.zenodo.org/docs/github/).
 5. Repeat the archive verification for every release. A GitHub workflow cannot itself grant access to the author's Zenodo account.
 
 ## Hosting and repository settings
 
-Pages: select GitHub Actions in Settings → Pages, then run the Pages workflow. Documentation is served at the site root and Pyodide at `/app/`. Test file upload, inference and download in an actual browser before describing the hosted mode as validated.
+Pages: select GitHub Actions in Settings → Pages, then push to main or run the Pages workflow. Documentation is served at the site root and Pyodide at `/app/`. Test file upload, inference and download in an actual browser before describing the hosted mode as validated.
 
 Streamlit Community Cloud: create an app from this repository with entrypoint `app/gaitspm_app.py`. Its adjacent `app/requirements.txt` includes the optional Streamlit dependencies through `requirements-streamlit.txt`. Configure cloud dependencies appropriately and publish the resulting URL only after its smoke test. Hosted uploads run remotely.
 
@@ -28,7 +28,7 @@ Author review must supply affiliation, ORCID if available, funding/conflicts, re
 
 ## Outreach materials
 
-`outreach/drafts.md` contains unsent drafts for Todd Pataky, Biomch-L and social channels. Link a stable release, executable tests and an openly reproducible tutorial before inviting adoption. Track replies through issues only with the sender's permission. A request for a listing is not an endorsement.
+Keep outreach drafts outside the public source tree. Link a stable release, executable tests and an openly reproducible tutorial before inviting adoption. Track replies through issues only with the sender's permission. A request for a listing is not an endorsement.
 
 A real-data two-minute demo should show CSV provenance, mapping, design, SPM output and export, and identify whether the grouping is scientific or a test partition. Existing screenshots  are presentation assets, not evidence that a new real-data demonstration has been recorded.
 

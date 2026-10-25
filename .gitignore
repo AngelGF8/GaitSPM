@@ -19,3 +19,11 @@ docs/IMPLEMENTATION_STATUS.md
 tests/test_public_validation.py
 tests/fixtures/public_validation/
 audit-v1.4.2-original-manifest.sha256
+
+# Regenerable development and release outputs
+.test-output/
+dist/
+audit/
+audit-v*/
+MANIFEST.sha256
+outreach/

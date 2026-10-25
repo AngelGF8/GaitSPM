@@ -38,12 +38,13 @@ jobs:
           node-version: '22'
       - run: npm install
       - run: npm run test:ui
+      - run: python tests/test_package.py
       - run: python scripts/package_release.py
       - uses: actions/upload-artifact@v4
         with:
           name: release-package
           path: |
-            ../GaitSPM_v*.zip
+            dist/GaitSPM_v*.zip
   draft:
     needs: package
     runs-on: ubuntu-latest

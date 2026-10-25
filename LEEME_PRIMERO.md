@@ -47,7 +47,7 @@ Lectura y generación de fuentes con UTF-8 explícito, independiente de la confi
 
 Se probó un CSV público independiente de MovementRx: 20 curvas reales de referencia, con adaptación explícita de encabezados e IDs. No se modificó ningún ángulo. Los grupos TestA/TestB son etiquetas arbitrarias de prueba, no grupos clínicos. El recorrido HTTP de carga, mapeo, Welch y exportaciones pasó; el estadístico coincidió con SciPy con error máximo 1,25×10⁻¹⁴. CSV de prueba: `tests/fixtures/movementrx/movementrx_import_test.csv`. Fuente, licencia y conversión: `tests/fixtures/movementrx/README.md`.
 
-Se corrigieron IDs con ceros iniciales, interpretación de NA como ID, cabeceras y tokens duplicados, errores de subida ocultos, mapeos pendientes y reutilización de resultados tras una carga o configuración fallida. Informe completo: `audit-v1.4.1/INFORME.md`.
+Se corrigieron IDs con ceros iniciales, interpretación de NA como ID, cabeceras y tokens duplicados, errores de subida ocultos, mapeos pendientes y reutilización de resultados tras una carga o configuración fallida. Consulta las pruebas reproducibles en `tests/README.md`.
 
 ## Qué cambia
 
@@ -64,7 +64,7 @@ SPM1D analiza campos de curvas continuas; sus clústeres no equivalen a pruebas 
 
 Las recetas fijan α=0,05, pruebas bilaterales cuando procede y Bonferroni entre variables. No se debe cambiar de método buscando significación. La prueba de normalidad es orientativa; el modo automático no certifica supuestos. Las permutaciones de etiquetas entre grupos no ofrecen una alternativa Welch para varianzas desiguales. ANOVA de medidas repetidas depende de los supuestos de esfericidad: spm1d no aplica corrección de no esfericidad para ese diseño. Los post hoc son los que localizan pares tras el contraste global.
 
-La documentación oficial del motor se encuentra en https://spm1d.org/doc/Stats1D/anova.html y https://spm1d.org/doc/Stats1D/ . El informe `audit-v1.4/INFORME.md` distingue comprobaciones ejecutadas y pendientes. Esta revisión es una auditoría técnica interna, no validación clínica ni certificación.
+La documentación oficial del motor se encuentra en https://spm1d.org/doc/Stats1D/anova.html y https://spm1d.org/doc/Stats1D/ . Las instrucciones de verificación están en `tests/README.md`. Esta revisión es una auditoría técnica interna, no validación clínica ni certificación.
 
 ## Código y pruebas
 
@@ -72,4 +72,4 @@ Edita `app/gaitspm_app.py` para modificar el motor; `app/sync_html_engine.py` ge
 
 El modo Streamlit se conserva como alternativa de desarrollo (`requirements-streamlit.txt`) pero no se ha probado en esta versión. Abrir directamente `app/gaitspm.html` activa la alternativa Pyodide, que requiere descargar su runtime y no se ha validado aquí. El camino recomendado es el lanzador local.
 
-Autor: Ángel González de la Flor. Licencia GPL v3. El estado de preparación para GitHub se documenta en audit-v1.4.1/INFORME.md.
+Autor: Ángel González de la Flor. Licencia GPL v3. La guía de publicación está en `docs/publication.md`.

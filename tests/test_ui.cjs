@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {JSDOM,VirtualConsole}=require('jsdom');
 const root=path.resolve(__dirname,'..');
-const fixtures=JSON.parse(fs.readFileSync(path.join(root,'audit-v1.4/ui-fixtures.json')));
+const fixtures=JSON.parse(fs.readFileSync(path.join(root,'.test-output/ui-fixtures.json')));
 const errors=[],vc=new VirtualConsole();vc.on('jsdomError',e=>errors.push(e.message));
 const dom=new JSDOM(fs.readFileSync(path.join(root,'app/web/template.html'),'utf8'),{
  runScripts:'outside-only',url:'https://unit-test.invalid/',virtualConsole:vc

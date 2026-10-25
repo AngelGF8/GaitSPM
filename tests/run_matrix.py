@@ -8,6 +8,8 @@ from test_audit import E, ROOT, config, synthetic_catalog, synthetic_dataset
 
 warnings.filterwarnings('ignore',category=FutureWarning)
 started=time.time();rows=[]
+OUT=ROOT/'.test-output/matrix'
+OUT.mkdir(parents=True,exist_ok=True)
 for item in synthetic_catalog():
     c,m,_,vm=synthetic_dataset(item['key'])
     for label,settings in [('Student',{}),('Welch',{'equal_var':False}),('SnPM',{'mode':'nonparam','iterations':5000})]:
@@ -35,7 +37,7 @@ summary=dict(analyses=len(rows),failed=sum(not r['ok'] for r in rows),permutatio
     null_experiment=dict(seed=901,families=repetitions,variables_per_family=3,rejections=int(null_rejects),
         rate=rate,wilson95=[mid-half,mid+half],scope='Independent smooth Gaussian fields only'),
     seconds=round(time.time()-started,2))
-pd.DataFrame(rows).to_csv(ROOT/'audit/dataset-test-matrix.csv',index=False)
-(ROOT/'audit/matrix-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+pd.DataFrame(rows).to_csv(OUT/'dataset-test-matrix.csv',index=False)
+(OUT/'matrix-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
 print(json.dumps(summary,indent=2),flush=True)
 assert not summary['failed'], 'See dataset-test-matrix.csv'

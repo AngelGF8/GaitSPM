@@ -11,6 +11,11 @@
 - Reproducible synthetic spm1d concordance suite.
 - MkDocs Material documentation, Pages build workflow, contribution guidance and publication guidance.
 
+### Repository maintenance
+
+- Removed historical logs, audit outputs, duplicated English README and internal outreach drafts from the public tree.
+- Test outputs now use ignored `.test-output/`; application ZIPs contain runtime code, examples and user documentation, with a per-release checksum manifest.
+
 ### Limits
 
 - New models require parametric inference and equal variance. Factorial designs require balance; mixed designs assume sphericity and can use approximate residuals in spm1d.
@@ -24,4 +29,4 @@
 
 ## 1.4.1
 
-- External MovementRx import and export checks; historical audit in `audit-v1.4.1/`.
+- External MovementRx import and export checks. Historical audit files remain in Git history.

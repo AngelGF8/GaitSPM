@@ -15,7 +15,7 @@ from test_audit import E,ROOT,config
 import serve
 
 FIX=ROOT/'tests/fixtures/movementrx'
-OUT=ROOT/'audit-v1.4.1'
+OUT=ROOT/'.test-output/external'
 
 class ExternalUploadTests(unittest.TestCase):
     def test_identity_fields_survive_import(self):
@@ -79,7 +79,7 @@ class ExternalUploadTests(unittest.TestCase):
             computed=ns['STATE']['results']['KneeSagittal']
             expected=stats.ttest_ind(original[::2],original[1::2],axis=0,equal_var=False).statistic
             np.testing.assert_allclose(computed['z'],expected,rtol=1e-11,atol=1e-11)
-            OUT.mkdir(exist_ok=True)
+            OUT.mkdir(parents=True,exist_ok=True)
             formats={}
             for name in ('js_table_csv','js_table_xlsx'):
                 r=call(name);blob=base64.b64decode(r['b64']);self.assertGreater(len(blob),100)
