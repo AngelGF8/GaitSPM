@@ -9,7 +9,7 @@ from simulation import synthetic_catalog,synthetic_dataset
 def main(E):
     st.set_page_config(page_title='GaitSPM · Laboratory',layout='wide',initial_sidebar_state='expanded')
     ss=st.session_state
-    h1,h2=st.columns([8,1]);lang=h2.radio('ES / EN',['es','en'],horizontal=True,key='ui_language',label_visibility='collapsed')
+    h1,h2=st.columns([8,1]);lang=h2.radio('EN / ES',['en','es'],horizontal=True,key='ui_language',label_visibility='collapsed')
     def t(es,en):return en if lang=='en' else es
     h1.markdown('## GaitSPM <span style="font-size:14px;color:#6e8097">/ '+t('Laboratorio','Laboratory')+'</span>',unsafe_allow_html=True)
     st.markdown('''<style>html,body,[class*="css"],.stApp,button,input,textarea,select,h1,h2,h3,p,label{font-family:Arial,Helvetica,sans-serif!important}.stApp{background:#f4f6f9}section[data-testid="stSidebar"]{background:#edf2f7}h1,h2,h3{color:#102c4f}div[data-testid="stMetric"]{background:white;border:1px solid #dbe2ea;border-radius:6px;padding:12px}button[kind="primary"]{background:#102c4f;border-color:#102c4f}.block-container{padding-top:1.5rem}div[data-testid="stTabs"] button{font-size:14px}</style>''',unsafe_allow_html=True)

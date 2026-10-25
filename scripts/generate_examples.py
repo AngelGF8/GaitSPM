@@ -39,7 +39,7 @@ def main():
             pd.DataFrame(checks).to_csv(out/'calibration.csv',index=False,float_format='%.8f')
         all_checks+=checks
         assumptions=[
-            'DATOS SINTÉTICOS / SYNTHETIC DATA. No real patients. Not a sample-size calculation.',
+            'SYNTHETIC DATA. No real patients. Not a sample-size calculation.',
             '60 unique participants: 30 cases + 30 controls per example; repeated conditions do not increase independent n.',
             'Angles in degrees; 101 nodes = 0–100% of an already segmented gait cycle.',
             'L is an indexed simulated limb, not necessarily the clinically affected left side.',
@@ -52,9 +52,9 @@ def main():
         ]
         meta={**d,'seed':SEED,'anchors':spec['anchors'],'n_subjects':60,'n_nodes':101,'synthetic':True,'assumptions':assumptions}
         (out/'metadata.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n', encoding="utf-8")
-        intro=f'# {d["title_es"]} / {d["title_en"]}\n\n30 casos + 30 controles; {d["n_conditions"]} condición/es. DATOS SINTÉTICOS.\n\n'
-        source=f'Parámetros heredados de v1.3: [{d["citation"]}]({d["url"]}).' if d['url'] else 'Escenario didáctico hipotético añadido en v1.4. Sin efectos clínicos publicados.'
-        (out/'README.md').write_text(intro+source+'\n\n'+d['population']+'\n\nConfiguración recomendada: `'+json.dumps(d['recipe'],ensure_ascii=False)+'`.\n\nCargar '+key+'.csv o la hoja Curves_Wide de '+key+'.xlsx. El modo guiado reconoce las bases originales y propone la configuración. Los archivos editados requieren revisión manual.\n\n'+'\n'.join('- '+x for x in assumptions)+'\n', encoding="utf-8")
+        intro=f'# {d["title_en"]}\n\n30 cases + 30 controls; {d["n_conditions"]} condition(s). SYNTHETIC DATA.\n\n'
+        source=f'Scalar parameters retained from v1.3: [{d["citation"]}]({d["url"]}).' if d['url'] else 'Hypothetical teaching scenario added in v1.4. No published clinical effects.'
+        (out/'README.md').write_text(intro+source+'\n\n'+d['population']+'\n\nRecommended configuration: `'+json.dumps(d['recipe'],ensure_ascii=False)+'`.\n\nLoad '+key+'.csv or the Curves_Wide sheet in '+key+'.xlsx. Guided mode recognizes the original datasets and proposes settings. Edited files require manual review.\n\n'+'\n'.join('- '+x for x in assumptions)+'\n', encoding="utf-8")
         payload.append({'spec':meta,'wide':[wide.columns.tolist()]+wide.values.tolist(),'people':[m.columns.tolist()]+m.values.tolist(),'checks':checks})
     dest=ROOT/'datasets/synthetic';pd.DataFrame(all_checks).to_csv(dest/'calibration_all.csv',index=False,float_format='%.8f')
     (dest/'catalog.json').write_text(json.dumps(synthetic_catalog(),ensure_ascii=False,indent=2), encoding="utf-8")

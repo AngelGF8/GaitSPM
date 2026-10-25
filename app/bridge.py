@@ -126,7 +126,7 @@ def js_apply_long(roles_json):
     roles = json.loads(roles_json)
     roles = {k: v for k, v in roles.items() if v or k == "covariates"}
     canon, meta, covs = canon_from_long(STATE["updf"], roles)
-    # la selección explícita de covariables manda sobre la heurística de autodetección
+    # explicit covariate selection takes precedence over automatic detection heuristics
     df = STATE["updf"]
     want = [c for c in (roles.get("covariates") or []) if c in df.columns]
     missing = [c for c in want if c not in covs]

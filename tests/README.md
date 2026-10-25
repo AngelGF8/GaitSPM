@@ -1,8 +1,8 @@
-# Reproducir comprobaciones
+# Reproduce the checks
 
-Python 3.12: instala `requirements.txt`; spm1d está incluido en `vendor/`.
+Use Python 3.12 and install `requirements.txt`; spm1d is included in `vendor/`.
 
-Desde la raíz:
+Run from the repository root:
 
 ```sh
 python app/sync_html_engine.py
@@ -14,11 +14,11 @@ npm install
 npm run test:ui
 ```
 
-`test_release.py` genera en `.test-output/` los fixtures con resultados reales para `test_ui.cjs`. La prueba DOM usa jsdom y un puente simulado con esas salidas; no abre navegador ni verifica píxeles. Los tests Python validan por separado estadísticas, importación y puente real.
+`test_release.py` generates fixtures with real analysis results in `.test-output/` for `test_ui.cjs`. The DOM test uses jsdom and a mock bridge returning those results; it does not open a browser or verify pixels. Python tests separately validate statistics, import and the real bridge.
 
-`test_browser.cjs` es una comprobación opcional Playwright preparada para un entorno con Chromium. No se ejecutó satisfactoriamente en esta revisión. `test_streamlit.py` y `run_matrix.py` son utilidades heredadas, no evidencia de pruebas 1.4; Streamlit requiere requisitos opcionales. Las salidas regenerables se guardan en `.test-output/`, excluido de Git.
+`test_browser.cjs` is an optional Playwright check requiring Chromium. `test_streamlit.py` and `run_matrix.py` are legacy utilities, not evidence of version 1.4 validation; Streamlit requires optional dependencies. Regenerable outputs are stored in `.test-output/`, which is excluded from Git.
 
-Prueba externa: tests/fixtures/movementrx/README.md.
+See [the external CSV fixture](fixtures/movementrx/README.md) for its provenance and reproduction steps.
 
 ## Launcher and platform checks
 

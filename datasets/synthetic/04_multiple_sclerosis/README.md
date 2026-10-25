@@ -1,16 +1,16 @@
-# Esclerosis múltiple / Multiple sclerosis
+# Multiple sclerosis
 
-30 casos + 30 controles; 1 condición/es. DATOS SINTÉTICOS.
+30 cases + 30 controls; 1 condition(s). SYNTHETIC DATA.
 
-Parámetros heredados de v1.3: [Lencioni et al. (2016), Table 1, speed-matched controls](https://doi.org/10.3389/fnhum.2016.00620).
+Scalar parameters retained from v1.3: [Lencioni et al. (2016), Table 1, speed-matched controls](https://doi.org/10.3389/fnhum.2016.00620).
 
 Multiple sclerosis, published n=17 cases and n=12 speed-matched controls; EDSS 5.8 ± 0.8, slow gait. Selected neurological scenario.
 
-Configuración recomendada: `{"design": "ttest2", "groups": ["Control", "MS"], "cond": "BASE", "cond_levels": null, "group_filter": null, "side_mode": "L", "mode": "param", "equal_var": false, "alpha": 0.05, "two_tailed": true, "field_correction": "bonferroni"}`.
+Recommended configuration: `{"design": "ttest2", "groups": ["Control", "MS"], "cond": "BASE", "cond_levels": null, "group_filter": null, "side_mode": "L", "mode": "param", "equal_var": false, "alpha": 0.05, "two_tailed": true, "field_correction": "bonferroni"}`.
 
-Cargar 04_multiple_sclerosis.csv o la hoja Curves_Wide de 04_multiple_sclerosis.xlsx. El modo guiado reconoce las bases originales y propone la configuración. Los archivos editados requieren revisión manual.
+Load 04_multiple_sclerosis.csv or the Curves_Wide sheet in 04_multiple_sclerosis.xlsx. Guided mode recognizes the original datasets and proposes settings. Edited files require manual review.
 
-- DATOS SINTÉTICOS / SYNTHETIC DATA. No real patients. Not a sample-size calculation.
+- SYNTHETIC DATA. No real patients. Not a sample-size calculation.
 - 60 unique participants: 30 cases + 30 controls per example; repeated conditions do not increase independent n.
 - Angles in degrees; 101 nodes = 0–100% of an already segmented gait cycle.
 - L is an indexed simulated limb, not necessarily the clinically affected left side.

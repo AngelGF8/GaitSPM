@@ -1,7 +1,7 @@
 """Build the native engine and self-contained HTML from reviewable sources."""
 from pathlib import Path
 ROOT = Path(__file__).resolve().parent
-MARKER = '# ----------------------------------------------------------------------------\n# Interfaz Streamlit'
+MARKER = '# ----------------------------------------------------------------------------\n# Streamlit interface'
 
 def main():
     s = (ROOT / 'gaitspm_app.py').read_text(encoding='utf-8')

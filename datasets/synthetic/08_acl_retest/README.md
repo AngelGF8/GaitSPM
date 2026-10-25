@@ -1,16 +1,16 @@
-# LCA · repetición sin cambio sistemático / ACL · repeat measurement without systematic change
+# ACL · repeat measurement without systematic change
 
-30 casos + 30 controles; 2 condición/es. DATOS SINTÉTICOS.
+30 cases + 30 controls; 2 condition(s). SYNTHETIC DATA.
 
-Escenario didáctico hipotético añadido en v1.4. Sin efectos clínicos publicados.
+Hypothetical teaching scenario added in v1.4. No published clinical effects.
 
 Simulación longitudinal: 30 ACLR y 30 controles, TEST/RETEST. Generador sin cambio sistemático; un resultado no significativo no prueba equivalencia.
 
-Configuración recomendada: `{"design": "paired_cond", "groups": null, "cond": null, "cond_levels": ["TEST", "RETEST"], "group_filter": "ACLR", "side_mode": "L", "mode": "param", "equal_var": true, "alpha": 0.05, "two_tailed": true, "field_correction": "bonferroni"}`.
+Recommended configuration: `{"design": "paired_cond", "groups": null, "cond": null, "cond_levels": ["TEST", "RETEST"], "group_filter": "ACLR", "side_mode": "L", "mode": "param", "equal_var": true, "alpha": 0.05, "two_tailed": true, "field_correction": "bonferroni"}`.
 
-Cargar 08_acl_retest.csv o la hoja Curves_Wide de 08_acl_retest.xlsx. El modo guiado reconoce las bases originales y propone la configuración. Los archivos editados requieren revisión manual.
+Load 08_acl_retest.csv or the Curves_Wide sheet in 08_acl_retest.xlsx. Guided mode recognizes the original datasets and proposes settings. Edited files require manual review.
 
-- DATOS SINTÉTICOS / SYNTHETIC DATA. No real patients. Not a sample-size calculation.
+- SYNTHETIC DATA. No real patients. Not a sample-size calculation.
 - 60 unique participants: 30 cases + 30 controls per example; repeated conditions do not increase independent n.
 - Angles in degrees; 101 nodes = 0–100% of an already segmented gait cycle.
 - L is an indexed simulated limb, not necessarily the clinically affected left side.

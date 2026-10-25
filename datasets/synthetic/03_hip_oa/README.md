@@ -1,16 +1,16 @@
-# Artrosis de cadera / Hip osteoarthritis
+# Hip osteoarthritis
 
-30 casos + 30 controles; 1 condición/es. DATOS SINTÉTICOS.
+30 cases + 30 controls; 1 condition(s). SYNTHETIC DATA.
 
-Parámetros heredados de v1.3: [Bahr et al. (2021), Table 2, preoperative hip vs controls](https://doi.org/10.12659/MSM.934558).
+Scalar parameters retained from v1.3: [Bahr et al. (2021), Table 2, preoperative hip vs controls](https://doi.org/10.12659/MSM.934558).
 
 Unilateral hip osteoarthritis before THA, n=23; healthy controls n=39. Same source as THA, independently simulated IDs.
 
-Configuración recomendada: `{"design": "ttest2", "groups": ["Control", "HOA"], "cond": "BASE", "cond_levels": null, "group_filter": null, "side_mode": "L", "mode": "param", "equal_var": false, "alpha": 0.05, "two_tailed": true, "field_correction": "bonferroni"}`.
+Recommended configuration: `{"design": "ttest2", "groups": ["Control", "HOA"], "cond": "BASE", "cond_levels": null, "group_filter": null, "side_mode": "L", "mode": "param", "equal_var": false, "alpha": 0.05, "two_tailed": true, "field_correction": "bonferroni"}`.
 
-Cargar 03_hip_oa.csv o la hoja Curves_Wide de 03_hip_oa.xlsx. El modo guiado reconoce las bases originales y propone la configuración. Los archivos editados requieren revisión manual.
+Load 03_hip_oa.csv or the Curves_Wide sheet in 03_hip_oa.xlsx. Guided mode recognizes the original datasets and proposes settings. Edited files require manual review.
 
-- DATOS SINTÉTICOS / SYNTHETIC DATA. No real patients. Not a sample-size calculation.
+- SYNTHETIC DATA. No real patients. Not a sample-size calculation.
 - 60 unique participants: 30 cases + 30 controls per example; repeated conditions do not increase independent n.
 - Angles in degrees; 101 nodes = 0–100% of an already segmented gait cycle.
 - L is an indexed simulated limb, not necessarily the clinically affected left side.

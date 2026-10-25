@@ -1,16 +1,16 @@
-# Esclerosis múltiple · fatiga y recuperación / Multiple sclerosis · fatigue and recovery
+# Multiple sclerosis · fatigue and recovery
 
-30 casos + 30 controles; 3 condición/es. DATOS SINTÉTICOS.
+30 cases + 30 controls; 3 condition(s). SYNTHETIC DATA.
 
-Escenario didáctico hipotético añadido en v1.4. Sin efectos clínicos publicados.
+Hypothetical teaching scenario added in v1.4. No published clinical effects.
 
 Simulación longitudinal: 30 MS y 30 controles, BASE/FATIGUE/RECOVERY. Los cambios son supuestos didácticos, no efectos clínicos publicados.
 
-Configuración recomendada: `{"design": "anova1rm", "groups": null, "cond": null, "cond_levels": ["BASE", "FATIGUE", "RECOVERY"], "group_filter": "MS", "side_mode": "L", "mode": "param", "equal_var": true, "alpha": 0.05, "two_tailed": true, "field_correction": "bonferroni"}`.
+Recommended configuration: `{"design": "anova1rm", "groups": null, "cond": null, "cond_levels": ["BASE", "FATIGUE", "RECOVERY"], "group_filter": "MS", "side_mode": "L", "mode": "param", "equal_var": true, "alpha": 0.05, "two_tailed": true, "field_correction": "bonferroni"}`.
 
-Cargar 07_ms_fatigue.csv o la hoja Curves_Wide de 07_ms_fatigue.xlsx. El modo guiado reconoce las bases originales y propone la configuración. Los archivos editados requieren revisión manual.
+Load 07_ms_fatigue.csv or the Curves_Wide sheet in 07_ms_fatigue.xlsx. Guided mode recognizes the original datasets and proposes settings. Edited files require manual review.
 
-- DATOS SINTÉTICOS / SYNTHETIC DATA. No real patients. Not a sample-size calculation.
+- SYNTHETIC DATA. No real patients. Not a sample-size calculation.
 - 60 unique participants: 30 cases + 30 controls per example; repeated conditions do not increase independent n.
 - Angles in degrees; 101 nodes = 0–100% of an already segmented gait cycle.
 - L is an indexed simulated limb, not necessarily the clinically affected left side.

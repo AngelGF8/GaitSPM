@@ -1,16 +1,16 @@
-# Reconstrucción LCA / ACL reconstruction
+# ACL reconstruction
 
-30 casos + 30 controles; 1 condición/es. DATOS SINTÉTICOS.
+30 cases + 30 controls; 1 condition(s). SYNTHETIC DATA.
 
-Parámetros heredados de v1.3: [Noehren et al. (2013), Table 2, walking (not running)](https://pmc.ncbi.nlm.nih.gov/articles/PMC4313379/).
+Scalar parameters retained from v1.3: [Noehren et al. (2013), Table 2, walking (not running)](https://pmc.ncbi.nlm.nih.gov/articles/PMC4313379/).
 
 Females after ACL reconstruction, mean 5.2 years since surgery. Knee flexion sign reversed to flexion-positive; SD unchanged. Scalar loading-response values assigned to synthetic nodes.
 
-Configuración recomendada: `{"design": "ttest2", "groups": ["Control", "ACLR"], "cond": "BASE", "cond_levels": null, "group_filter": null, "side_mode": "L", "mode": "param", "equal_var": false, "alpha": 0.05, "two_tailed": true, "field_correction": "bonferroni"}`.
+Recommended configuration: `{"design": "ttest2", "groups": ["Control", "ACLR"], "cond": "BASE", "cond_levels": null, "group_filter": null, "side_mode": "L", "mode": "param", "equal_var": false, "alpha": 0.05, "two_tailed": true, "field_correction": "bonferroni"}`.
 
-Cargar 06_acl.csv o la hoja Curves_Wide de 06_acl.xlsx. El modo guiado reconoce las bases originales y propone la configuración. Los archivos editados requieren revisión manual.
+Load 06_acl.csv or the Curves_Wide sheet in 06_acl.xlsx. Guided mode recognizes the original datasets and proposes settings. Edited files require manual review.
 
-- DATOS SINTÉTICOS / SYNTHETIC DATA. No real patients. Not a sample-size calculation.
+- SYNTHETIC DATA. No real patients. Not a sample-size calculation.
 - 60 unique participants: 30 cases + 30 controls per example; repeated conditions do not increase independent n.
 - Angles in degrees; 101 nodes = 0–100% of an already segmented gait cycle.
 - L is an indexed simulated limb, not necessarily the clinically affected left side.

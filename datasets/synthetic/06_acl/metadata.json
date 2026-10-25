@@ -51,7 +51,7 @@
   "n_nodes": 101,
   "synthetic": true,
   "assumptions": [
-    "DATOS SINTÉTICOS / SYNTHETIC DATA. No real patients. Not a sample-size calculation.",
+    "SYNTHETIC DATA. No real patients. Not a sample-size calculation.",
     "60 unique participants: 30 cases + 30 controls per example; repeated conditions do not increase independent n.",
     "Angles in degrees; 101 nodes = 0–100% of an already segmented gait cycle.",
     "L is an indexed simulated limb, not necessarily the clinically affected left side.",

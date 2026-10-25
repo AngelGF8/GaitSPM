@@ -1,0 +1,53 @@
+name: English preview assets
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/capture_english.cjs
+      - .github/workflows/preview-assets.yml
+permissions:
+  contents: write
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pip install -r requirements.txt
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps chromium
+      - run: python app/sync_html_engine.py
+      - name: Capture English interface
+        run: |
+          python app/serve.py > /tmp/gaitspm-preview.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID"' EXIT
+          python - <<'PY'
+          import time, urllib.request
+          for attempt in range(60):
+              try:
+                  urllib.request.urlopen('http://127.0.0.1:4173', timeout=2).close()
+                  break
+              except OSError:
+                  time.sleep(1)
+          else:
+              raise RuntimeError('Preview server did not start')
+          PY
+          node scripts/capture_english.cjs
+          python scripts/build_preview_gif.py
+      - name: Publish only preview images
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add capturas/*.png docs/assets/workflow.gif
+          if ! git diff --cached --quiet; then
+            git commit -m 'docs: refresh screenshots and animated preview in English'
+            git push origin HEAD:main
+          fi

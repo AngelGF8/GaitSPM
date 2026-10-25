@@ -1,27 +1,27 @@
-# CSV externo: MovementRx
+# External CSV: MovementRx
 
-**Origen independiente de GaitSPM:** https://github.com/aalhossary/MovementRx, commit `70f97b52b55e476fa52f9e733a98cefe55532c18`.
+**Independent source:** https://github.com/aalhossary/MovementRx, commit `70f97b52b55e476fa52f9e733a98cefe55532c18`.
 
-Archivo original: `spmclient/res/refData/kinematic/L_KneeX_Ang_Ref.csv`. Se conserva sin cambios en `original/`; su blob SHA-1 es `b971c393d1fa5219e49ba7755ce784189e36c4f8`. Licencia GPL v3 del repositorio conservada en LICENSE; README original en UPSTREAM_README.md.
+Original file: `spmclient/res/refData/kinematic/L_KneeX_Ang_Ref.csv`. It is preserved unchanged in `original/`; its Git blob SHA-1 is `b971c393d1fa5219e49ba7755ce784189e36c4f8`. The upstream GPL v3 license is retained in LICENSE and the original README in UPSTREAM_README.md.
 
-Artículo: Alhossary A, Pataky T, Ang WT, Chua KSG, Kwong WH, Donnelly CJ. Versatile clinical movement analysis using statistical parametric mapping in MovementRx. Scientific Reports. 2023;13:2414. https://doi.org/10.1038/s41598-023-29635-4
+Article: Alhossary A, Pataky T, Ang WT, Chua KSG, Kwong WH, Donnelly CJ. Versatile clinical movement analysis using statistical parametric mapping in MovementRx. Scientific Reports. 2023;13:2414. https://doi.org/10.1038/s41598-023-29635-4
 
-El artículo describe una curva media de ensayos por participante en los archivos de referencia. Este CSV contiene 20 filas y 101 ángulos de rodilla izquierda en el plano X/sagital. La convención de signos del original se conserva. No se reconstruyen ni simulan trayectorias.
+The article describes a trial-averaged curve per participant in the reference files. This CSV contains 20 rows and 101 left-knee angles in the X/sagittal plane. The original sign convention is preserved. No trajectories are reconstructed or simulated.
 
-## Adaptación explícita
+## Explicit adaptation
 
-El original tiene columnas V1…V100 y una última cabecera vacía. No incluye identificadores ni grupos, y por tanto **no se importa directamente como base de participantes válida**. GaitSPM rechaza la falta de ID; no debe usarse una columna de ángulos como identificador.
+The original has columns V1…V100 and a final blank header. It has no identifiers or groups, so **it cannot be imported directly as a valid participant dataset**. GaitSPM rejects missing IDs; an angle column must not be used as an identifier.
 
-`movementrx_import_test.csv` añade IDs de fila MRX01…MRX20, condición REFERENCE, lado L y renombra los 101 nodos como KneeSagittal_0…100. Las filas pares/impares reciben TestA/TestB, 10 en cada etiqueta. Esta división es exclusivamente técnica y arbitraria: **no representa patologías ni intervenciones**. Todos los valores de las curvas son idénticos al original (diferencia máxima 0).
+`movementrx_import_test.csv` adds row IDs MRX01…MRX20, condition REFERENCE and side L, and renames the 101 nodes KneeSagittal_0…100. Alternating rows receive TestA/TestB labels, with 10 per label. This arbitrary split is solely a software test: **it does not represent diagnoses or interventions**. All curve values are identical to the original (maximum difference 0).
 
-La prueba compara Welch entre esas etiquetas para verificar el programa, no para formular una conclusión clínica. No hay clústeres significativos con esta configuración. Eso no demuestra equivalencia. No mezclar este control de software con los ocho ejemplos sintéticos de 30+30 participantes.
+The test compares these labels using Welch's test to verify the software, not to draw a clinical conclusion. There are no significant clusters under this configuration; this does not demonstrate equivalence. Keep this software check separate from the eight synthetic examples with 30+30 participants.
 
-## Repetir en GaitSPM
+## Reproduce in GaitSPM
 
-1. Inicia `python launch.py` y carga `movementrx_import_test.csv`.
-2. Aplica subject → ID, group → grupo, condition → condición, side → lado.
-3. Comprueba 20 participantes, TestA=10/TestB=10, 101 nodos y KneeSagittal → rodilla/sagital; confirma unidades y mapeo.
-4. Selecciona dos grupos independientes, TestA/TestB, REFERENCE, solo L, paramétrico, varianzas iguales desactivado (Welch), bilateral, α=0,05, Bonferroni.
-5. Ejecuta y exporta. La ejecución genera `.test-output/external/external-result.png`; esta salida temporal no se versiona.
+1. Run `python launch.py` and load `movementrx_import_test.csv`.
+2. Map subject → ID, group → group, condition → condition and side → side.
+3. Check 20 participants, TestA=10/TestB=10, 101 nodes and KneeSagittal → knee/sagittal; confirm units and mapping.
+4. Select two independent groups, TestA/TestB, REFERENCE, L only, parametric, equal variances disabled (Welch), two-tailed, α=0.05 and Bonferroni.
+5. Run and export. The automated test generates `.test-output/external/external-result.png`; this temporary output is not versioned.
 
-Recrear la adaptación: `python scripts/prepare_external_csv.py`. Prueba reproducible de carga HTTP real: `python tests/test_external_upload.py`.
+Recreate the adaptation: `python scripts/prepare_external_csv.py`. Reproducible test with real HTTP upload: `python tests/test_external_upload.py`.

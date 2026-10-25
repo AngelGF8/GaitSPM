@@ -1,14 +1,14 @@
-# Ejemplos sintéticos GaitSPM 1.4
+# GaitSPM 1.4 synthetic examples
 
-| Ejemplo | Contexto | Participantes | Diseño recomendado |
+| Example | Context | Participants | Recommended design |
 |---|---|---|---|
-| 01 | Síndrome de pinzamiento femoroacetabular (FAIS) | 30 casos + 30 controles | Dos grupos, Welch |
-| 02 | Artrosis de rodilla | 30 + 30 | Dos grupos, Welch |
-| 03 | Artrosis de cadera | 30 + 30 | Dos grupos, Welch |
-| 04 | Esclerosis múltiple | 30 + 30 | Dos grupos, Welch |
-| 05 | Artroplastia de cadera | 30 + 30 | Dos grupos, Welch |
-| 06 | Reconstrucción de LCA | 30 + 30 | Dos grupos, Welch |
-| 07 | EM: fatiga y recuperación hipotéticas | 30 + 30, tres condiciones | ANOVA de medidas repetidas en 30 casos |
-| 08 | LCA: repetición técnica sin efecto sistemático | 30 + 30, dos condiciones | t pareada en 30 casos |
+| 01 | Femoroacetabular impingement syndrome (FAIS) | 30 cases + 30 controls | Two groups, Welch |
+| 02 | Knee osteoarthritis | 30 + 30 | Two groups, Welch |
+| 03 | Hip osteoarthritis | 30 + 30 | Two groups, Welch |
+| 04 | Multiple sclerosis | 30 + 30 | Two groups, Welch |
+| 05 | Hip arthroplasty | 30 + 30 | Two groups, Welch |
+| 06 | ACL reconstruction | 30 + 30 | Two groups, Welch |
+| 07 | MS: hypothetical fatigue and recovery | 30 + 30, three conditions | Repeated-measures ANOVA in 30 cases |
+| 08 | ACL: technical retest without systematic change | 30 + 30, two conditions | Paired t-test in 30 cases |
 
-Cada carpeta ofrece CSV ancho, CSV español, largo, transpuesto, Excel, participantes y metadatos. Guide y Metrics no son hojas para importar como curvas; el importador selecciona Curves_Wide. 30 por grupo. Solo cinemática. Las mediciones repetidas conservan sus IDs. Consulta ../../docs/GUIA_EJEMPLOS.md (desde la raíz: docs/GUIA_EJEMPLOS.md).
+Each folder provides wide CSV, Spanish-locale CSV, long and transposed CSV, Excel, participant data and metadata. Guide and Metrics are not curve-import sheets; the importer selects Curves_Wide. There are 30 participants per group and only kinematic data. Repeated measurements retain participant IDs. See the [example guide](../../docs/GUIA_EJEMPLOS.md).

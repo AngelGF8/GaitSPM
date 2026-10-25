@@ -13,7 +13,7 @@
 <p align="center">
   <a href="https://angelgf8.github.io/GaitSPM/app/"><img src="docs/assets/try-browser.svg" width="360" alt="Try it in your browser — open GaitSPM"></a>
 </p>
-<p align="center"><a href="https://angelgf8.github.io/GaitSPM/">Documentation</a> · <a href="LEEME_PRIMERO.md">Guía en español</a> · <a href="#start-on-your-computer">Run locally</a> · <a href="ROADMAP.md">Roadmap</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
+<p align="center"><a href="https://angelgf8.github.io/GaitSPM/">Documentation</a> · <a href="LEEME_PRIMERO.md">Spanish installation guide</a> · <a href="#start-on-your-computer">Run locally</a> · <a href="ROADMAP.md">Roadmap</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
 
 ## See the workflow
 
@@ -69,7 +69,7 @@ Six views of the MATLAB-style interface. Click a screenshot to inspect it at ful
 
 Local kinematic gait analysis with **spm1d 0.4.53**, a **Guided mode** and a **Laboratory mode**. English is the default interface language; use **ES** to switch to Spanish. Your explicit language choice is remembered in the browser.
 
-[Guía en español](LEEME_PRIMERO.md) · [Automated checks](https://github.com/AngelGF8/GaitSPM/actions)
+[Spanish installation guide](LEEME_PRIMERO.md) · [Automated checks](https://github.com/AngelGF8/GaitSPM/actions)
 
 ## Start on your computer
 
@@ -113,7 +113,7 @@ These are **synthetic data**, not real patient records. Every example contains 6
 
 Only joint angles in degrees are included: no forces, moments or EMG. The random `technical_score` covariate has no clinical meaning. The first six examples retain documented scalar anchors inherited from version 1.3, while their waveform shapes are simulated. Examples 07–08 are hypothetical teaching scenarios. Examples 03 and 05 are independent datasets and must not be paired as a surgical follow-up.
 
-Source attribution and simulation assumptions are included with each dataset. Further guidance is available in the Spanish [example guide](docs/GUIA_EJEMPLOS.md).
+Source attribution and simulation assumptions are included with each dataset. Further guidance is available in the [example guide](docs/GUIA_EJEMPLOS.md).
 
 ## Supported input and validation
 

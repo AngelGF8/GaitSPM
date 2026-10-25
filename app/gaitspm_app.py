@@ -1,23 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-GaitSPM · Dashboard de análisis de la marcha (Vicon, 0–100 % del ciclo) con SPM1D
-=================================================================================
-Carga una base consolidada (Excel/CSV), clasifica variables por articulación y
-plano (pelvis, cadera, rodilla, tobillo × sagital/frontal/transversal), y aplica
-Statistical Parametric Mapping 1D (spm1d, Pataky 2012) según el objetivo:
+GaitSPM: gait analysis dashboard for normalized kinematic curves (0–100%).
 
-  · t independiente (2 grupos)          · ANOVA de 1 vía (≥3 grupos)
-  · t pareada (pre-post / L-R)          · RM-ANOVA (≥3 condiciones intra-sujeto)
-  · Regresión con covariable continua   · Variantes no paramétricas (SnPM)
+Import consolidated Excel/CSV data, map variables to joints and planes,
+and run spm1d analyses. Outputs include MATLAB-style mean/SD and SPM plots,
+cluster tables, effect sizes, normality checks, corrected post hoc comparisons,
+and Methods/Results text in English or Spanish.
 
-Salidas: rejilla de figuras estilo MATLAB (curvas media±DE + curva SPM{t}/SPM{F}
-con umbral RFT y clústeres supraumbrales), tabla de clústeres, curvas de tamaño
-del efecto, comprobación de normalidad, post-hoc con Bonferroni y textos de
-Métodos/Resultados (ES/EN) listos para manuscrito.
-
-Ejecución:
-    pip install -r requirements.txt
-    streamlit run gaitspm_app.py
+Start the browser interface with `python launch.py` from the repository root.
+The optional Streamlit interface uses `streamlit run streamlit_app.py`.
 """
 from __future__ import annotations
 
@@ -51,7 +42,7 @@ VERSION = "1.5.0.dev0"
 NODES = np.arange(101)
 
 # ----------------------------------------------------------------------------
-# Estética MATLAB
+# MATLAB styling
 # ----------------------------------------------------------------------------
 MATLAB_COLORS = [
     (0.0000, 0.4470, 0.7410),
@@ -175,7 +166,7 @@ def _clean_series(s: pd.Series, default: str = "—") -> pd.Series:
 
 
 # ----------------------------------------------------------------------------
-# Lectura de archivos y detección de estructura
+# File reading and structure detection
 # ----------------------------------------------------------------------------
 def sniff_csv(text: str):
     """Use the header/CSV grammar, never counts of decimal commas in the body."""
@@ -310,7 +301,7 @@ def resample_rows(idxs, M):
     return out
 
 
-# ---------------------------- lado y clasificación ---------------------------
+# ---------------------------- side and classification ---------------------------
 _SIDE_L = {"l", "left", "izq", "izda", "izquierda", "izquierdo", "i"}
 _SIDE_R = {"r", "right", "der", "dcha", "derecha", "derecho", "d"}
 
@@ -379,7 +370,7 @@ def classify_variables(varnames):
     })
 
 
-# ---------------------------- constructores canónicos ------------------------
+# ---------------------------- canonical constructors ------------------------
 CANON_COLS = ["subject", "group", "condition", "side", "variable", "node", "value"]
 
 
@@ -442,7 +433,7 @@ def _finalize_canon(canon: pd.DataFrame):
     canon["node"] = canon["node"].astype(np.int16)
     for c in ["subject", "group", "condition", "side", "variable"]:
         canon[c] = canon[c].astype("category")
-    # promedia ensayos repetidos (media por sujeto·condición·lado·variable·nodo)
+    # average repeated trials (subject/condition/side/variable/node mean)
     canon = (canon.groupby(["subject", "group", "condition", "side", "variable", "node"],
                            observed=True, as_index=False)["value"].agg(lambda x: x.mean() if x.notna().all() else np.nan))
     return canon
@@ -597,7 +588,7 @@ def canon_from_transposed(df: pd.DataFrame, node_col: str, delim: str, token_rol
 
 
 # ----------------------------------------------------------------------------
-# Motor estadístico (spm1d)
+# Statistical engine (spm1d)
 # ----------------------------------------------------------------------------
 def _subject_curves(canon, variable, cond=None, group=None, side_mode="mean", side=None):
     d = canon[canon["variable"].astype(str) == str(variable)]
@@ -719,7 +710,7 @@ def extract_clusters(spmi, z):
     return cl
 
 
-# --------------------------- tamaños del efecto ------------------------------
+# --------------------------- effect sizes ------------------------------
 def cohens_d_ind(YA, YB):
     nA, nB = len(YA), len(YB)
     sp = np.sqrt(((nA - 1) * YA.std(0, ddof=1) ** 2 + (nB - 1) * YB.std(0, ddof=1) ** 2) / (nA + nB - 2))
@@ -815,7 +806,7 @@ def _summ(label, Y):
     return {"label": str(label), "n": int(len(Y)), "mean": Y.mean(0), "sd": Y.std(0, ddof=1)}
 
 
-# ------------------------------- análisis ------------------------------------
+# ------------------------------- analysis ------------------------------------
 ADVANCED_DESIGNS = ("ancova", "glm", "anova2", "anova2onerm")
 
 
@@ -1054,7 +1045,7 @@ def run_one(canon, meta, vrow, cfg):
                            "curve": eta2_curve(Ys) if design == "anova1" else eta2p_rm_curve(Ys)},
                    plot={"type": "groups", "groups": [_summ(l, Y) for l, Y in zip(labels, Ys)]},
                    direction=None)
-        # post-hoc por pares (Bonferroni)
+        # pairwise post hoc (Bonferroni)
         if cfg.get("posthoc", True) and bool(spmi.h0reject):
             pairs = list(itertools.combinations(range(len(labels)), 2))
             a_adj = alpha / len(pairs)
@@ -1234,7 +1225,7 @@ def run_analysis(canon, meta, varmap_sel, cfg, progress=None):
 
 
 # ----------------------------------------------------------------------------
-# Figuras estilo MATLAB
+# MATLAB-style figures
 # ----------------------------------------------------------------------------
 def _safe_plot_color(value, fallback):
     """Devuelve un color Matplotlib válido y evita valores manipulados."""
@@ -1542,7 +1533,7 @@ def fig_to_bytes(fig, fmt="png", dpi=300):
 
 
 # ----------------------------------------------------------------------------
-# Tabla de resultados
+# Results table
 # ----------------------------------------------------------------------------
 def results_table(results, lang):
     rows = []
@@ -1610,7 +1601,7 @@ def results_table(results, lang):
 
 
 # ----------------------------------------------------------------------------
-# Textos de Métodos / Resultados (ES/EN)
+# Methods / Results text (ES/EN)
 # ----------------------------------------------------------------------------
 _DESIGN_TXT = {
     "es": {
@@ -1752,7 +1743,7 @@ def methods_text(cfg, results, lang="en"):
            "eta2": "eta cuadrado", "eta2p": "eta cuadrado parcial"}
     effs = sorted({eff[r["effect"]["name"]] for r in n_ok if r.get("effect")})
     if effs:
-        s += "Se calcularon descriptivamente tamaños del efecto nodo a nodo (" + ", ".join(effs) + ")."
+        s += "Se calcularon descriptivamente effect sizes nodo a nodo (" + ", ".join(effs) + ")."
     return s
 
 
@@ -1830,7 +1821,7 @@ def results_text(results, cfg, lang="en"):
 
 
 # ----------------------------------------------------------------------------
-# Datos de demostración: FAI cam vs controles (efectos según literatura)
+# Demonstration data: cam FAI versus controls (literature-informed effects)
 # ----------------------------------------------------------------------------
 DEMO_GROUPS = ["Control", "Cam asintomático", "FAI cam"]
 DEMO_CONDS = ["PRE", "POST", "SEG"]
@@ -1917,7 +1908,7 @@ def demo_wide_df(canon, meta):
 
 
 # ----------------------------------------------------------------------------
-# Interfaz Streamlit
+# Streamlit interface
 # ----------------------------------------------------------------------------
 def main():
     import sys
@@ -1948,7 +1939,7 @@ def _selftest(outdir="out_demo"):
         assert not errs, errs
         return cfg, res, bands
 
-    # 1 · t independiente: Control vs FAI cam (PRE)
+    # 1 · independent t-test: Control vs FAI cam (PRE)
     cfg, res, bands = run("ttest2", groups=["Control", "FAI cam"], cond="PRE")
     for v in ("HipFlexion", "HipRotation", "HipAdduction", "PelvisTilt"):
         cl = res[v]["clusters"]
@@ -1988,13 +1979,13 @@ def _selftest(outdir="out_demo"):
                  + "\n\nRESULTADOS (ES)\n" + results_text(res, cfg, "es")
                  + "\n\nRESULTS (EN)\n" + results_text(res, cfg, "en") + "\n")
 
-    # 2 · pareada PRE vs POST
+    # 2 · paired PRE versus POST
     _, r2, _ = run("paired_cond", cond_levels=["PRE", "POST"])
     assert r2["AnkleDorsiflexion"]["clusters"], "PRE-POST tobillo"
     # 3 · L vs R
     _, r3, _ = run("paired_side", side_levels=["L", "R"], cond="PRE")
     assert r3["KneeFlexion"]["clusters"], "L-R rodilla"
-    # 4 · ANOVA 3 grupos + post-hoc
+    # 4 · three-group ANOVA + post hoc
     cfg4, r4, _ = run("anova1", groups=DEMO_GROUPS, cond="PRE")
     assert r4["HipRotation"]["clusters"] or r4["HipFlexion"]["clusters"], "ANOVA cadera"
     phvar = next((v for v in ("HipRotation", "HipFlexion") if r4[v].get("posthoc")), None)
@@ -2004,19 +1995,19 @@ def _selftest(outdir="out_demo"):
     figp = fig_pair(r4[phvar], php, "es", cfg4)
     figp.savefig(f"{outdir}/posthoc_{phvar}.png", dpi=200, bbox_inches="tight")
     plt.close(figp)
-    # 5 · RM-ANOVA 3 condiciones
+    # 5 · three-condition RM-ANOVA
     _, r5, _ = run("anova1rm", cond_levels=DEMO_CONDS)
     assert r5["AnkleDorsiflexion"]["clusters"], "RM tobillo"
     assert r5["AnkleDorsiflexion"]["effect"]["name"] == "eta2p"
     assert np.nanmin(r5["AnkleDorsiflexion"]["effect"]["curve"]) >= 0
     assert np.nanmax(r5["AnkleDorsiflexion"]["effect"]["curve"]) <= 1
-    # 6 · regresión con velocidad
+    # 6 · regression with speed
     cfg6, r6, b6 = run("regress", covariate="velocidad", cond="PRE")
     assert r6["KneeFlexion"]["clusters"], "regresión rodilla"
     figr = fig_detail(r6["KneeFlexion"], b6.get("KneeFlexion"), "es", cfg6)
     figr.savefig(f"{outdir}/detalle_regresion_KneeFlexion.png", dpi=200, bbox_inches="tight")
     plt.close(figr)
-    # 7 · no paramétrico rápido
+    # 7 · quick nonparametric test
     vm2 = vm[vm["variable"].isin(["HipFlexion", "KneeAdduction"])]
     _, r7, _ = run("ttest2", vmap=vm2, groups=["Control", "FAI cam"], cond="PRE",
                    mode="nonparam", iterations=300)
@@ -2027,14 +2018,14 @@ def _selftest(outdir="out_demo"):
     assert np.isclose(a7["zstar"], b7["zstar"]), "umbral SnPM no reproducible"
     assert [c["p"] for c in a7["clusters"]] == [c["p"] for c in b7["clusters"]], \
         "p de clúster SnPM no reproducibles"
-    # 7b · corrección entre campos
+    # 7b · correction across fields
     _, rc, _ = run("ttest2", groups=["Control", "FAI cam"], cond="PRE", field_correction="bonferroni")
     padj = [r["field_p_adj"] for r in rc.values() if "error" not in r]
     assert all(0 <= p <= 1 for p in padj), padj
-    # 8 · textos
+    # 8 · text
     for lg in ("es", "en"):
         assert len(methods_text(cfg, res, lg)) > 200 and len(results_text(res, cfg, lg)) > 50
-    # 9 · ejemplos CSV + roundtrip del parser
+    # 9 · CSV examples + parser round trip
     wide = demo_wide_df(canon, meta)
     wide.to_csv(f"{outdir}/ejemplo_marcha_ancho.csv", index=False)
     subs = (meta[meta["group"] == "Control"]["subject"].head(3).tolist()

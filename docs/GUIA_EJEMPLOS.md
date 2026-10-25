@@ -1,120 +1,120 @@
-# Guía de los ocho ejemplos
+# Guide to the eight examples
 
-Resultados calculados el 24 de octubre de 2026 con GaitSPM 1.4.0 / spm1d 0.4.53, semillas fijas. Cada caso tiene 30 pacientes sintéticos y 30 controles sintéticos. Se proponen ejercicios de análisis, no conclusiones sobre pacientes reales.
+Results calculated on 24 October 2026 with GaitSPM 1.4.0 / spm1d 0.4.53 and fixed seeds. Each example contains 30 synthetic cases and 30 synthetic controls. These are analysis exercises, not conclusions about real patients.
 
-Recorrido: cargar → revisar mapeo y calidad → configurar → ejecutar → leer interpretación y detalle → exportar. Por defecto se analizan todas las variables del caso, lado L, α=0,05 y Bonferroni entre variables. Dos grupos: Welch. Medidas repetidas: solo casos, mismos IDs.
-## 01_fai · FAI sintomático
+Workflow: load → review mapping and quality → configure → run → read interpretation and details → export. Defaults: all example variables, side L, α=0.05 and Bonferroni correction across variables. Two groups: Welch. Repeated measurements: cases only, with the same participant IDs.
+## 01_fai · Symptomatic FAI
 
-**Diseño:** `ttest2`. **Grupos:** ['Control', 'FAIS']. **Filtro:** ninguno. **Condiciones:** BASE.
+**Design:** `ttest2`. **Groups:** ['Control', 'FAIS']. **Filter:** none. **Conditions:** BASE.
 
-| Variable | n incluido | Clústeres confirmados (% ciclo; p ajustada) |
+| Variable | Included n | Confirmed clusters (% cycle; adjusted p) |
 |---|---|---|
-| HipFlexion | 30 / 30 | Ninguno |
-| HipAdduction | 30 / 30 | Ninguno |
-| HipRotation | 30 / 30 | Ninguno |
+| HipFlexion | 30 / 30 | None |
+| HipAdduction | 30 / 30 | None |
+| HipRotation | 30 / 30 | None |
 
-**Qué observar:** Aprende a distinguir diferencias visuales de un contraste que supera el umbral. Ninguna variable presenta clústeres confirmados con esta receta; esto no demuestra equivalencia.
+**What to look for:** Distinguish visual differences from a statistical contrast exceeding the threshold. No variable has confirmed clusters with this recipe; this does not demonstrate equivalence.
 
-**Archivos:** `datasets/synthetic/01_fai/01_fai.csv` y `.xlsx`. Las fórmulas ROM y media de Metrics se actualizan al editar Curves_Wide; los resultados SPM se recalculan en GaitSPM.
+**Files:** `datasets/synthetic/01_fai/01_fai.csv` and `.xlsx`. ROM and mean formulas in Metrics update when Curves_Wide is edited; SPM results are recalculated in GaitSPM.
 
-## 02_knee_oa · Artrosis de rodilla
+## 02_knee_oa · Knee osteoarthritis
 
-**Diseño:** `ttest2`. **Grupos:** ['Control', 'KOA']. **Filtro:** ninguno. **Condiciones:** BASE.
+**Design:** `ttest2`. **Groups:** ['Control', 'KOA']. **Filter:** none. **Conditions:** BASE.
 
-| Variable | n incluido | Clústeres confirmados (% ciclo; p ajustada) |
+| Variable | Included n | Confirmed clusters (% cycle; adjusted p) |
 |---|---|---|
 | HipFlexion | 30 / 30 | 0.0–0.8%; p=0.050; 67.0–72.5%; p=0.049; 87.3–95.7%; p=0.048; 98.9–100.0%; p=0.050 |
-| KneeFlexion | 30 / 30 | 0.0–100.0%; p<0,001 |
-| AnkleDorsiflexion | 30 / 30 | Ninguno |
+| KneeFlexion | 30 / 30 | 0.0–100.0%; p<0.001 |
+| AnkleDorsiflexion | 30 / 30 | None |
 
-**Qué observar:** Localiza las regiones que superan el umbral y compáralas con las curvas medias. Revisa qué variables no son significativas y el signo del contraste antes de interpretar la dirección. La magnitud media mostrada dentro de un clúster es descriptiva.
+**What to look for:** Locate regions exceeding the threshold and compare them with the mean curves. Check which variables are not significant and the contrast sign before interpreting direction. The mean magnitude shown within a cluster is descriptive.
 
-**Archivos:** `datasets/synthetic/02_knee_oa/02_knee_oa.csv` y `.xlsx`. Las fórmulas ROM y media de Metrics se actualizan al editar Curves_Wide; los resultados SPM se recalculan en GaitSPM.
+**Files:** `datasets/synthetic/02_knee_oa/02_knee_oa.csv` and `.xlsx`. ROM and mean formulas in Metrics update when Curves_Wide is edited; SPM results are recalculated in GaitSPM.
 
-## 03_hip_oa · Artrosis de cadera
+## 03_hip_oa · Hip osteoarthritis
 
-**Diseño:** `ttest2`. **Grupos:** ['Control', 'HOA']. **Filtro:** ninguno. **Condiciones:** BASE.
+**Design:** `ttest2`. **Groups:** ['Control', 'HOA']. **Filter:** none. **Conditions:** BASE.
 
-| Variable | n incluido | Clústeres confirmados (% ciclo; p ajustada) |
+| Variable | Included n | Confirmed clusters (% cycle; adjusted p) |
 |---|---|---|
-| HipFlexion | 30 / 30 | 0.0–39.2%; p<0,001; 51.9–100.0%; p<0,001 |
-| HipAdduction | 30 / 30 | 0.0–59.7%; p<0,001; 83.7–100.0%; p=0.017 |
-| HipRotation | 30 / 30 | 0.0–53.3%; p<0,001; 82.0–100.0%; p=0.002 |
+| HipFlexion | 30 / 30 | 0.0–39.2%; p<0.001; 51.9–100.0%; p<0.001 |
+| HipAdduction | 30 / 30 | 0.0–59.7%; p<0.001; 83.7–100.0%; p=0.017 |
+| HipRotation | 30 / 30 | 0.0–53.3%; p<0.001; 82.0–100.0%; p=0.002 |
 
-**Qué observar:** Localiza las regiones que superan el umbral y compáralas con las curvas medias. Revisa qué variables no son significativas y el signo del contraste antes de interpretar la dirección. La magnitud media mostrada dentro de un clúster es descriptiva.
+**What to look for:** Locate regions exceeding the threshold and compare them with the mean curves. Check which variables are not significant and the contrast sign before interpreting direction. The mean magnitude shown within a cluster is descriptive.
 
-**Archivos:** `datasets/synthetic/03_hip_oa/03_hip_oa.csv` y `.xlsx`. Las fórmulas ROM y media de Metrics se actualizan al editar Curves_Wide; los resultados SPM se recalculan en GaitSPM.
+**Files:** `datasets/synthetic/03_hip_oa/03_hip_oa.csv` and `.xlsx`. ROM and mean formulas in Metrics update when Curves_Wide is edited; SPM results are recalculated in GaitSPM.
 
-## 04_multiple_sclerosis · Esclerosis múltiple
+## 04_multiple_sclerosis · Multiple sclerosis
 
-**Diseño:** `ttest2`. **Grupos:** ['Control', 'MS']. **Filtro:** ninguno. **Condiciones:** BASE.
+**Design:** `ttest2`. **Groups:** ['Control', 'MS']. **Filter:** none. **Conditions:** BASE.
 
-| Variable | n incluido | Clústeres confirmados (% ciclo; p ajustada) |
+| Variable | Included n | Confirmed clusters (% cycle; adjusted p) |
 |---|---|---|
-| HipFlexion | 30 / 30 | Ninguno |
+| HipFlexion | 30 / 30 | None |
 | KneeFlexion | 30 / 30 | 81.3–88.4%; p=0.022 |
-| AnkleDorsiflexion | 30 / 30 | 0.0–56.0%; p<0,001; 65.3–100.0%; p<0,001 |
+| AnkleDorsiflexion | 30 / 30 | 0.0–56.0%; p<0.001; 65.3–100.0%; p<0.001 |
 
-**Qué observar:** Localiza las regiones que superan el umbral y compáralas con las curvas medias. Revisa qué variables no son significativas y el signo del contraste antes de interpretar la dirección. La magnitud media mostrada dentro de un clúster es descriptiva.
+**What to look for:** Locate regions exceeding the threshold and compare them with the mean curves. Check which variables are not significant and the contrast sign before interpreting direction. The mean magnitude shown within a cluster is descriptive.
 
-**Archivos:** `datasets/synthetic/04_multiple_sclerosis/04_multiple_sclerosis.csv` y `.xlsx`. Las fórmulas ROM y media de Metrics se actualizan al editar Curves_Wide; los resultados SPM se recalculan en GaitSPM.
+**Files:** `datasets/synthetic/04_multiple_sclerosis/04_multiple_sclerosis.csv` and `.xlsx`. ROM and mean formulas in Metrics update when Curves_Wide is edited; SPM results are recalculated in GaitSPM.
 
-## 05_hip_arthroplasty · Artroplastia de cadera
+## 05_hip_arthroplasty · Hip arthroplasty
 
-**Diseño:** `ttest2`. **Grupos:** ['Control', 'THA']. **Filtro:** ninguno. **Condiciones:** BASE.
+**Design:** `ttest2`. **Groups:** ['Control', 'THA']. **Filter:** none. **Conditions:** BASE.
 
-| Variable | n incluido | Clústeres confirmados (% ciclo; p ajustada) |
+| Variable | Included n | Confirmed clusters (% cycle; adjusted p) |
 |---|---|---|
-| HipFlexion | 30 / 30 | 0.0–33.6%; p<0,001; 56.1–100.0%; p<0,001 |
-| HipAdduction | 30 / 30 | 0.0–57.3%; p<0,001; 90.3–100.0%; p=0.034 |
-| HipRotation | 30 / 30 | Ninguno |
+| HipFlexion | 30 / 30 | 0.0–33.6%; p<0.001; 56.1–100.0%; p<0.001 |
+| HipAdduction | 30 / 30 | 0.0–57.3%; p<0.001; 90.3–100.0%; p=0.034 |
+| HipRotation | 30 / 30 | None |
 
-**Qué observar:** Localiza las regiones que superan el umbral y compáralas con las curvas medias. Revisa qué variables no son significativas y el signo del contraste antes de interpretar la dirección. La magnitud media mostrada dentro de un clúster es descriptiva.
+**What to look for:** Locate regions exceeding the threshold and compare them with the mean curves. Check which variables are not significant and the contrast sign before interpreting direction. The mean magnitude shown within a cluster is descriptive.
 
-**Archivos:** `datasets/synthetic/05_hip_arthroplasty/05_hip_arthroplasty.csv` y `.xlsx`. Las fórmulas ROM y media de Metrics se actualizan al editar Curves_Wide; los resultados SPM se recalculan en GaitSPM.
+**Files:** `datasets/synthetic/05_hip_arthroplasty/05_hip_arthroplasty.csv` and `.xlsx`. ROM and mean formulas in Metrics update when Curves_Wide is edited; SPM results are recalculated in GaitSPM.
 
-## 06_acl · Reconstrucción LCA
+## 06_acl · ACL reconstruction
 
-**Diseño:** `ttest2`. **Grupos:** ['Control', 'ACLR']. **Filtro:** ninguno. **Condiciones:** BASE.
+**Design:** `ttest2`. **Groups:** ['Control', 'ACLR']. **Filter:** none. **Conditions:** BASE.
 
-| Variable | n incluido | Clústeres confirmados (% ciclo; p ajustada) |
+| Variable | Included n | Confirmed clusters (% cycle; adjusted p) |
 |---|---|---|
-| HipFlexion | 30 / 30 | 0.0–100.0%; p<0,001 |
-| KneeFlexion | 30 / 30 | Ninguno |
+| HipFlexion | 30 / 30 | 0.0–100.0%; p<0.001 |
+| KneeFlexion | 30 / 30 | None |
 
-**Qué observar:** Localiza las regiones que superan el umbral y compáralas con las curvas medias. Revisa qué variables no son significativas y el signo del contraste antes de interpretar la dirección. La magnitud media mostrada dentro de un clúster es descriptiva.
+**What to look for:** Locate regions exceeding the threshold and compare them with the mean curves. Check which variables are not significant and the contrast sign before interpreting direction. The mean magnitude shown within a cluster is descriptive.
 
-**Archivos:** `datasets/synthetic/06_acl/06_acl.csv` y `.xlsx`. Las fórmulas ROM y media de Metrics se actualizan al editar Curves_Wide; los resultados SPM se recalculan en GaitSPM.
+**Files:** `datasets/synthetic/06_acl/06_acl.csv` and `.xlsx`. ROM and mean formulas in Metrics update when Curves_Wide is edited; SPM results are recalculated in GaitSPM.
 
-## 07_ms_fatigue · Esclerosis múltiple · fatiga y recuperación
+## 07_ms_fatigue · Multiple sclerosis · fatigue and recovery
 
-**Diseño:** `anova1rm`. **Grupos:** None. **Filtro:** MS. **Condiciones:** ['BASE', 'FATIGUE', 'RECOVERY'].
+**Design:** `anova1rm`. **Groups:** None. **Filter:** MS. **Conditions:** ['BASE', 'FATIGUE', 'RECOVERY'].
 
-| Variable | n incluido | Clústeres confirmados (% ciclo; p ajustada) |
+| Variable | Included n | Confirmed clusters (% cycle; adjusted p) |
 |---|---|---|
-| HipFlexion | 30 / 30 / 30 | 48.0–89.4%; p<0,001 |
-| KneeFlexion | 30 / 30 / 30 | 44.4–91.9%; p<0,001 |
-| AnkleDorsiflexion | 30 / 30 / 30 | 47.3–88.1%; p<0,001 |
+| HipFlexion | 30 / 30 / 30 | 48.0–89.4%; p<0.001 |
+| KneeFlexion | 30 / 30 / 30 | 44.4–91.9%; p<0.001 |
+| AnkleDorsiflexion | 30 / 30 / 30 | 47.3–88.1%; p<0.001 |
 
-**Qué observar:** Identifica un efecto global entre BASE, FATIGUE y RECOVERY. Consulta los post hoc para localizar los pares. Las tres condiciones son de los mismos 30 casos; no son 90 pacientes. El cambio se introdujo deliberadamente en el generador y no representa eficacia clínica.
+**What to look for:** Identify an overall effect across BASE, FATIGUE and RECOVERY. Inspect post hoc comparisons to locate the pairs. All three conditions belong to the same 30 cases, not 90 patients. The change was deliberately introduced in the generator and does not represent clinical efficacy.
 
-**Archivos:** `datasets/synthetic/07_ms_fatigue/07_ms_fatigue.csv` y `.xlsx`. Las fórmulas ROM y media de Metrics se actualizan al editar Curves_Wide; los resultados SPM se recalculan en GaitSPM.
+**Files:** `datasets/synthetic/07_ms_fatigue/07_ms_fatigue.csv` and `.xlsx`. ROM and mean formulas in Metrics update when Curves_Wide is edited; SPM results are recalculated in GaitSPM.
 
-## 08_acl_retest · LCA · repetición sin cambio sistemático
+## 08_acl_retest · ACL · retest without systematic change
 
-**Diseño:** `paired_cond`. **Grupos:** None. **Filtro:** ACLR. **Condiciones:** ['TEST', 'RETEST'].
+**Design:** `paired_cond`. **Groups:** None. **Filter:** ACLR. **Conditions:** ['TEST', 'RETEST'].
 
-| Variable | n incluido | Clústeres confirmados (% ciclo; p ajustada) |
+| Variable | Included n | Confirmed clusters (% cycle; adjusted p) |
 |---|---|---|
-| HipFlexion | 30 / 30 | Ninguno |
-| KneeFlexion | 30 / 30 | Ninguno |
+| HipFlexion | 30 / 30 | None |
+| KneeFlexion | 30 / 30 | None |
 
-**Qué observar:** Compara TEST y RETEST con emparejamiento por ID. El generador no incluye desplazamiento sistemático, pero sí ruido entre mediciones. No hay clústeres significativos con esta receta. No equivale a demostrar fiabilidad ni equivalencia; esos objetivos requieren diseños y medidas específicos.
+**What to look for:** Compare TEST and RETEST with pairing by ID. The generator includes measurement noise but no systematic shift. There are no significant clusters with this recipe. This does not establish reliability or equivalence; those objectives require dedicated designs and measures.
 
-**Archivos:** `datasets/synthetic/08_acl_retest/08_acl_retest.csv` y `.xlsx`. Las fórmulas ROM y media de Metrics se actualizan al editar Curves_Wide; los resultados SPM se recalculan en GaitSPM.
+**Files:** `datasets/synthetic/08_acl_retest/08_acl_retest.csv` and `.xlsx`. ROM and mean formulas in Metrics update when Curves_Wide is edited; SPM results are recalculated in GaitSPM.
 
-## Supuestos de simulación
+## Simulation assumptions
 
-Los casos 01–06 igualan medias y DE escalares heredadas de la versión 1.3 con cuantiles estandarizados; por ello no constituyen muestras iid de pacientes. Se impusieron formas, suavidad, fases y correlaciones. Los casos 07/08 añaden cambios y ruido hipotéticos. El caso 05 es un contexto posartroplastia, no una séptima patología. Los 480 IDs son diferentes entre conjuntos. Las fuentes y límites se documentan en references/README.md y en cada metadata.json.
+Examples 01–06 match scalar means and SDs retained from version 1.3 using standardized quantiles; they are not independent, identically distributed patient samples. Shapes, smoothness, phases and correlations are imposed. Examples 07/08 add hypothetical changes and noise. Example 05 represents a post-arthroplasty context, not a seventh pathology. All 480 IDs are unique across datasets. Sources and limitations are documented in references/README.md and each metadata.json.
 
-Los resultados de esta guía solo corresponden a los archivos originales y a sus recetas. Cambiar variables, grupos, corrección, lado o método modifica los resultados. Guarda el JSON del análisis si necesitas conservar su configuración.
+Results in this guide apply only to the original files and their recipes. Changing variables, groups, correction, side or method changes the results. Save the analysis JSON to retain its configuration.

@@ -1,6 +1,6 @@
-"""Encode existing, unaltered UI screenshots as an animated walkthrough.
-This is a slideshow of historical synthetic-example screenshots, not a recording
-of the new models. Requires Pillow (already installed with Matplotlib).
+"""Encode real English UI screenshots as an animated walkthrough.
+Regenerate screenshots with scripts/capture_english.cjs against the native app.
+Requires Pillow (already installed with Matplotlib).
 """
 from pathlib import Path
 from PIL import Image
