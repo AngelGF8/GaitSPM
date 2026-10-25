@@ -2,6 +2,7 @@
 <p align="center"><strong>From gait curves to SPM — without writing analysis code.</strong><br>Participant-aware analysis · MATLAB-style figures · CSV / Excel → SPM → export</p>
 
 <p align="center">
+  <a href="https://doi.org/10.5281/zenodo.23636819"><img alt="DOI: 10.5281/zenodo.23636819" src="https://zenodo.org/badge/DOI/10.5281/zenodo.23636819.svg"></a>
   <a href="https://github.com/AngelGF8/GaitSPM/actions/workflows/tests.yml"><img alt="Native tests: Linux, Windows and macOS" src="https://github.com/AngelGF8/GaitSPM/actions/workflows/tests.yml/badge.svg"></a>
   <a href="https://github.com/AngelGF8/GaitSPM/actions/workflows/pages.yml"><img alt="Documentation and Pages deployment" src="https://github.com/AngelGF8/GaitSPM/actions/workflows/pages.yml/badge.svg"></a>
   <a href="LICENSE"><img alt="Licence: GPL v3" src="https://img.shields.io/badge/License-GPLv3-0969da"></a>
@@ -22,7 +23,7 @@
 
 The animation uses real interface screenshots of synthetic teaching examples. Browser mode downloads its scientific runtime on first use and processes uploaded data in your browser. Native Python remains the reference environment for the automated numerical checks.
 
-[Statistical designs](docs/statistics.md) · [Software validation](docs/validation-guide.md) · [Changelog](CHANGELOG.md) · Last released citation: **1.4.2**
+[Statistical designs](docs/statistics.md) · [Software validation](docs/validation-guide.md) · [Changelog](CHANGELOG.md) · Last stable release: **1.4.2** · [Archived software DOI](https://doi.org/10.5281/zenodo.23636819)
 
 ## Unreleased statistical extensions
 
@@ -144,6 +145,12 @@ A nonsignificant result does not establish equivalence or absence of an effect. 
 Normality checks and the exploratory automatic mode do not certify model assumptions. Label permutations are not a Welch alternative for unequal variances. Repeated-measures ANOVA depends on its sphericity assumptions; spm1d does not implement a nonsphericity correction for this design. Use post hoc comparisons to identify pairs after an omnibus test.
 
 Refer to the official [spm1d statistics documentation](https://spm1d.org/doc/Stats1D/) and [ANOVA notes](https://spm1d.org/doc/Stats1D/anova.html). This is a technical software review, not clinical validation or certification.
+
+## Citation and archive
+
+González de la Flor, Á. (2026). *GaitSPM: graphical kinematic SPM1D analysis 1.5.0*. Zenodo. [10.5281/zenodo.23636819](https://doi.org/10.5281/zenodo.23636819).
+
+The Zenodo record is labelled **1.5.0** and preserves source commit `c11160fd4c971c021fd28b3995c4161d3581404a`. The archived code identifies itself as **1.5.0.dev0**; this DOI documents that development snapshot, not a separately tagged stable release. [CITATION.cff](CITATION.cff) describes the published Zenodo record. Cite the underlying spm1d methods separately.
 
 ## Development and verification
 

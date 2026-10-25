@@ -2,7 +2,9 @@
 
 ## Release and citation
 
-`CITATION.cff` describes the last released version. Keep it synchronized with the tag and actual release date; do not label unreleased work as a published version. The `Unreleased` changelog describes this update.
+`CITATION.cff` describes the [published Zenodo record](https://doi.org/10.5281/zenodo.23636819), labelled **1.5.0** and published on 2026-10-25. Its archived source commit `c11160f` identifies itself as **1.5.0.dev0**. The DOI identifies that snapshot; it does not create a stable GitHub release. Keep future citation metadata synchronized with the actual version and archive. The `Unreleased` changelog describes development changes.
+
+Do not hard-code this version DOI into `.zenodo.json` for future releases: each new archived version needs its own identifier.
 
 1. Run all native, UI and concordance checks on the exact release commit; record the software test status.
 2. Build documentation and review the browser and Streamlit workflows with synthetic data.
