@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="https://angelgf8.github.io/GaitSPM/app/"><img src="docs/assets/try-browser.svg" width="600" alt="Probar ahora en el navegador — abrir GaitSPM"></a>
+  <a href="https://angelgf8.github.io/GaitSPM/app/"><img src="docs/assets/try-browser.svg" width="360" alt="Try it in your browser — open GaitSPM"></a>
 </p>
 <p align="center"><a href="https://angelgf8.github.io/GaitSPM/">Documentation</a> · <a href="LEEME_PRIMERO.md">Guía en español</a> · <a href="#start-on-your-computer">Run locally</a> · <a href="ROADMAP.md">Roadmap</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
 
