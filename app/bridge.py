@@ -26,7 +26,7 @@ def _numeric_cols(df, exclude=()):
         if c in exclude:
             continue
         v = _to_numeric(df[c], errors="coerce")
-        if v.notna().mean() > 0.8 and v.nunique() > 2:
+        if v.notna().mean() > 0.8 and v.nunique() > 1:
             out.append(str(c))
     return out
 
@@ -431,7 +431,10 @@ def js_explain():
             if r['plot']['type']=='groups' else [{'label':r['plot']['covname'],'n':len(r['plot']['x'])}])
         summaries.append(dict(variable=var,n=r.get('n_included'),samples=ns,
                               excluded=r.get('excluded_subjects',[]),clusters=clusters,
-                              statistic=r['stat_name'],mode=r['mode_used'],warnings=r['warnings']))
+                              statistic=r['stat_name'],mode=r['mode_used'],warnings=r['warnings'],
+                              model=r.get('model'), alpha=r['alpha'],
+                              effect_count=r.get('effect_count',1), threshold=float(r['zstar']),
+                              statistic_field=np.asarray(r['z']).tolist(), raw_clusters=r['clusters']))
     return dict(summaries=summaries,example=STATE.get('example'),configuration=cfg,
                 software={'GaitSPM':VERSION,'spm1d':spm1d.__version__})
 

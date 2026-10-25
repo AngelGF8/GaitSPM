@@ -1,0 +1,16 @@
+{
+  "title": "GaitSPM: local guided kinematic SPM1D analysis",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "González de la Flor, Ángel"
+    }
+  ],
+  "description": "Graphical workflows using spm1d for kinematic waveform analysis, with participant-aware import and numerical concordance tests.",
+  "license": "GPL-3.0-only",
+  "keywords": [
+    "biomechanics",
+    "gait analysis",
+    "spm1d"
+  ]
+}

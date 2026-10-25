@@ -1,0 +1,69 @@
+name: release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - run: python app/sync_html_engine.py
+      - name: Require a stable version matching citation and tag
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python - <<'PY'
+          import os, re
+          from pathlib import Path
+          source = Path('app/gaitspm_app.py').read_text(encoding='utf-8')
+          version = re.search(r'^VERSION = "([^"]+)"', source, re.M).group(1)
+          assert re.fullmatch(r'\d+\.\d+\.\d+', version), 'Finalize the release version first'
+          assert os.environ['RELEASE_TAG'] == 'v' + version
+          citation = Path('CITATION.cff').read_text(encoding='utf-8')
+          assert 'version: ' + version in citation
+          PY
+      - run: python tests/test_spm1d_validation.py
+      - run: python -m unittest discover -s tests -p test_audit.py
+      - run: python tests/test_bridge.py
+      - run: python tests/test_release.py
+      - run: python tests/test_external_upload.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run test:ui
+      - run: python scripts/package_release.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-package
+          path: |
+            ../GaitSPM_v*.zip
+  draft:
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-package
+          path: release-assets
+      - name: Create a reviewable draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python - <<'PYCODE'
+          import os, subprocess
+          from pathlib import Path
+          assets = [str(p) for p in Path('release-assets').rglob('*') if p.is_file()]
+          subprocess.run(['gh','release','create',os.environ['RELEASE_TAG'],'--draft','--verify-tag',
+                          '--title','GaitSPM '+os.environ['RELEASE_TAG'],'--notes-file','CHANGELOG.md',*assets],check=True)
+          PYCODE

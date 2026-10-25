@@ -1,4 +1,53 @@
-# GaitSPM 1.4.2
+# GaitSPM
+
+Development: **1.5.0.dev0** · Last released citation: **1.4.2**
+
+[![Tests](https://github.com/AngelGF8/GaitSPM/actions/workflows/tests.yml/badge.svg)](https://github.com/AngelGF8/GaitSPM/actions/workflows/tests.yml)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-blue)](requirements.txt)
+
+![Load data, inspect mapping, configure and view SPM results](docs/assets/workflow.gif)
+
+<p align="center"><a href="https://AngelGF8.github.io/GaitSPM/app/"><img src="https://img.shields.io/badge/Probar_ahora_en_el_navegador-Pyodide-102c4f?style=for-the-badge" alt="Probar ahora en el navegador"></a></p>
+
+**Hosting pending:** the button is the intended Pages address; enable Pages and deploy the documentation workflow before it becomes available. The GIF uses existing synthetic-example screenshots, not a recording of the new models. DOI, JOSS and Streamlit badges will be added only after their public records or deployments exist.
+
+[Documentation](docs/index.md) · [Statistical designs](docs/statistics.md) · [Changelog](CHANGELOG.md) · [Roadmap](ROADMAP.md) · [Contribute](CONTRIBUTING.md)
+
+## Unreleased statistical extensions
+
+The local development version adds **two-group ANCOVA**, **numeric-predictor GLM t contrasts**, **balanced two-way independent ANOVA**, and **mixed group × repeated-condition ANOVA** in Laboratory and optional Streamlit modes. New designs require parametric inference and equal variance. Mixed ANOVA assumes sphericity and uses upstream approximate residual inference with one averaged response per cell. Factorial inference always protects all three effects with Bonferroni; across-variable correction is additional. See [model definitions and limits](docs/statistics.md).
+
+## Reproducible software checks
+
+The software test suite compares GaitSPM with direct spm1d calls using deterministic synthetic inputs. It covers statistic fields, critical thresholds, cluster endpoints and p-values, as well as invalid models, missing data and factorial corrections.
+
+```sh
+python tests/test_spm1d_validation.py
+```
+
+See the [validation methodology](docs/validation-guide.md). Research manuscripts and their results are maintained separately and are not part of this software update.
+
+## Choose a workflow
+
+| Aspect | GaitSPM | spm1d by code | Commercial software |
+|---|---|---|---|
+| Installation | Native Python launcher; browser deployment planned | Python or MATLAB environment | Product dependent |
+| Code needed for routine analysis | Graphical controls | Analysis scripts | Product dependent |
+| Privacy | Native local or browser processing; hosted Streamlit would be remote | Depends on where scripts run | Deployment and vendor dependent |
+| Tests available | Guided subset plus adjusted/factorial models with stated limits | Broader programmable upstream API | Check the specific product and version |
+| Price / licence | No licence fee; GPL v3 | Open-source upstream; MATLAB runtime has separate licensing | Vendor dependent; no universal price claim |
+
+## Interface gallery
+
+Existing MATLAB-style screenshots, using synthetic examples:
+
+| Import and mapping | Configure |
+|---|---|
+| ![Participant mapping](capturas/03_control_calidad_mapeo.png) | ![Analysis settings](capturas/04_configuracion_analisis.png) |
+| ![SPM results](capturas/06_resultados_figura_spm.png) | ![Variable detail](capturas/07_detalle_variable.png) |
+| ![Methods and results](capturas/08_textos_metodos_resultados.png) | ![Repeated-measures ANOVA](capturas/12_anova_medidas_repetidas.png) |
+
 
 Local kinematic gait analysis with **spm1d 0.4.53**, a **Guided mode** and a **Laboratory mode**. English is the default interface language; use **ES** to switch to Spanish. Your explicit language choice is remembered in the browser.
 

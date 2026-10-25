@@ -1,0 +1,16 @@
+name: Reproducible bug
+description: Report an import, analysis or export problem
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction and expected behaviour
+      description: Include version, OS, design and a synthetic or anonymised example. Do not upload identifiable participant data.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result and error output
+    validations:
+      required: true

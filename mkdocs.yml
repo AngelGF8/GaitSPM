@@ -1,0 +1,29 @@
+site_name: GaitSPM
+site_url: https://AngelGF8.github.io/GaitSPM/
+repo_url: https://github.com/AngelGF8/GaitSPM
+site_description: Reproducible kinematic SPM1D analysis
+exclude_docs: |
+  licenses/
+  references/
+  validation/
+  IMPLEMENTATION_STATUS.md
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: blue
+  features:
+    - navigation.sections
+    - content.code.copy
+nav:
+  - Start: index.md
+  - Clinical guide: guide.md
+  - Statistical designs: statistics.md
+  - Tutorials: tutorials.md
+  - Validation: validation-guide.md
+  - FAQ: faq.md
+  - Publication and outreach: publication.md
+markdown_extensions:
+  - admonition
+  - tables
+  - fenced_code

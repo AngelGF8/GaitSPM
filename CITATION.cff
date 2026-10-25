@@ -8,3 +8,9 @@ version: 1.4.2
 date-released: 2026-10-24
 license: GPL-3.0-only
 type: software
+repository-code: "https://github.com/AngelGF8/GaitSPM"
+url: "https://github.com/AngelGF8/GaitSPM"
+keywords:
+  - biomechanics
+  - gait analysis
+  - statistical parametric mapping

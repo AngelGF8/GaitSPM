@@ -1,0 +1,13 @@
+name: Feature or tutorial
+description: Propose a scoped improvement
+body:
+  - type: textarea
+    id: usecase
+    attributes:
+      label: Research use case and proposed behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Validation plan or public dataset provenance

@@ -2,7 +2,7 @@
 'use strict';
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
 const PYVER='0.28.3', IDX='https://cdn.jsdelivr.net/pyodide/v'+PYVER+'/full/';
-const DESIGNS={ttest2:'Comparar 2 grupos independientes (SPM{t})',paired_cond:'Comparar 2 condiciones pareadas, p. ej. pre-post (SPM{t})',paired_side:'Comparar lados I vs D, pareado (SPM{t})',anova1:'Comparar ≥3 grupos independientes (SPM{F})',anova1rm:'Comparar ≥3 condiciones intra-sujeto, RM-ANOVA (SPM{F})',regress:'Asociación con covariable continua, regresión (SPM{t})'};
+const DESIGNS={ancova:'ANCOVA · 2 groups + covariates',glm:'GLM · numeric predictors + t contrast',anova2:'Two-way ANOVA · independent group × condition',anova2onerm:'Mixed ANOVA · group × repeated condition',ttest2:'Comparar 2 grupos independientes (SPM{t})',paired_cond:'Comparar 2 condiciones pareadas, p. ej. pre-post (SPM{t})',paired_side:'Comparar lados I vs D, pareado (SPM{t})',anova1:'Comparar ≥3 grupos independientes (SPM{F})',anova1rm:'Comparar ≥3 condiciones intra-sujeto, RM-ANOVA (SPM{F})',regress:'Asociación con covariable continua, regresión (SPM{t})'};
 const JES={pelvis:'Pelvis',hip:'Cadera',knee:'Rodilla',ankle:'Tobillo'};
 const PES={sagittal:'Sagital',frontal:'Frontal',transverse:'Transversal'};
 const GUESS={sub:['sujet','subject','id','part'],grp:['grupo','group'],con:['cond','sesion','session','visit','momento'],sid:['lado','side','limb','pierna'],nod:['punto','node','point','frame','cycle','perc','%'],val:['valor','value','angle','ang','deg'],vrb:['variable','var','param','output','señal','signal'],tri:['trial','ensayo','rep']};
@@ -92,7 +92,9 @@ function buildVars(){const p=S.p,box=$('#varsBox');
  box.innerHTML=vs.map(v=>{const r=p.varmap.find(x=>x.variable===v)||{};const on=r.joint&&r.plane;
   return '<label class="chk"><input type="checkbox" value="'+esc(v)+'"'+(on?' checked':'')+'>'+esc(varLabel(v))+'</label>';}).join('');}
 function styleLabels(){const p=S.p||{groups:[],conds:[]},d=$('#design').value;
- if(d==='ttest2'||d==='anova1'){const selected=checks('gChecks');return selected.length?selected:p.groups.slice(0,d==='ttest2'?2:3);}
+ if(['anova2','anova2onerm'].includes(d))return checks('gChecks').flatMap(g=>checks('rmChecks').map(c=>g+' / '+c));
+ if(['ancova','glm'].includes(d))return ['Complete cases (unadjusted)'];
+ if(['ttest2','anova1'].includes(d)){const selected=checks('gChecks');return selected.length?selected:p.groups.slice(0,d==='ttest2'?2:3);}
  if(d==='paired_cond')return [$('#pcA')?$('#pcA').value:'A',$('#pcB')?$('#pcB').value:'B'];
  if(d==='anova1rm'){const selected=checks('rmChecks');return selected.length?selected:p.conds;}
  if(d==='paired_side')return ['L','R'];
@@ -108,19 +110,23 @@ function collectStyle(){return {
  cluster_fill_alpha:parseFloat($('#clusterAlpha').value),show_cluster_bars:$('#clusterBars').checked};}
 function renderDyn(){const p=S.p,d=$('#design').value,H=[];
  const so=a=>a.map(x=>'<option>'+esc(x)+'</option>').join('');
- if(d==='ttest2'||d==='anova1'){const k=(d==='ttest2')?2:3,preferred=(d==='ttest2'&&p.groups.includes('Control')&&p.groups.includes('FAI cam'))?['Control','FAI cam']:p.groups.slice(0,k);
-  H.push('<div class="fld">Grupos '+(d==='ttest2'?'(elige 2)':'(mínimo 3)')+'<div id="gChecks" class="checks">'+p.groups.map(g=>'<label class="chk"><input type="checkbox" value="'+esc(g)+'"'+(preferred.includes(g)?' checked':'')+'>'+esc(g)+'</label>').join('')+'</div></div>');}
+ if(['ttest2','anova1','ancova','anova2','anova2onerm'].includes(d)){const k=(['ttest2','ancova','anova2','anova2onerm'].includes(d))?2:3,preferred=(d==='ttest2'&&p.groups.includes('Control')&&p.groups.includes('FAI cam'))?['Control','FAI cam']:p.groups.slice(0,k);
+  H.push('<div class="fld">Grupos '+(d==='anova1'?'(mínimo 3)':'(2+)')+'<div id="gChecks" class="checks">'+p.groups.map(g=>'<label class="chk"><input type="checkbox" value="'+esc(g)+'"'+(preferred.includes(g)?' checked':'')+'>'+esc(g)+'</label>').join('')+'</div></div>');}
  if(d==='paired_cond')H.push('<div class="fld two"><label>Nivel A<select id="pcA">'+so(p.conds)+'</select></label><label>Nivel B<select id="pcB">'+so(p.conds)+'</select></label></div>');
- if(d==='anova1rm')H.push('<div class="fld">Condiciones (mínimo 3)<div id="rmChecks" class="checks">'+p.conds.map(c=>'<label class="chk"><input type="checkbox" value="'+esc(c)+'" checked>'+esc(c)+'</label>').join('')+'</div></div>');
+ if(['anova1rm','anova2','anova2onerm'].includes(d))H.push('<div class="fld">Condiciones / Conditions<div id="rmChecks" class="checks">'+p.conds.map(c=>'<label class="chk"><input type="checkbox" value="'+esc(c)+'" checked>'+esc(c)+'</label>').join('')+'</div></div>');
+ if(['ancova','glm'].includes(d))H.push('<div class="fld">Covariates (centered)<div id="covChecks" class="checks">'+p.covs.map(c=>'<label class="chk"><input type="checkbox" value="'+esc(c)+'">'+esc(c)+'</label>').join('')+'</div></div>');
+ if(d==='glm')H.push('<label class="fld">t contrast [intercept, selected covariates]<input id="contrast" value="[0,1]"></label>');
+ if(['anova2','anova2onerm'].includes(d))H.push('<label class="fld">Effect (Bonferroni across 3)<select id="factorEffect"><option value="interaction">Group × condition</option><option value="group">Group</option><option value="condition">Condition</option></select></label>');
+ if(['ancova','glm','anova2','anova2onerm'].includes(d))H.push('<p class="hint">Parametric, equal variance. Factorial designs must be balanced; mixed ANOVA assumes sphericity. ANCOVA: second group minus first, common slopes. GLM: independent subjects.</p>');
  if(d==='regress')H.push('<label class="fld">Covariable<select id="covSel">'+(p.covs.length?so(p.covs):'<option value="">— sin covariables numéricas —</option>')+'</select></label>');
- if((d==='ttest2'||d==='anova1'||d==='regress'||d==='paired_side')&&p.conds.length>1)H.push('<label class="fld">Condición analizada<select id="condSel">'+so(p.conds)+'</select></label>');
+ if((d==='ttest2'||d==='anova1'||d==='regress'||d==='ancova'||d==='glm'||d==='paired_side')&&p.conds.length>1)H.push('<label class="fld">Condición analizada<select id="condSel">'+so(p.conds)+'</select></label>');
  if((d==='paired_cond'||d==='paired_side'||d==='anova1rm'||d==='regress')&&p.groups.length)H.push('<label class="fld">Filtrar grupo<select id="gFilt"><option value="">(todos)</option>'+so(p.groups)+'</select></label>');
  if(p.sides.length&&d!=='paired_side'){
   H.push('<label class="fld">Lados<select id="sideMode"><option value="mean">Promediar L y R</option><option value="L">Solo L</option><option value="R">Solo R</option></select><small class="mut">Cada sujeto aporta una observación; no se permite pseudo-replicación L/R.</small></label>');}
  if(d==='paired_side')H.push('<p class="hint">Comparación pareada L vs R'+((p.sides.indexOf('L')>=0&&p.sides.indexOf('R')>=0)?'':' — <b>los datos no incluyen ambos lados</b>')+'.</p>');
  $('#dyn').innerHTML=H.join('');
  if($('#pcB')&&p.conds.length>1)$('#pcB').selectedIndex=1;
- const isT=(d==='ttest2'||d==='paired_cond'||d==='paired_side'||d==='regress');
+ const isT=(d==='ttest2'||d==='paired_cond'||d==='paired_side'||d==='regress'||d==='ancova'||d==='glm');
  $('#ttWrap').hidden=!isT;$('#evWrap').hidden=!(d==='ttest2'||d==='anova1');
  $('#phWrap').hidden=!(d==='anova1'||d==='anova1rm');
  $('#dyn').onchange=renderStyleColors;renderStyleColors();}
@@ -139,6 +145,11 @@ function collectCfg(){const p=S.p,d=$('#design').value,probs=[]; if(!p)return {c
   groups:null,cond:null,cond_levels:null,side_levels:null,group_filter:null,covariate:null};
  Object.assign(cfg,collectStyle());
  if(d==='ttest2'){cfg.groups=checks('gChecks');if(cfg.groups.length!==2)probs.push('Selecciona exactamente 2 grupos.');}
+ if(['ancova','glm','anova2','anova2onerm'].includes(d)&&cfg.mode!=='param')probs.push('Select parametric inference for this design.');
+ if(d==='ancova'){cfg.groups=checks('gChecks');if(cfg.groups.length!==2)probs.push('Select exactly two groups.');}
+ if(['ancova','glm'].includes(d)){cfg.covariates=checks('covChecks');if(!cfg.covariates.length)probs.push('Select numeric covariates.');cfg.cond=p.conds[0];}
+ if(d==='glm'){try{cfg.contrast=JSON.parse($('#contrast').value);}catch(e){probs.push('Invalid contrast JSON.');}}
+ if(['anova2','anova2onerm'].includes(d)){cfg.groups=checks('gChecks');cfg.cond_levels=checks('rmChecks');cfg.factor_effect=$('#factorEffect').value;if(cfg.groups.length<2||cfg.cond_levels.length<2)probs.push('Select at least two groups and conditions.');}
  if(d==='anova1'){cfg.groups=checks('gChecks');if(cfg.groups.length<3)probs.push('Selecciona al menos 3 grupos.');}
  if(d==='paired_cond'){if(p.conds.length<2)probs.push('Se necesitan al menos 2 condiciones en los datos.');
   else{cfg.cond_levels=[$('#pcA').value,$('#pcB').value];if(cfg.cond_levels[0]===cfg.cond_levels[1])probs.push('Los dos niveles deben ser distintos.');}}

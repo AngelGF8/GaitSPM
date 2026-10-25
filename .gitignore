@@ -9,3 +9,13 @@ node_modules/
 data_private/
 audit-v1.4/workbooks/
 *.inspect.ndjson
+site/
+docs/app/
+
+# Locally maintained research manuscript and results (not for publication here)
+paper/
+docs/validation/
+docs/IMPLEMENTATION_STATUS.md
+tests/test_public_validation.py
+tests/fixtures/public_validation/
+audit-v1.4.2-original-manifest.sha256

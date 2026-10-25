@@ -47,7 +47,7 @@ except ModuleNotFoundError:
     import spm1d
 import streamlit as st
 
-VERSION = "1.4.2"
+VERSION = "1.5.0.dev0"
 NODES = np.arange(101)
 
 # ----------------------------------------------------------------------------
@@ -154,6 +154,10 @@ DESIGNS = {
     "ttest2": "Comparar 2 grupos independientes (SPM{t})",
     "paired_cond": "Comparar 2 condiciones pareadas, p. ej. pre-post (SPM{t})",
     "paired_side": "Comparar lados I vs D, pareado (SPM{t})",
+    "ancova": "ANCOVA · 2 groups + covariates (SPM{t})",
+    "glm": "GLM · numeric predictors + t contrast",
+    "anova2": "Two-way ANOVA · independent group × condition",
+    "anova2onerm": "Mixed ANOVA · group × repeated condition",
     "anova1": "Comparar ≥3 grupos independientes (SPM{F})",
     "anova1rm": "Comparar ≥3 condiciones intra-sujeto, RM-ANOVA (SPM{F})",
     "regress": "Asociación con covariable continua, regresión (SPM{t})",
@@ -476,7 +480,7 @@ def _covariate_meta(df, roles, exclude_cols):
         if c in exclude_cols or c in roles.values():
             continue
         v = _to_numeric(df[c], errors="coerce")
-        if v.notna().mean() > 0.8 and v.nunique() > 2:
+        if v.notna().mean() > 0.8 and v.nunique() > 1:
             cov_cols.append(c)
     subj = _clean_series(df[roles["subject"]])
     meta = pd.DataFrame({"subject": subj})
@@ -484,7 +488,10 @@ def _covariate_meta(df, roles, exclude_cols):
         meta[r] = _clean_series(df[roles[r]]) if roles.get(r) else "—"
     for c in cov_cols:
         meta[c] = _to_numeric(df[c], errors="coerce")
-    meta = meta.groupby(["subject", "group", "condition", "side"], as_index=False).mean(numeric_only=True)
+    keys = ["subject", "group", "condition", "side"]
+    if cov_cols and (meta.groupby(keys, observed=True)[cov_cols].nunique() > 1).any().any():
+        raise ValueError('Conflicting covariate values within participant/condition/side.')
+    meta = meta.groupby(keys, as_index=False).mean(numeric_only=True)
     return meta, cov_cols
 
 
@@ -658,8 +665,7 @@ def prepare_regress(canon, meta, variable, cov, cond, group, side_mode):
     mm["subject"] = mm["subject"].astype(str)
     if cond is not None and "condition" in mm.columns:
         sub = mm[mm["condition"].astype(str) == str(cond)]
-        if len(sub):
-            mm = sub
+        mm = sub
     if (mm.groupby('subject')[cov].nunique() > 1).any():
         raise ValueError('Covariable cambia dentro del sujeto seleccionado / covariate varies within subject.')
     xmap = mm.groupby("subject")[cov].mean()
@@ -810,7 +816,135 @@ def _summ(label, Y):
 
 
 # ------------------------------- análisis ------------------------------------
+ADVANCED_DESIGNS = ("ancova", "glm", "anova2", "anova2onerm")
+
+
+def prepare_model(canon, meta, variable, cfg):
+    """Build explicit subject-aligned inputs; never use metadata row order."""
+    design = cfg['design']
+    side = cfg.get('side_mode', 'mean')
+    if design in ('ancova', 'glm'):
+        covs = cfg.get('covariates') or [cfg.get('covariate')]
+        if not covs or any(not c for c in covs) or len(set(covs)) != len(covs):
+            raise ValueError('Select unique numeric covariates / selecciona covariables únicas.')
+        data = canon
+        if design == 'ancova':
+            levels = cfg.get('groups') or []
+            if len(levels) != 2 or len(set(levels)) != 2:
+                raise ValueError('ANCOVA requires exactly two groups.')
+            data = canon[canon.group.astype(str).isin(levels)]
+        ids, Y, _ = _subject_curves(data, variable, cond=cfg.get('cond'),
+                                  group=cfg.get('group_filter'), side_mode=side)
+        aligned = []
+        for cov in covs:
+            subs, _, x = prepare_regress(data, meta, variable, cov, cfg.get('cond'),
+                                        cfg.get('group_filter'), side)
+            aligned.append(dict(zip(subs, x)))
+        keep = [i for i, sub in enumerate(ids) if all(sub in a for a in aligned)]
+        ids, Y = [ids[i] for i in keep], Y[keep]
+        columns, names = [np.ones(len(ids))], ['intercept']
+        if design == 'ancova':
+            membership = data.groupby('subject', observed=True).group.first().to_dict()
+            g = np.array([str(membership[sub]) == str(levels[1]) for sub in ids], float)
+            if min(np.sum(g == 0), np.sum(g == 1)) < 3:
+                raise ValueError('ANCOVA requires at least three complete subjects per group.')
+            columns.append(g); names.append(str(levels[1]) + ' - ' + str(levels[0]))
+        for cov, a in zip(covs, aligned):
+            x = np.array([a[sub] for sub in ids], float)
+            columns.append(x - x.mean() if len(x) else x); names.append(cov + ' (centered)')
+        X = np.column_stack(columns)
+        contrast = np.asarray(([0, 1] + [0]*len(covs)) if design == 'ancova'
+                              else cfg.get('contrast', []), dtype=float)
+        if contrast.shape != (X.shape[1],) or not np.isfinite(contrast).all() or not np.any(contrast):
+            raise ValueError('Contrast must be finite, nonzero and match [intercept, predictors].')
+        if len(Y) <= X.shape[1] + 1 or np.linalg.matrix_rank(X) != X.shape[1]:
+            raise ValueError('Rank-deficient model or insufficient residual degrees of freedom.')
+        return dict(Y=Y, X=X, contrast=contrast, subjects=ids, columns=names)
+    levels, conditions = cfg.get('groups') or [], cfg.get('cond_levels') or []
+    if len(set(levels)) < 2 or len(set(conditions)) < 2 or len(set(levels)) != len(levels) or len(set(conditions)) != len(conditions):
+        raise ValueError('Two distinct groups and conditions are required (or more).')
+    mats, aa, bb, subjects, summaries, sizes = [], [], [], [], [], []
+    for a, group in enumerate(levels):
+        if design == 'anova2onerm':
+            ids, Ys = prepare_levels(canon, variable, 'condition', conditions, None, group, side)
+            cells = [(ids, y) for y in Ys]
+        else:
+            cells = [_subject_curves(canon, variable, cond=c, group=group, side_mode=side)[:2]
+                     for c in conditions]
+        for b, (ids, Y) in enumerate(cells):
+            if len(ids) < 3:
+                raise ValueError('Every cell requires at least three complete subjects.')
+            mats.append(Y); sizes.append(len(Y)); subjects.extend(ids)
+            aa.extend([a]*len(Y)); bb.extend([b]*len(Y))
+            summaries.append(_summ(str(group) + ' / ' + str(conditions[b]), Y))
+    if len(set(sizes)) != 1:
+        raise ValueError('This release requires balanced two-way designs after complete-case exclusion.')
+    if design == 'anova2' and len(set(subjects)) != len(subjects):
+        raise ValueError('Repeated subject IDs: use mixed ANOVA / usa ANOVA mixto.')
+    subject_codes = {sub: i for i, sub in enumerate(sorted(set(subjects)))}
+    return dict(Y=np.vstack(mats), A=np.array(aa), B=np.array(bb),
+                SUBJ=np.array([subject_codes[sub] for sub in subjects]),
+                subjects=sorted(set(subjects)), summaries=summaries)
+
+
+def run_model(canon, meta, vrow, cfg):
+    design = cfg['design']
+    if cfg.get('mode') != 'param' or not cfg.get('equal_var', True):
+        raise ValueError('Advanced designs require parametric inference and equal variance.')
+    if design in ('ancova', 'glm') and cfg.get('cond') is None and canon.condition.nunique() > 1:
+        raise ValueError('Select one condition for independent GLM/ANCOVA observations.')
+    model = prepare_model(canon, meta, vrow['variable'], cfg)
+    Y = model['Y']
+    factorial = design in ('anova2', 'anova2onerm')
+    effect = cfg.get('factor_effect', 'interaction')
+    if factorial and effect not in ('group', 'condition', 'interaction'):
+        raise ValueError('Select group, condition or interaction.')
+    m = max(1, int(cfg.get('field_count', 1))) if cfg.get('field_correction', 'bonferroni') == 'bonferroni' else 1
+    # Always protect the three factorial hypotheses, even when displaying one.
+    effect_count = 3 if factorial else 1
+    alpha = float(cfg['alpha']) / (m * effect_count)
+    if factorial:
+        args = [Y, model['A'], model['B']]
+        if design == 'anova2onerm': args.append(model['SUBJ'])
+        fields = getattr(spm1d.stats, design)(*args, equal_var=True)
+        spm = fields[('group', 'condition', 'interaction').index(effect)]
+        spmi = spm.inference(alpha, interp=True)
+        plot = dict(type='groups', groups=model['summaries'])
+        detail = dict(effect=effect, groups=cfg['groups'], conditions=cfg['cond_levels'])
+    else:
+        spm = spm1d.stats.glm(Y, model['X'], model['contrast'])
+        spmi = spm.inference(alpha, two_tailed=bool(cfg['two_tailed']), interp=True)
+        plot = dict(type='groups', groups=[_summ('Complete cases (unadjusted)', Y)])
+        detail = dict(columns=model['columns'], contrast=model['contrast'].tolist(),
+                      design_matrix=model['X'].tolist())
+    z = np.asarray(spmi.z, float)
+    if not np.isfinite(z).all(): raise ValueError('Nonfinite model statistic.')
+    eligible = canon[canon.variable.astype(str).eq(str(vrow['variable']))]
+    if cfg.get('groups') and design != 'glm': eligible = eligible[eligible.group.astype(str).isin(cfg['groups'])]
+    if cfg.get('group_filter'): eligible = eligible[eligible.group.astype(str).eq(str(cfg['group_filter']))]
+    if factorial: eligible = eligible[eligible.condition.astype(str).isin(cfg['cond_levels'])]
+    elif cfg.get('cond') is not None: eligible = eligible[eligible.condition.astype(str).eq(str(cfg['cond']))]
+    excluded = sorted(set(eligible.subject.astype(str)) - set(model['subjects']))
+    warns = ['Equal variance assumed; parametric inference only.']
+    if factorial: warns.append('Bonferroni across all three factorial effects (alpha/3), in addition to across-variable correction.')
+    if design == 'anova2onerm': warns.append('Sphericity assumed; no nonsphericity correction. One averaged response per subject/condition; spm1d approximate residuals may apply.')
+    if design == 'ancova': warns.append('Common covariate slopes assumed; contrast is second group minus first. Mean plot is unadjusted.')
+    if excluded: warns.append('Complete-case exclusions: ' + ', '.join(excluded))
+    return dict(variable=vrow['variable'], joint=vrow['joint'], plane=vrow['plane'], design=design,
+                two_tailed=False if factorial else bool(cfg['two_tailed']), alpha=alpha,
+                family_alpha=float(cfg['alpha']), field_count=m, effect_count=effect_count,
+                posthoc=None, normality_pct=None, test_label='SPM{F} · '+effect if factorial else 'SPM{t} · '+design,
+                stat_name='F' if factorial else 't', effect=None, plot=plot,
+                direction=None, n_included=len(model['subjects']), excluded_subjects=excluded,
+                model={**detail, 'subjects':model['subjects']}, z=z, zstar=float(spmi.zstar),
+                h0reject=bool(spmi.h0reject), clusters=extract_clusters(spmi,z), mode_used='param',
+                df_str=_df_str(spm,spmi,'param',cfg['iterations']), warnings=warns, seed=None,
+                iterations_actual=None)
+
+
 def run_one(canon, meta, vrow, cfg):
+    if cfg["design"] in ADVANCED_DESIGNS:
+        return run_model(canon, meta, vrow, cfg)
     method = cfg.get("field_correction", "bonferroni")
     if method not in ("none", "bonferroni"):
         raise ValueError("Selecciona Bonferroni o sin ajuste; Holm/FDR sobre mínimos de clúster se ha retirado.")
@@ -1011,6 +1145,8 @@ def run_one(canon, meta, vrow, cfg):
 
 
 def compute_band(canon, var, cfg):
+    if cfg["design"] in ADVANCED_DESIGNS:
+        return None  # no ambiguous pooled-condition reference band
     if not cfg.get("band_group"):
         return None
     cond = cfg.get("cond") if cfg["design"] in ("ttest2", "anova1", "regress", "paired_side") else None
@@ -1052,11 +1188,12 @@ def apply_field_correction(results, cfg):
     for res in results.values():
         if "error" in res:
             continue
-        if not np.isclose(res["alpha"], alpha/m):
+        factor = m * res.get("effect_count", 1)
+        if not np.isclose(res["alpha"], alpha/factor):
             raise ValueError("Reejecuta la inferencia con α/m / rerun inference with alpha/m.")
         res["field_correction"] = method
         for cluster in res.get("clusters", []):
-            cluster["p_field_adj"] = float(min(1, m * cluster["p"]))
+            cluster["p_field_adj"] = float(min(1, factor * cluster["p"]))
         res["field_p_raw"] = min((c["p"] for c in res.get("clusters", [])), default=1.)
         res["field_p_adj"] = min((c["p_field_adj"] for c in res.get("clusters", [])), default=1.)
         res["field_significant"] = bool(confirmed_clusters(res))
@@ -1069,7 +1206,7 @@ def apply_field_correction(results, cfg):
 
 def confirmed_clusters(res):
     """Clústeres que mantienen la inferencia definida para la familia."""
-    if res.get("field_correction", "none") == "none":
+    if res.get("field_correction", "none") == "none" and res.get("effect_count", 1) == 1:
         return res.get("clusters", [])
     return [c for c in res.get("clusters", [])
             if c.get("p_field_adj", 1) <= res.get("family_alpha", .05)]
@@ -1246,8 +1383,9 @@ def plot_spm(ax, res, lang, show_xlabel=True, cfg=None):
     ax.text(0.02, 0.97, f"{res['stat_name']}* = {zs:.2f}", transform=ax.transAxes,
             fontsize=7.2, va="top", color="0.2", zorder=5,
             bbox=dict(fc="white", ec="none", alpha=0.75, pad=0.6))
-    if res.get("field_correction", "none") != "none":
-        ax.text(0.98, 0.97, f"α / m = {res['alpha']:.4f}",
+    if res.get("field_correction", "none") != "none" or res.get("effect_count", 1) > 1:
+        denominator = "3m" if res.get("effect_count", 1) > 1 else "m"
+        ax.text(0.98, 0.97, f"α / {denominator} = {res['alpha']:.4f}",
                 transform=ax.transAxes, fontsize=7.0, va="top", ha="right", color="0.25",
                 zorder=5, bbox=dict(fc="white", ec="none", alpha=0.75, pad=0.6))
     ax.set_xlim(0, 100)
@@ -1503,6 +1641,10 @@ CITAS = [
 
 def _design_phrase(cfg, lang):
     d = cfg["design"]
+    if d in ADVANCED_DESIGNS:
+        if d in ('anova2', 'anova2onerm'):
+            return f"{d}: group × condition, {cfg.get('factor_effect', 'interaction')}; equal variance; Bonferroni across 3 effects" + ("; sphericity assumed, approximate residual inference for one response per cell" if d == "anova2onerm" else "")
+        return f"{d}: covariates {cfg.get('covariates') or [cfg.get('covariate')]}; contrast {cfg.get('contrast') if d == 'glm' else 'second group minus first'}, equal variance assumed"
     if d == "ttest2":
         return _DESIGN_TXT[lang][d].format(a=cfg["groups"][0], b=cfg["groups"][1])
     if d == "paired_cond":
@@ -1636,7 +1778,10 @@ def results_text(results, cfg, lang="en"):
                 ns.append(name)
             continue
         for c in clusters:
-            if res["design"] in ("anova1", "anova1rm"):
+            if res["design"] in ADVANCED_DESIGNS:
+                lines.append(f"{name}: {res['test_label']} at {_cluster_phrase(c, res, lang)}. "
+                             + ("Contrast sign: " + str(c['sign']) if res['stat_name'] == 't' else ''))
+            elif res["design"] in ("anova1", "anova1rm"):
                 if lang == "en":
                     lines.append(f"A significant main effect was found for {name} at {_cluster_phrase(c, res, lang)}.")
                 else:

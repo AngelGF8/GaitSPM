@@ -36,15 +36,27 @@ def main(E):
         if 'canon' in ss:
             c=ss.canon;groups=list(c.group.unique());conds=list(c.condition.unique());sides=list(c.side.unique())
             designs={'ttest2':t('t independiente','Independent t'),'paired_cond':t('t pareada · condiciones','Paired t · conditions'),'paired_side':t('t pareada · lados','Paired t · sides'),'anova1':t('ANOVA independiente','Independent ANOVA'),'anova1rm':'RM-ANOVA','regress':t('Regresión','Regression')}
+            designs.update({k:E.DESIGNS[k] for k in E.ADVANCED_DESIGNS})
             design=st.selectbox(t('Diseño','Design'),list(designs),format_func=designs.get,key='design')
             cfg=dict(design=design,groups=None,cond=None,cond_levels=None,side_levels=None,group_filter=None,covariate=None,lang=lang)
-            if design in ('ttest2','anova1'):cfg['groups']=st.multiselect(t('Grupos','Groups'),groups,default=groups[:2 if design=='ttest2' else 3],key='group_selection')
-            if design in ('paired_cond','anova1rm'):cfg['cond_levels']=st.multiselect(t('Condiciones','Conditions'),conds,default=conds[:2 if design=='paired_cond' else 3],key='condition_levels')
+            if design in ('ttest2','anova1','ancova','anova2','anova2onerm'):cfg['groups']=st.multiselect(t('Grupos','Groups'),groups,default=groups[:2 if design=='ttest2' else 3],key='group_selection')
+            if design in ('paired_cond','anova1rm','anova2','anova2onerm'):cfg['cond_levels']=st.multiselect(t('Condiciones','Conditions'),conds,default=conds[:2 if design=='paired_cond' else 3],key='condition_levels')
             else:cfg['cond']=st.selectbox(t('Condición','Condition'),conds)
             if design=='paired_side':cfg['side_levels']=['L','R']
             if design in ('paired_cond','anova1rm','regress'):
                 gf=st.selectbox(t('Filtrar grupo','Group filter'),['—']+groups);cfg['group_filter']=None if gf=='—' else gf
             if design=='regress':cfg['covariate']=st.selectbox(t('Covariable','Covariate'),ss.covs) if ss.covs else None
+            if design in ('ancova','glm'):
+                cfg['covariates']=st.multiselect('Covariates (centered)',ss.covs)
+                if design=='glm':
+                    import json
+                    raw=st.text_input('t contrast [intercept, selected covariates]','[0,1]')
+                    try:cfg['contrast']=json.loads(raw)
+                    except ValueError:cfg['contrast']=[]
+            if design in ('anova2','anova2onerm'):
+                cfg['factor_effect']=st.selectbox('Effect (Bonferroni across 3)',['interaction','group','condition'])
+            if design in E.ADVANCED_DESIGNS:
+                st.caption('Parametric / equal variance. Balanced factorial designs; mixed ANOVA assumes sphericity. ANCOVA: second group minus first, common slopes.')
             sm=st.selectbox(t('Lados','Sides'),['mean','L','R'],format_func=lambda x:t('Promediar L/R','Average L/R') if x=='mean' else x);cfg['side_mode']=sm
             selected=st.multiselect(t('Variables','Variables'),ss.varmap.variable.tolist(),default=ss.varmap.variable.tolist(),key='selected_vars')
             with st.expander(t('Opciones estadísticas','Statistical options')):
@@ -114,7 +126,7 @@ def main(E):
                 cfg['show_interval_edges']=st.checkbox(t('Líneas límite','Boundary lines'),False)
             labels=res[successful[0]].get('plot',{}).get('groups',[]) if successful else []
             with cols[1]:
-                for i,g in enumerate(labels):
+                for i,g in enumerate(labels[:len(cfg['line_colors'])]):
                     cfg['line_colors'][i]=st.color_picker(g['label']+' · '+t('curva','curve'),cfg['line_colors'][i],key=f'line_{i}')
                     cfg['band_colors'][i]=st.color_picker(g['label']+' · '+t('intervalo','interval'),cfg['band_colors'][i],key=f'band_{i}')
             with cols[2]:
@@ -146,4 +158,8 @@ def main(E):
     with tabs[3]:
         mt=E.methods_text(cfg,res,lang);rt=E.results_text(res,cfg,lang)
         st.text_area(t('Métodos','Methods'),mt,height=220);st.text_area(t('Resultados','Results'),rt,height=220);st.download_button('TXT',(mt+'\n\n'+rt).encode('utf-8'),'report.txt')
+        import json
+        audit = {'configuration':cfg, 'software':{'GaitSPM':E.VERSION,'spm1d':E.spm1d.__version__},
+                 'models':{v:r.get('model') for v,r in res.items() if 'error' not in r}}
+        st.download_button('Analysis JSON',json.dumps(audit,ensure_ascii=False,indent=2),'gaitspm_analysis.json')
         st.markdown('\n\n'.join(E.CITAS))

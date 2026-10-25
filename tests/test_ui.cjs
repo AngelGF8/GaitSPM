@@ -76,6 +76,19 @@ w.structuredClone=structuredClone;
   $('#unitsConfirmed').checked=false;assert.ok(w.unit.cfg().probs.length);
  }
  await w.unit.lang('en');
+ await $('[data-load="07_ms_fatigue"]').onclick();
+ $('#unitsConfirmed').checked=true;
+ for(const design of ['ancova','glm','anova2','anova2onerm']){
+  $('#design').value=design;$('#design').onchange();$('#mode').value='param';
+  if(['ancova','glm'].includes(design))$('#covChecks input').checked=true;
+  if(design==='glm')$('#contrast').value='[0,1]';
+  const r=w.unit.cfg();assert.equal(r.probs.length,0,r.probs.join('; '));
+  assert.equal(r.cfg.design,design);
+  if(design==='ancova')assert.equal(r.cfg.groups.length,2);
+  if(design==='glm')assert.deepEqual(Array.from(r.cfg.contrast),[0,1]);
+  if(design.startsWith('anova2')){assert.equal(r.cfg.cond_levels.length,3);assert.equal(r.cfg.factor_effect,'interaction');}
+  $('#mode').value='nonparam';assert.ok(w.unit.cfg().probs.length);$('#mode').value='param';
+ }
  w.unit.upload({nrows:20,ncols:102,tipo:'csv',sep:',',decimal:'.',preview:{columns:['subject','Knee_0'],rows:[['001',1]]},structure:'wide',blocks:['Knee'],meta_cols:['subject'],columns:['subject','Knee_0'],numeric:['Knee_0']});
  assert.match($('#mapBox').textContent,/participant ID/);assert.doesNotMatch($('#mapBox').textContent,/Sujeto|El archivo|Aplicar mapeo/);
  $('#mSub').value='—';await $('#btnMap').onclick();assert.match($('#mapErr').textContent,/Select the participant ID column/);

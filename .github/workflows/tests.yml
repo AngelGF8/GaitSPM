@@ -21,6 +21,8 @@ jobs:
         env:
           GAITSPM_TEST_BOOTSTRAP: '1'
       - run: python -m unittest discover -s tests -p test_audit.py -v
+      - name: Direct spm1d concordance
+        run: python tests/test_spm1d_validation.py
       - run: python tests/test_bridge.py
       - run: python tests/test_release.py
       - run: python tests/test_external_upload.py
