@@ -97,7 +97,7 @@ Unmodified examples are recognised and offered their predefined analysis setting
 
 The report shows mean curves, variability bands, SPM fields, cluster intervals, analysed sample sizes and an interpretation based on the current results. Figures, tables and report text use the selected language. Methods and Results text can be copied or exported; the analysis configuration can be saved as JSON.
 
-## Eight examples, six clinical contexts
+## Nine examples, seven clinical contexts
 
 | Example | Context | Simulated participants | Default analysis |
 |---|---|---:|---|
@@ -110,9 +110,11 @@ The report shows mean curves, variability bands, SPM fields, cluster intervals, 
 | 07 | MS: hypothetical fatigue and recovery | 30 + 30, three repeated conditions | Repeated-measures ANOVA in the 30 cases |
 | 08 | ACL: technical retest without a systematic shift | 30 + 30, two repeated conditions | Paired t-test in the 30 cases |
 
-These are **synthetic data**, not real patient records. Every example contains 60 unique participant IDs; there are 480 distinct simulated participants across the eight examples. Repeated conditions retain the same IDs and do not increase the sample size.
+| 09 | Cerebral palsy: hypothetical crouch gait, 12 variables | 30 + 30 | Independent groups, Welch |
 
-Only joint angles in degrees are included: no forces, moments or EMG. The random `technical_score` covariate has no clinical meaning. The first six examples retain documented scalar anchors inherited from version 1.3, while their waveform shapes are simulated. Examples 07–08 are hypothetical teaching scenarios. Examples 03 and 05 are independent datasets and must not be paired as a surgical follow-up.
+These are **synthetic data**, not real patient records. Every example contains 60 unique participant IDs; there are 540 distinct simulated participants across the nine examples. Repeated conditions retain the same IDs and do not increase the sample size.
+
+Only joint angles in degrees are included: no forces, moments or EMG. The random `technical_score` covariate has no clinical meaning. The first six examples retain documented scalar anchors inherited from version 1.3, while their waveform shapes are simulated. Examples 07–09 are hypothetical teaching scenarios. Examples 03 and 05 are independent datasets and must not be paired as a surgical follow-up.
 
 Source attribution and simulation assumptions are included with each dataset. Further guidance is available in the [example guide](docs/GUIA_EJEMPLOS.md).
 
@@ -156,7 +158,7 @@ The Zenodo record is labelled **1.5.0** and preserves source commit `c11160fd4c9
 
 Edit `app/gaitspm_app.py` for engine changes. Run `python app/sync_html_engine.py` to regenerate the native engine and self-contained HTML. Interface sources are under `app/web/`; `app/serve.py` implements the local HTTP server.
 
-Version 1.4.2 uses explicit UTF-8 for source text and adds a launcher test. GitHub Actions checks **Linux, Windows and macOS with Python 3.12**, including a fresh launcher-created virtual environment, HTTP startup, the statistical tests, the external CSV and eight offline DOM workflows. Check the [actual workflow results](https://github.com/AngelGF8/GaitSPM/actions) for the commit you use.
+Version 1.4.2 uses explicit UTF-8 for source text and adds a launcher test. GitHub Actions checks **Linux, Windows and macOS with Python 3.12**, including a fresh launcher-created virtual environment, HTTP startup, the statistical tests, the external CSV and nine offline DOM workflows. Check the [actual workflow results](https://github.com/AngelGF8/GaitSPM/actions) for the commit you use.
 
 **Remaining limits:** automated HTTP and DOM tests do not verify visual rendering, the browser file picker, mobile layout or desktop double-click behaviour. The optional Streamlit interface and direct-file Pyodide fallback are not validated by this workflow. Use the native Python launcher.
 

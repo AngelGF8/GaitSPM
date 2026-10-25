@@ -11,6 +11,8 @@ SEED=260905
 def main():
     payload=[];all_checks=[]
     for d in synthetic_catalog():
+        if d.get('source_kind') == 'bundled_csv':
+            continue  # Preserve the uploaded CSV and workbook verbatim.
         key=d['key'];spec=synthetic_spec(key);c,m,covs,vm=synthetic_dataset(key,SEED)
         out=ROOT/'datasets/synthetic'/key;out.mkdir(parents=True,exist_ok=True)
         c.to_csv(out/'curves_long.csv',index=False,float_format='%.10f')
@@ -59,6 +61,6 @@ def main():
     dest=ROOT/'datasets/synthetic';pd.DataFrame(all_checks).to_csv(dest/'calibration_all.csv',index=False,float_format='%.8f')
     (dest/'catalog.json').write_text(json.dumps(synthetic_catalog(),ensure_ascii=False,indent=2), encoding="utf-8")
     (ROOT/'datasets/workbook_inputs.json').write_text(json.dumps(payload,ensure_ascii=False,allow_nan=False), encoding="utf-8")
-    print(f'{len(payload)} examples; 480 unique synthetic participants; 30 per group; {len(all_checks)} calibrated moments')
+    print(f'{len(payload)} examples; {sum(d["n_total"] for d in synthetic_catalog())} unique synthetic participants in the full catalog; 30 per group; {len(all_checks)} calibrated moments')
 
 if __name__=='__main__':main()

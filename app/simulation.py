@@ -1,7 +1,7 @@
-"""Deterministic, literature-calibrated synthetic benchmarks, NOT patient data.
+"""Deterministic synthetic teaching examples, NOT patient data.
 
 Each example has 60 unique people: 30 controls and 30 cases, one indexed limb,
-one or more conditions and 101 nodes. The finite samples match selected scalar means
+one or more conditions and 101 nodes. Examples 01–06 match selected scalar means
 and sample SDs; this is moment matching, not an iid clinical sample. Waveform
 shapes, phase timings and covariance are explicit simulation assumptions.
 """
@@ -53,6 +53,47 @@ EXTRA_SPECS = [
 ]
 
 
+# Fixed uploaded examples are loaded verbatim; seed only affects generated examples.
+BUNDLED_EXAMPLE_CSV = {}
+BUNDLED_SPECS = [dict(
+    key='09_cerebral_palsy', title_en='Cerebral palsy · crouch gait',
+    title_es='Parálisis cerebral · marcha agachada', group='CP',
+    short='Hypothetical teaching model · 2026',
+    citation='GaitSPM hypothetical teaching model (2026); qualitative context: Abbasi et al. (2018)',
+    url='https://pmc.ncbi.nlm.nih.gov/articles/PMC6169120/',
+    population='30 synthetic controls and 30 cerebral palsy cases; assumed crouch-gait waveforms, not patient observations or published scalar calibration.',
+    source_kind='bundled_csv',
+    source_note_en='Hypothetical teaching model. Waveforms and covariance are assumed; the citation supplies qualitative context only.',
+    source_note_es='Modelo didáctico hipotético. Formas y covarianza supuestas; la referencia aporta solo contexto cualitativo.',
+    variables=['PelvisTilt','PelvisObliquity','PelvisRotation','HipAdduction','HipRotation',
+               'KneeVarus','KneeRotation','AnkleInversion','AnkleRotation',
+               'HipFlexion','KneeFlexion','AnkleDorsiflexion'])]
+
+
+def bundled_dataset(key):
+    import base64, io, zlib
+    from pathlib import Path
+    spec = synthetic_spec(key)
+    if key in BUNDLED_EXAMPLE_CSV:
+        source = io.BytesIO(zlib.decompress(base64.b64decode(BUNDLED_EXAMPLE_CSV[key])))
+    else:
+        source = Path(__file__).resolve().parents[1] / 'datasets' / 'synthetic' / key / (key + '.csv')
+    wide = pd.read_csv(source, float_precision='round_trip')
+    keys = ['subject', 'group', 'condition', 'side']
+    meta = wide[keys + ['technical_score']].copy()
+    meta['synthetic'] = True
+    columns = [f'{v}_{n}' for v in spec['variables'] for n in range(101)]
+    canon = wide.melt(id_vars=keys, value_vars=columns, var_name='curve', value_name='value')
+    parts = canon.pop('curve').str.rsplit('_', n=1, expand=True)
+    canon['variable'], canon['node'] = parts[0], parts[1].astype(int)
+    canon = canon[keys + ['variable', 'node', 'value']]
+    vm = pd.DataFrame([dict(variable=v,
+        joint=next(j for j in ['pelvis','hip','knee','ankle'] if v.lower().startswith(j)),
+        plane='transverse' if 'Rotation' in v else ('frontal' if any(x in v for x in ['Obliquity','Adduction','Varus','Inversion']) else 'sagittal'))
+        for v in spec['variables']])
+    return canon, meta, ['technical_score'], vm
+
+
 def example_recipe(key):
     spec = synthetic_spec(key)
     recipe = dict(design='ttest2', groups=['Control', spec['group']], cond='BASE',
@@ -68,9 +109,9 @@ def example_recipe(key):
 
 
 def synthetic_catalog():
-    items = SYNTHETIC_SPECS + EXTRA_SPECS
+    items = SYNTHETIC_SPECS + EXTRA_SPECS + BUNDLED_SPECS
     return [{**{k:v for k,v in d.items() if k != 'anchors'},
-             'n_vars':len(synthetic_spec(d['key'])['anchors']), 'n_total':60,'n_cases':30,'n_controls':30,
+             'n_vars':len(d['variables']) if 'variables' in d else len(synthetic_spec(d['key'])['anchors']), 'n_total':60,'n_cases':30,'n_controls':30,
              'n_conditions':3 if d['key']=='07_ms_fatigue' else (2 if d['key']=='08_acl_retest' else 1),
              'recipe':example_recipe(d['key'])}
             for d in sorted(items,key=lambda x:x['key'])]
@@ -80,7 +121,7 @@ def synthetic_spec(key):
     extra=next((d for d in EXTRA_SPECS if d['key']==key),None)
     if extra:
         return {**extra, 'anchors':synthetic_spec(extra['base'])['anchors']}
-    return next(d for d in SYNTHETIC_SPECS if d['key']==key)
+    return next(d for d in SYNTHETIC_SPECS + BUNDLED_SPECS if d['key']==key)
 
 
 def _moments(n, mean, sd, rng, positive=False):
@@ -92,6 +133,8 @@ def _moments(n, mean, sd, rng, positive=False):
 
 
 def synthetic_dataset(key, seed=260905):
+    if key in {d['key'] for d in BUNDLED_SPECS}:
+        return bundled_dataset(key)
     if key in {d['key'] for d in EXTRA_SPECS}:
         return repeated_dataset(key, seed)
     spec=synthetic_spec(key)

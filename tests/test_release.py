@@ -14,6 +14,30 @@ def bridge():
     return ns
 
 class ReleaseTests(unittest.TestCase):
+    def test_fixed_example_browser_parity_and_identity(self):
+        import re, hashlib
+        key = '09_cerebral_palsy'
+        folder = ROOT / 'datasets/synthetic' / key
+        metadata = json.loads((folder / 'metadata.json').read_text(encoding='utf-8'))
+        for name, digest in metadata['files_sha256'].items():
+            self.assertEqual(hashlib.sha256((folder / name).read_bytes()).hexdigest(), digest)
+        native = synthetic_dataset(key)
+        source = re.search(r'id="py-simulation">(.*?)</script>', (ROOT/'app/gaitspm.html').read_text(encoding='utf-8'), re.S).group(1)
+        ns = {'__file__': '/nonexistent/app/simulation.py'}
+        exec(source, ns)
+        browser = ns['synthetic_dataset'](key)
+        for i in [0, 1, 3]:
+            pd.testing.assert_frame_equal(native[i], browser[i], check_exact=True)
+        self.assertEqual(native[0].shape[0], 60 * 12 * 101)
+        pd.testing.assert_frame_equal(native[3], E.classify_variables(native[3].variable))
+        state = bridge()
+        state['_store'](*native[:3])
+        self.assertEqual(state['STATE']['example']['key'], key)
+        changed = native[0].copy()
+        changed.loc[0, 'value'] += 1
+        state['_store'](changed, native[1], native[2])
+        self.assertIsNone(state['STATE']['example'])
+
     def test_spanish_decimal_and_quoted_delimiters(self):
         text='subject;group;HipFlexion_0;HipFlexion_1\n"A,1";Case;1,25;2,25\n"B,1";Control;3,25;4,25\n'
         df,info=E.read_upload(text.encode(),'es.csv')

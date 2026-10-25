@@ -1,4 +1,4 @@
-# Guide to the eight examples
+# Guide to the nine examples
 
 Results calculated on 24 October 2026 with GaitSPM 1.4.0 / spm1d 0.4.53 and fixed seeds. Each example contains 30 synthetic cases and 30 synthetic controls. These are analysis exercises, not conclusions about real patients.
 
@@ -115,6 +115,10 @@ Workflow: load → review mapping and quality → configure → run → read int
 
 ## Simulation assumptions
 
-Examples 01–06 match scalar means and SDs retained from version 1.3 using standardized quantiles; they are not independent, identically distributed patient samples. Shapes, smoothness, phases and correlations are imposed. Examples 07/08 add hypothetical changes and noise. Example 05 represents a post-arthroplasty context, not a seventh pathology. All 480 IDs are unique across datasets. Sources and limitations are documented in references/README.md and each metadata.json.
+Examples 01–06 match scalar means and SDs retained from version 1.3 using standardized quantiles; they are not independent, identically distributed patient samples. Shapes, smoothness, phases and correlations are imposed. Examples 07/08 add hypothetical changes and noise. Example 05 represents a post-arthroplasty context, not a seventh pathology. All 540 IDs are unique across datasets. Sources and limitations are documented in references/README.md and each metadata.json.
 
 Results in this guide apply only to the original files and their recipes. Changing variables, groups, correction, side or method changes the results. Save the analysis JSON to retain its configuration.
+
+## 09 · Cerebral palsy: crouch gait
+
+Use **Load example** for 30 synthetic controls and 30 CP cases with 12 variables covering pelvis, hip, knee and ankle. The preset compares Control vs CP using Welch, two tails and Bonferroni correction across 12 fields. CSV and Excel imports recognize the original dataset. This fixed teaching model uses assumed waveforms and covariance, without published scalar calibration; the workbook cites Abbasi et al. (2018) for qualitative context only. The original CSV values are bundled in the browser app.

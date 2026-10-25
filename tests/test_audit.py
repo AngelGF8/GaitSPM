@@ -42,7 +42,7 @@ class AuditTests(unittest.TestCase):
             cal = pd.read_csv(ROOT/'datasets/synthetic'/key/'calibration.csv')
             np.testing.assert_allclose(cal.target_mean,cal.simulated_mean,atol=1e-7)
             np.testing.assert_allclose(cal.target_sd,cal.simulated_sd,atol=1e-7)
-        self.assertEqual(len(all_ids),480)
+        self.assertEqual(len(all_ids),sum(d['n_total'] for d in synthetic_catalog()))
 
     def test_02_all_parsers(self):
         roles={x:x for x in ['subject','group','condition','side']}
@@ -50,10 +50,12 @@ class AuditTests(unittest.TestCase):
             return c.astype({'subject':str,'group':str,'condition':str,'side':str,'variable':str}).sort_values(E.CANON_COLS[:-1]).reset_index(drop=True)
         for item in synthetic_catalog():
             folder=ROOT/'datasets/synthetic'/item['key']; expected=ordered(synthetic_dataset(item['key'])[0])
-            for name in ['curves_wide.csv','curves_wide_es.csv',item['key']+'.xlsx']:
+            names = [item['key']+'.csv', item['key']+'.xlsx'] if item.get('source_kind') == 'bundled_csv' else ['curves_wide.csv','curves_wide_es.csv',item['key']+'.xlsx']
+            for name in names:
                 df,_=E.read_upload((folder/name).read_bytes(),name)
                 got=E.canon_from_wide(df,E.find_curve_blocks(df.columns),roles)[0]
                 np.testing.assert_allclose(ordered(got).value,expected.value,atol=1e-7)
+            if item.get('source_kind') == 'bundled_csv': continue
             df=pd.read_csv(folder/'curves_long.csv')
             got=E.canon_from_long(df,{**roles,'variable':'variable','node':'node','value':'value'})[0]
             np.testing.assert_allclose(ordered(got).value,expected.value,atol=1e-7)

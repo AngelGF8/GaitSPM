@@ -249,5 +249,53 @@
       "two_tailed": true,
       "field_correction": "bonferroni"
     }
+  },
+  {
+    "key": "09_cerebral_palsy",
+    "title_en": "Cerebral palsy · crouch gait",
+    "title_es": "Parálisis cerebral · marcha agachada",
+    "group": "CP",
+    "short": "Hypothetical teaching model · 2026",
+    "citation": "GaitSPM hypothetical teaching model (2026); qualitative context: Abbasi et al. (2018)",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6169120/",
+    "population": "30 synthetic controls and 30 cerebral palsy cases; assumed crouch-gait waveforms, not patient observations or published scalar calibration.",
+    "source_kind": "bundled_csv",
+    "source_note_en": "Hypothetical teaching model. Waveforms and covariance are assumed; the citation supplies qualitative context only.",
+    "source_note_es": "Modelo didáctico hipotético. Formas y covarianza supuestas; la referencia aporta solo contexto cualitativo.",
+    "variables": [
+      "PelvisTilt",
+      "PelvisObliquity",
+      "PelvisRotation",
+      "HipAdduction",
+      "HipRotation",
+      "KneeVarus",
+      "KneeRotation",
+      "AnkleInversion",
+      "AnkleRotation",
+      "HipFlexion",
+      "KneeFlexion",
+      "AnkleDorsiflexion"
+    ],
+    "n_vars": 12,
+    "n_total": 60,
+    "n_cases": 30,
+    "n_controls": 30,
+    "n_conditions": 1,
+    "recipe": {
+      "design": "ttest2",
+      "groups": [
+        "Control",
+        "CP"
+      ],
+      "cond": "BASE",
+      "cond_levels": null,
+      "group_filter": null,
+      "side_mode": "L",
+      "mode": "param",
+      "equal_var": false,
+      "alpha": 0.05,
+      "two_tailed": true,
+      "field_correction": "bonferroni"
+    }
   }
 ]
