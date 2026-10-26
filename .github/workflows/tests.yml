@@ -32,5 +32,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm --prefix tests install
-      - run: npm --prefix tests run test:ui
+      - run: npm ci
+        working-directory: tests
+      - run: npm run test:ui
+        working-directory: tests
