@@ -10,8 +10,8 @@ python -m unittest discover -s tests -p test_audit.py -v
 python tests/test_bridge.py
 python tests/test_release.py
 python tests/test_external_upload.py
-npm install
-npm run test:ui
+npm --prefix tests install
+npm --prefix tests run test:ui
 ```
 
 `test_release.py` generates fixtures with real analysis results in `.test-output/` for `test_ui.cjs`. The DOM test uses jsdom and a mock bridge returning those results; it does not open a browser or verify pixels. Python tests separately validate statistics, import and the real bridge.
@@ -33,6 +33,6 @@ python tests/test_spm1d_validation.py
 
 This suite covers deterministic synthetic designs, rank/missing-data guards, factorial multiplicity and the browser bridge. CI runs these checks without uploading numerical reports. Research manuscripts and external multi-dataset results are maintained separately.
 
-## Monte Carlo harness
+## Research checks
 
-Run `python tests/test_monte_carlo.py` for deterministic generator, stream, interval and full-pipeline parity checks across the scenario inventory. These small CI checks do not assess statistical validity. The separate long-running study is specified in [the Monte Carlo protocol](../docs/monte-carlo-protocol.md); run `python scripts/monte_carlo.py --replicates 5000 --workers 6`. Its default research outputs stay in ignored `paper/`, not in CI artifacts or the public repository.
+Run `python research/monte_carlo/test_harness.py` for deterministic generator, stream, interval and full-pipeline parity checks across the scenario inventory. These small CI checks do not assess statistical validity. The separate long-running study is specified in [the Monte Carlo protocol](../research/monte_carlo/README.md); run `python research/monte_carlo/monte_carlo.py --replicates 5000 --workers 6`. Its default research outputs stay in ignored `paper/`, not in CI artifacts or the public repository.

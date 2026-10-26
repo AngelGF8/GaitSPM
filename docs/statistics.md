@@ -34,4 +34,4 @@ Existing independent, paired, one-way ANOVA and regression paths retain their pe
 
 Sources: the bundled, unmodified `vendor/spm1d/stats/t.py` and `vendor/spm1d/stats/anova/ui.py`; [official spm1d documentation](https://spm1d.org/doc/Stats1D/). See the [numerical concordance scope](validation-guide.md) for precisely what is tested.
 
-Agreement with direct spm1d calls does not establish false-positive control for these extensions across arbitrary data distributions. See the [finite-scenario Monte Carlo protocol](monte-carlo-protocol.md). In particular, variance violations and nonsphericity are robustness challenges, not supported alternatives to the stated assumptions.
+Agreement with direct spm1d calls does not establish false-positive control for these extensions across arbitrary data distributions. In particular, variance violations and nonsphericity are robustness challenges, not supported alternatives to the stated assumptions.

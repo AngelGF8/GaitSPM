@@ -8,13 +8,13 @@
   <a href="LICENSE"><img alt="Licence: GPL v3" src="https://img.shields.io/badge/License-GPLv3-0969da"></a>
   <a href="requirements.txt"><img alt="Python 3.12" src="https://img.shields.io/badge/Python-3.12-3776ab?logo=python&amp;logoColor=white"></a>
   <a href="https://spm1d.org/"><img alt="Powered by spm1d 0.4.53" src="https://img.shields.io/badge/spm1d-0.4.53-6f42c1"></a>
-  <a href="CHANGELOG.md"><img alt="Development version 1.5.0.dev0" src="https://img.shields.io/badge/Development-1.5.0.dev0-8250df"></a>
+  <a href="docs/project/changelog.md"><img alt="Development version 1.5.0.dev0" src="https://img.shields.io/badge/Development-1.5.0.dev0-8250df"></a>
 </p>
 
 <p align="center">
   <a href="https://angelgf8.github.io/GaitSPM/app/"><img src="docs/assets/try-browser.svg" width="360" alt="Try it in your browser — open GaitSPM"></a>
 </p>
-<p align="center"><a href="https://angelgf8.github.io/GaitSPM/">Documentation</a> · <a href="LEEME_PRIMERO.md">Spanish installation guide</a> · <a href="#start-on-your-computer">Run locally</a> · <a href="ROADMAP.md">Roadmap</a> · <a href="CONTRIBUTING.md">Contribute</a></p>
+<p align="center"><a href="https://angelgf8.github.io/GaitSPM/">Documentation</a> · <a href="LEEME_PRIMERO.md">Spanish installation guide</a> · <a href="#start-on-your-computer">Run locally</a> · <a href="docs/project/roadmap.md">Roadmap</a> · <a href=".github/CONTRIBUTING.md">Contribute</a></p>
 
 ## See the workflow
 
@@ -23,7 +23,7 @@
 
 The animation uses real interface screenshots of synthetic teaching examples. Browser mode downloads its scientific runtime on first use and processes uploaded data in your browser. Native Python remains the reference environment for the automated numerical checks.
 
-[Statistical designs](docs/statistics.md) · [Numerical concordance](docs/validation-guide.md) · [Changelog](CHANGELOG.md) · Last stable release: **1.4.2** · [Archived software DOI](https://doi.org/10.5281/zenodo.23636819)
+[Statistical designs](docs/statistics.md) · [Numerical concordance](docs/validation-guide.md) · [Changelog](docs/project/changelog.md) · Last stable release: **1.4.2** · [Archived software DOI](https://doi.org/10.5281/zenodo.23636819)
 
 ## Unreleased statistical extensions
 
@@ -39,9 +39,7 @@ python tests/test_spm1d_validation.py
 
 These tests establish numerical concordance with spm1d 0.4.53 for the tested configurations. They do not establish Type I error control across all supported designs or data distributions, independently validate spm1d, or establish clinical validity.
 
-A separate [Monte Carlo protocol](docs/monte-carlo-protocol.md) evaluates finite-scenario false-positive rates and familywise error, distinguishing valid assumptions from deliberate violations. Its existence or successful execution is not a blanket validity claim.
-
-See the [scope and methods of the concordance checks](docs/validation-guide.md). Research manuscripts and their results are maintained separately and are not part of this software update.
+See the [scope and methods of the concordance checks](docs/validation-guide.md).
 
 ## Choose a workflow
 
@@ -59,16 +57,16 @@ Six views of the MATLAB-style interface. Click a screenshot to inspect it at ful
 
 <table>
   <tr>
-    <td width="50%" align="center"><strong>01 · Import and participant mapping</strong><br><br><a href="capturas/03_control_calidad_mapeo.png"><img src="capturas/03_control_calidad_mapeo.png" alt="01 · Import and participant mapping" width="460"></a></td>
-    <td width="50%" align="center"><strong>02 · Configure your analysis</strong><br><br><a href="capturas/04_configuracion_analisis.png"><img src="capturas/04_configuracion_analisis.png" alt="02 · Configure your analysis" width="460"></a></td>
+    <td width="50%" align="center"><strong>01 · Import and participant mapping</strong><br><br><a href="docs/assets/screenshots/03_control_calidad_mapeo.png"><img src="docs/assets/screenshots/03_control_calidad_mapeo.png" alt="01 · Import and participant mapping" width="460"></a></td>
+    <td width="50%" align="center"><strong>02 · Configure your analysis</strong><br><br><a href="docs/assets/screenshots/04_configuracion_analisis.png"><img src="docs/assets/screenshots/04_configuracion_analisis.png" alt="02 · Configure your analysis" width="460"></a></td>
   </tr>
   <tr>
-    <td width="50%" align="center"><strong>03 · Curves and SPM fields</strong><br><br><a href="capturas/06_resultados_figura_spm.png"><img src="capturas/06_resultados_figura_spm.png" alt="03 · Curves and SPM fields" width="460"></a></td>
-    <td width="50%" align="center"><strong>04 · Inspect a variable</strong><br><br><a href="capturas/07_detalle_variable.png"><img src="capturas/07_detalle_variable.png" alt="04 · Inspect a variable" width="460"></a></td>
+    <td width="50%" align="center"><strong>03 · Curves and SPM fields</strong><br><br><a href="docs/assets/screenshots/06_resultados_figura_spm.png"><img src="docs/assets/screenshots/06_resultados_figura_spm.png" alt="03 · Curves and SPM fields" width="460"></a></td>
+    <td width="50%" align="center"><strong>04 · Inspect a variable</strong><br><br><a href="docs/assets/screenshots/07_detalle_variable.png"><img src="docs/assets/screenshots/07_detalle_variable.png" alt="04 · Inspect a variable" width="460"></a></td>
   </tr>
   <tr>
-    <td width="50%" align="center"><strong>05 · Methods and results text</strong><br><br><a href="capturas/08_textos_metodos_resultados.png"><img src="capturas/08_textos_metodos_resultados.png" alt="05 · Methods and results text" width="460"></a></td>
-    <td width="50%" align="center"><strong>06 · Repeated-measures ANOVA</strong><br><br><a href="capturas/12_anova_medidas_repetidas.png"><img src="capturas/12_anova_medidas_repetidas.png" alt="06 · Repeated-measures ANOVA" width="460"></a></td>
+    <td width="50%" align="center"><strong>05 · Methods and results text</strong><br><br><a href="docs/assets/screenshots/08_textos_metodos_resultados.png"><img src="docs/assets/screenshots/08_textos_metodos_resultados.png" alt="05 · Methods and results text" width="460"></a></td>
+    <td width="50%" align="center"><strong>06 · Repeated-measures ANOVA</strong><br><br><a href="docs/assets/screenshots/12_anova_medidas_repetidas.png"><img src="docs/assets/screenshots/12_anova_medidas_repetidas.png" alt="06 · Repeated-measures ANOVA" width="460"></a></td>
   </tr>
 </table>
 
@@ -166,6 +164,6 @@ Version 1.4.2 uses explicit UTF-8 for source text and adds a launcher test. GitH
 
 **Remaining limits:** automated HTTP and DOM tests do not verify visual rendering, the browser file picker, mobile layout or desktop double-click behaviour. The optional Streamlit interface and direct-file Pyodide fallback are not validated by this workflow. Use the native Python launcher.
 
-See [test instructions](tests/README.md), [release and hosting guidance](docs/publication.md), and the [changelog](CHANGELOG.md). Historical audit files remain available in Git history.
+See [test instructions](tests/README.md), [release and hosting guidance](docs/publication.md), and the [changelog](docs/project/changelog.md). Historical audit files remain available in Git history.
 
-Author: **Ángel González de la Flor**. Licensed under **GPL v3**; see [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
+Author: **Ángel González de la Flor**. Licensed under **GPL v3**; see [LICENSE](LICENSE) and [third-party notices](docs/licenses/THIRD_PARTY_NOTICES.md).

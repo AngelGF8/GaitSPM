@@ -11,6 +11,6 @@ if target.exists():
 try:
     target.mkdir()
     shutil.copy2(ROOT / 'app/gaitspm.html', target / 'index.html')
-    subprocess.run([sys.executable, '-m', 'mkdocs', 'build', '--strict'], cwd=ROOT, check=True)
+    subprocess.run([sys.executable, '-m', 'mkdocs', 'build', '--strict', '--config-file', str(ROOT/'config/mkdocs.yml')], cwd=ROOT, check=True)
 finally:
     shutil.rmtree(target)

@@ -36,8 +36,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install
-      - run: npm run test:ui
+      - run: npm --prefix tests install
+      - run: npm --prefix tests run test:ui
       - run: python tests/test_package.py
       - run: python scripts/package_release.py
       - uses: actions/upload-artifact@v4
@@ -66,5 +66,5 @@ jobs:
           from pathlib import Path
           assets = [str(p) for p in Path('release-assets').rglob('*') if p.is_file()]
           subprocess.run(['gh','release','create',os.environ['RELEASE_TAG'],'--draft','--verify-tag',
-                          '--title','GaitSPM '+os.environ['RELEASE_TAG'],'--notes-file','CHANGELOG.md',*assets],check=True)
+                          '--title','GaitSPM '+os.environ['RELEASE_TAG'],'--notes-file','docs/project/changelog.md',*assets],check=True)
           PYCODE

@@ -1,6 +1,6 @@
 """Reproducible finite-scenario Type I error study of GaitSPM production inference.
 
-Results default to the private paper directory. See docs/monte-carlo-protocol.md.
+Results default to the private paper directory. See research/monte_carlo/README.md.
 No resampling until success, no significance-based stopping, no spm1d version switch.
 """
 from __future__ import annotations
@@ -25,7 +25,7 @@ import scipy
 from scipy.ndimage import gaussian_filter1d
 from scipy.stats import beta, binomtest
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT/'vendor'))
 sys.path.insert(0, str(ROOT/'app'))
 import gaitspm_engine as E
@@ -213,7 +213,7 @@ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def provenance(reps,seed,batch):
-    sources=['scripts/monte_carlo.py','docs/monte-carlo-protocol.md','app/gaitspm_engine.py','app/gaitspm_app.py']
+    sources=['research/monte_carlo/monte_carlo.py','research/monte_carlo/README.md','app/gaitspm_engine.py','app/gaitspm_app.py']
     vendor=hashlib.sha256()
     for p in sorted((ROOT/'vendor/spm1d').rglob('*.py')):
         vendor.update(str(p.relative_to(ROOT)).encode());vendor.update(p.read_bytes())
@@ -304,7 +304,7 @@ def main():
     ap.add_argument('--workers',type=int,default=6)
     ap.add_argument('--batch-size',type=int,default=100)
     ap.add_argument('--seed',type=int,default=SEED)
-    ap.add_argument('--output',type=Path,default=ROOT/'paper/monte_carlo_2026-10-26')
+    ap.add_argument('--output',type=Path,default=ROOT/'paper/monte_carlo_runs')
     ap.add_argument('--plan-only',action='store_true')
     args=ap.parse_args()
     if min(args.replicates,args.workers,args.batch_size)<1:ap.error('Positive counts required')

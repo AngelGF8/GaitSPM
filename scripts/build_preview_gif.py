@@ -9,7 +9,7 @@ names = ['02_ejemplo_cargado.png', '03_control_calidad_mapeo.png',
          '04_configuracion_analisis.png', '06_resultados_figura_spm.png']
 frames = []
 for name in names:
-    with Image.open(ROOT / 'capturas' / name) as source:
+    with Image.open(ROOT / 'docs/assets/screenshots' / name) as source:
         frame = source.convert('RGB')
         frame.thumbnail((1024, 576), Image.Resampling.LANCZOS)
         frames.append(frame)

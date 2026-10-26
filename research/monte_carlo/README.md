@@ -69,12 +69,12 @@ Before the production run, write a frozen manifest containing scenario definitio
 ```sh
 python app/sync_html_engine.py
 python tests/test_spm1d_validation.py
-python tests/test_monte_carlo.py
-python scripts/monte_carlo.py --plan-only
-python scripts/monte_carlo.py --replicates 5000 --workers 6
+python research/monte_carlo/test_harness.py
+python research/monte_carlo/monte_carlo.py --plan-only
+python research/monte_carlo/monte_carlo.py --replicates 5000 --workers 6
 ```
 
-The default output is `paper/monte_carlo_2026-10-26/`, excluded from the public repository. Use a separate output directory for pilots. Research results and figures remain local until publication is explicitly authorized; public code and this protocol permit reproduction.
+The default output is `paper/monte_carlo_runs/`, excluded from the public repository. Use a separate output directory for pilots. Research results and figures remain local until publication is explicitly authorized; public code and this protocol permit reproduction.
 
 ## Uncertainty, interpretation and reporting
 
@@ -88,3 +88,7 @@ Deliverables: frozen JSON manifest; compressed per-replication decisions; CSV su
 
 - Morris TP, White IR, Crowther MJ. Using simulation studies to evaluate statistical methods. *Statistics in Medicine*. 2019;38:2074–2102. [doi:10.1002/sim.8086](https://doi.org/10.1002/sim.8086). The protocol follows the aim/data-generating mechanism/estimand/method/performance-measure structure and reports Monte Carlo uncertainty.
 - [spm1d 0.4 statistical documentation](https://spm1d.org/doc/Stats1D/). The pinned source `vendor/spm1d/stats/t.py` documents the GLM's lack of non-sphericity correction; `vendor/spm1d/stats/anova/ui.py` documents factorial and approximate repeated-measures inference; `vendor/spm1d/rft1d/random.py` documents the Gaussian smoothing convention.
+
+## Archived runs
+
+Previously completed runs retain their original source snapshots and commit identifiers. Reorganizing this repository does not rewrite frozen manifests or results. Use a separate output directory for runs under this layout; a source-hash mismatch must not be bypassed to resume an older run.

@@ -18,7 +18,7 @@ Its SPM t-field tests the adjusted coefficient. The mean plot is a descriptive s
 
 ## Does identical software output validate a scientific conclusion?
 
-No. Agreement within numerical precision verifies the implementation on tested data. It does not establish Type I error control across designs or data distributions, appropriate design or preprocessing, clinical validity, or usefulness of an effect. The separate [Monte Carlo protocol](monte-carlo-protocol.md) evaluates error rates only within specified scenarios and reports Monte Carlo uncertainty.
+No. Agreement within numerical precision verifies the implementation on tested data. It does not establish Type I error control across designs or data distributions, appropriate design or preprocessing, clinical validity, or usefulness of an effect.
 
 ## Can I use vector figures?
 
