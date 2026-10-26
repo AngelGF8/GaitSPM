@@ -4,6 +4,8 @@
 
 ### Added
 
+- Cerebral palsy crouch-gait teaching example: original CSV/Excel, 60 synthetic participants and 12 variables, available locally and bundled in the browser app.
+
 - Two-group ANCOVA with multiple numeric covariates and subject-aligned complete cases.
 - Numeric-predictor GLM with explicit t contrast, rank and contrast validation.
 - Balanced independent and mixed group × condition ANOVA, selectable effects and Bonferroni protection across the three effects.

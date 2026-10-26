@@ -14,7 +14,7 @@ The original has columns V1…V100 and a final blank header. It has no identifie
 
 `movementrx_import_test.csv` adds row IDs MRX01…MRX20, condition REFERENCE and side L, and renames the 101 nodes KneeSagittal_0…100. Alternating rows receive TestA/TestB labels, with 10 per label. This arbitrary split is solely a software test: **it does not represent diagnoses or interventions**. All curve values are identical to the original (maximum difference 0).
 
-The test compares these labels using Welch's test to verify the software, not to draw a clinical conclusion. There are no significant clusters under this configuration; this does not demonstrate equivalence. Keep this software check separate from the eight synthetic examples with 30+30 participants.
+The test compares these labels using Welch's test to verify the software, not to draw a clinical conclusion. There are no significant clusters under this configuration; this does not demonstrate equivalence. Keep this software check separate from the nine synthetic examples with 30+30 participants.
 
 ## Reproduce in GaitSPM
 

@@ -9,7 +9,7 @@ const fs=require('node:fs');
  await page.goto(process.argv[2]||'http://127.0.0.1:4173');
  await page.locator('#app').waitFor({state:'visible'});
  await page.locator('[data-lang=en]').click();
- await page.waitForFunction(()=>document.documentElement.lang==='en'&&document.querySelectorAll('[data-load]').length===8);
+ await page.waitForFunction(()=>document.documentElement.lang==='en'&&document.querySelectorAll('[data-load]').length===9);
  fs.mkdirSync('capturas',{recursive:true});
  async function shot(name){
   await page.waitForFunction(()=>!document.querySelector('#labPanels')?.classList.contains('busy'));

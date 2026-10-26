@@ -35,8 +35,8 @@ w.structuredClone=structuredClone;
 (async()=>{
  await w.unit.ready();
  const $=s=>w.document.querySelector(s),$$=s=>[...w.document.querySelectorAll(s)];
- assert.equal($$('[data-load]').length,8);
- assert.equal($$('.example-actions a[download]').length,8);
+ assert.equal($$('[data-load]').length,fixtures.catalog.length);
+ assert.equal($$('.example-actions a[download]').length,fixtures.catalog.length);
  assert.equal($('#guidePanel').hidden,false);
  assert.equal(w.document.documentElement.lang,'en');
  assert.equal(w.unit.diagnostic('n insuficiente por grupo (mínimo 3).'),'Insufficient sample size per group (minimum 3).');
@@ -101,6 +101,6 @@ w.structuredClone=structuredClone;
  assert.equal($('#errPanel').hidden,false);
  assert.match($('#errTxt').textContent,/Network forbidden/);
  assert.deepEqual(errors,[]);
- console.log('PASS: 8 guided example workflows, recipes, actual result fixtures, ES/EN, mode switch, invalidation and import guards. Offline DOM only.');
+ console.log('PASS: 9 guided example workflows, recipes, actual result fixtures, ES/EN, mode switch, invalidation and import guards. Offline DOM only.');
  dom.window.close();
 })().catch(e=>{console.error(e);dom.window.close();process.exitCode=1;});

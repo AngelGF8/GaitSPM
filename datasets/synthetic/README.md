@@ -1,4 +1,4 @@
-# GaitSPM 1.4 synthetic examples
+# GaitSPM synthetic examples
 
 | Example | Context | Participants | Recommended design |
 |---|---|---|---|
@@ -11,4 +11,8 @@
 | 07 | MS: hypothetical fatigue and recovery | 30 + 30, three conditions | Repeated-measures ANOVA in 30 cases |
 | 08 | ACL: technical retest without systematic change | 30 + 30, two conditions | Paired t-test in 30 cases |
 
-Each folder provides wide CSV, Spanish-locale CSV, long and transposed CSV, Excel, participant data and metadata. Guide and Metrics are not curve-import sheets; the importer selects Curves_Wide. There are 30 participants per group and only kinematic data. Repeated measurements retain participant IDs. See the [example guide](../../docs/GUIA_EJEMPLOS.md).
+| 09 | Cerebral palsy: hypothetical crouch gait, 12 variables | 30 + 30 | Two groups, Welch |
+
+Example 09 preserves the uploaded CSV and Excel workbook and includes metadata; both native and browser example buttons load the original CSV values.
+
+Examples 01–08 provide wide CSV, Spanish-locale CSV, long and transposed CSV, Excel, participant data and metadata. Guide and Metrics are not curve-import sheets; the importer selects Curves_Wide. There are 30 participants per group and only kinematic data. Repeated measurements retain participant IDs. See the [example guide](../../docs/GUIA_EJEMPLOS.md).
