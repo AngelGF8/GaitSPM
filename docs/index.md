@@ -6,6 +6,14 @@ GaitSPM turns participant-level gait curves into SPM1D analyses using the upstre
 
 The browser application is hosted on GitHub Pages. It downloads Pyodide dependencies on first use; uploaded data are processed in your browser. Native local mode works offline after installation. A hosted Streamlit deployment would process uploads on its server.
 
+## Cite GaitSPM
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23636819.svg)](https://doi.org/10.5281/zenodo.23636819)
+
+González de la Flor, Á. (2026). *GaitSPM: graphical kinematic SPM1D analysis 1.5.0*. Zenodo. [10.5281/zenodo.23636819](https://doi.org/10.5281/zenodo.23636819).
+
+The record is labelled **1.5.0** and archives commit `c11160f`, whose source version is **1.5.0.dev0**. It is a development snapshot, not a separately tagged stable release. Cite the spm1d methods separately.
+
 ## Quick start
 
 ```sh

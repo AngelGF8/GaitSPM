@@ -1,15 +1,19 @@
 cff-version: 1.2.0
-message: "Please cite GaitSPM and the underlying spm1d methods separately."
-title: "GaitSPM: local guided kinematic SPM1D analysis"
+message: "Please cite the archived Zenodo record and the underlying spm1d methods separately. Zenodo labels this record 1.5.0; the archived source identifies itself as 1.5.0.dev0."
+title: "GaitSPM: graphical kinematic SPM1D analysis 1.5.0"
 authors:
   - family-names: "González de la Flor"
     given-names: "Ángel"
-version: 1.4.2
-date-released: 2026-10-24
+    orcid: "https://orcid.org/0000-0002-7215-3925"
+version: "1.5.0"
+date-released: 2026-10-25
+doi: "10.5281/zenodo.23636819"
+commit: "c11160fd4c971c021fd28b3995c4161d3581404a"
+abstract: "Zenodo archive labelled 1.5.0, containing development source version 1.5.0.dev0. This citation identifies the archived record, not a separately tagged stable release."
 license: GPL-3.0-only
 type: software
 repository-code: "https://github.com/AngelGF8/GaitSPM"
-url: "https://github.com/AngelGF8/GaitSPM"
+url: "https://doi.org/10.5281/zenodo.23636819"
 keywords:
   - biomechanics
   - gait analysis
