@@ -2,7 +2,7 @@
 
 GaitSPM turns participant-level gait curves into SPM1D analyses using the upstream spm1d engine. Use the local launcher for the verified native workflow.
 
-[Open browser application](app/index.html) · [Clinical guide](guide.md) · [Software validation](validation-guide.md)
+[Open browser application](app/index.html) · [Clinical guide](guide.md) · [Numerical concordance](validation-guide.md)
 
 The browser application is hosted on GitHub Pages. It downloads Pyodide dependencies on first use; uploaded data are processed in your browser. Native local mode works offline after installation. A hosted Streamlit deployment would process uploads on its server.
 

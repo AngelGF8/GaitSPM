@@ -876,6 +876,41 @@ def prepare_model(canon, meta, variable, cfg):
                 subjects=sorted(set(subjects)), summaries=summaries)
 
 
+
+def infer_model_fields(model, cfg, effects=None):
+    """Shared production inference for prepared models (also used by simulations).
+
+    This does not replace participant alignment or model validation in prepare_model.
+    Factorial families always contain three effects, including when only one is shown.
+    """
+    design = cfg['design']
+    if design not in ADVANCED_DESIGNS or cfg.get('mode') != 'param' or not cfg.get('equal_var', True):
+        raise ValueError('Advanced designs require parametric inference and equal variance.')
+    factorial = design in ('anova2', 'anova2onerm')
+    names = ('group', 'condition', 'interaction') if factorial else ('contrast',)
+    selected = names if effects is None else tuple(effects)
+    if not selected or any(e not in names for e in selected):
+        raise ValueError('Unknown model effect.')
+    method = cfg.get('field_correction', 'bonferroni')
+    if method not in ('none', 'bonferroni'):
+        raise ValueError('Use Bonferroni or none.')
+    m = max(1, int(cfg.get('field_count', 1))) if method == 'bonferroni' else 1
+    alpha = float(cfg['alpha']) / (m * len(names))
+    if factorial:
+        args = [model['Y'], model['A'], model['B']]
+        if design == 'anova2onerm':
+            args.append(model['SUBJ'])
+        fields = dict(zip(names, getattr(spm1d.stats, design)(*args, equal_var=True)))
+    else:
+        fields = {'contrast': spm1d.stats.glm(model['Y'], model['X'], model['contrast'])}
+    inferred = {}
+    for name in selected:
+        field = fields[name]
+        inference = field.inference(alpha, interp=True, **({} if factorial else {'two_tailed': bool(cfg['two_tailed'])}))
+        inferred[name] = (field, inference)
+    return inferred, alpha, len(names)
+
+
 def run_model(canon, meta, vrow, cfg):
     design = cfg['design']
     if cfg.get('mode') != 'param' or not cfg.get('equal_var', True):
@@ -889,20 +924,12 @@ def run_model(canon, meta, vrow, cfg):
     if factorial and effect not in ('group', 'condition', 'interaction'):
         raise ValueError('Select group, condition or interaction.')
     m = max(1, int(cfg.get('field_count', 1))) if cfg.get('field_correction', 'bonferroni') == 'bonferroni' else 1
-    # Always protect the three factorial hypotheses, even when displaying one.
-    effect_count = 3 if factorial else 1
-    alpha = float(cfg['alpha']) / (m * effect_count)
+    inferred, alpha, effect_count = infer_model_fields(model, cfg, [effect if factorial else 'contrast'])
+    spm, spmi = inferred[effect if factorial else 'contrast']
     if factorial:
-        args = [Y, model['A'], model['B']]
-        if design == 'anova2onerm': args.append(model['SUBJ'])
-        fields = getattr(spm1d.stats, design)(*args, equal_var=True)
-        spm = fields[('group', 'condition', 'interaction').index(effect)]
-        spmi = spm.inference(alpha, interp=True)
         plot = dict(type='groups', groups=model['summaries'])
         detail = dict(effect=effect, groups=cfg['groups'], conditions=cfg['cond_levels'])
     else:
-        spm = spm1d.stats.glm(Y, model['X'], model['contrast'])
-        spmi = spm.inference(alpha, two_tailed=bool(cfg['two_tailed']), interp=True)
         plot = dict(type='groups', groups=[_summ('Complete cases (unadjusted)', Y)])
         detail = dict(columns=model['columns'], contrast=model['contrast'].tolist(),
                       design_matrix=model['X'].tolist())

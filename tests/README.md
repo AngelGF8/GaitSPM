@@ -32,3 +32,7 @@ python tests/test_spm1d_validation.py
 ```
 
 This suite covers deterministic synthetic designs, rank/missing-data guards, factorial multiplicity and the browser bridge. CI runs these checks without uploading numerical reports. Research manuscripts and external multi-dataset results are maintained separately.
+
+## Monte Carlo harness
+
+Run `python tests/test_monte_carlo.py` for deterministic generator, stream, interval and full-pipeline parity checks across the scenario inventory. These small CI checks do not assess statistical validity. The separate long-running study is specified in [the Monte Carlo protocol](../docs/monte-carlo-protocol.md); run `python scripts/monte_carlo.py --replicates 5000 --workers 6`. Its default research outputs stay in ignored `paper/`, not in CI artifacts or the public repository.
