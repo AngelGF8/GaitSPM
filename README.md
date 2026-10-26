@@ -23,13 +23,13 @@
 
 The animation uses real interface screenshots of synthetic teaching examples. Browser mode downloads its scientific runtime on first use and processes uploaded data in your browser. Native Python remains the reference environment for the automated numerical checks.
 
-[Statistical designs](docs/statistics.md) · [Software validation](docs/validation-guide.md) · [Changelog](CHANGELOG.md) · Last stable release: **1.4.2** · [Archived software DOI](https://doi.org/10.5281/zenodo.23636819)
+[Statistical designs](docs/statistics.md) · [Numerical concordance](docs/validation-guide.md) · [Changelog](CHANGELOG.md) · Last stable release: **1.4.2** · [Archived software DOI](https://doi.org/10.5281/zenodo.23636819)
 
 ## Unreleased statistical extensions
 
-The local development version adds **two-group ANCOVA**, **numeric-predictor GLM t contrasts**, **balanced two-way independent ANOVA**, and **mixed group × repeated-condition ANOVA** in Laboratory and optional Streamlit modes. New designs require parametric inference and equal variance. Mixed ANOVA assumes sphericity and uses upstream approximate residual inference with one averaged response per cell. Factorial inference always protects all three effects with Bonferroni; across-variable correction is additional. See [model definitions and limits](docs/statistics.md).
+The local development version adds **two-group ANCOVA**, **numeric-predictor GLM t contrasts**, **balanced two-way independent ANOVA**, and **mixed group × repeated-condition ANOVA** in Laboratory and optional Streamlit modes. New designs require parametric inference and equal variance. Mixed ANOVA assumes sphericity and uses upstream approximate residual inference with one averaged response per cell. Factorial inference always divides alpha by three for the factorial family; across-variable correction is additional. See [model definitions and limits](docs/statistics.md).
 
-## Reproducible software checks
+## Numerical concordance with spm1d 0.4.53
 
 The software test suite compares GaitSPM with direct spm1d calls using deterministic synthetic inputs. It covers statistic fields, critical thresholds, cluster endpoints and p-values, as well as invalid models, missing data and factorial corrections.
 
@@ -37,7 +37,11 @@ The software test suite compares GaitSPM with direct spm1d calls using determini
 python tests/test_spm1d_validation.py
 ```
 
-See the [validation methodology](docs/validation-guide.md). Research manuscripts and their results are maintained separately and are not part of this software update.
+These tests establish numerical concordance with spm1d 0.4.53 for the tested configurations. They do not establish Type I error control across all supported designs or data distributions, independently validate spm1d, or establish clinical validity.
+
+A separate [Monte Carlo protocol](docs/monte-carlo-protocol.md) evaluates finite-scenario false-positive rates and familywise error, distinguishing valid assumptions from deliberate violations. Its existence or successful execution is not a blanket validity claim.
+
+See the [scope and methods of the concordance checks](docs/validation-guide.md). Research manuscripts and their results are maintained separately and are not part of this software update.
 
 ## Choose a workflow
 

@@ -13,7 +13,7 @@ ROOT_FILES = ('launch.py', 'Iniciar_GaitSPM.bat', 'Iniciar_GaitSPM.command',
               'requirements-streamlit.txt', 'requirements-lock.txt', 'LICENSE',
               'THIRD_PARTY_NOTICES.md', 'CITATION.cff', 'CHANGELOG.md', 'LEEME_PRIMERO.md')
 USER_DOCS = ('guide.md', 'statistics.md', 'faq.md', 'GUIA_EJEMPLOS.md',
-             'publication.md', 'validation-guide.md')
+             'publication.md', 'validation-guide.md', 'monte-carlo-protocol.md')
 
 
 def package_files(root=ROOT):

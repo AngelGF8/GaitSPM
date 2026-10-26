@@ -32,4 +32,6 @@ Mixed ANOVA assumes sphericity and equal variance. With one averaged response pe
 
 Existing independent, paired, one-way ANOVA and regression paths retain their permutation options. Permutation validity depends on exchangeability. Label permutation is not a Welch alternative. Family correction across variables is Bonferroni or none; cluster-minimum Holm/FDR adjustment is not offered.
 
-Sources: the bundled, unmodified `vendor/spm1d/stats/t.py` and `vendor/spm1d/stats/anova/ui.py`; [official spm1d documentation](https://spm1d.org/doc/Stats1D/). See the [validation methodology](validation-guide.md) for precisely what is tested.
+Sources: the bundled, unmodified `vendor/spm1d/stats/t.py` and `vendor/spm1d/stats/anova/ui.py`; [official spm1d documentation](https://spm1d.org/doc/Stats1D/). See the [numerical concordance scope](validation-guide.md) for precisely what is tested.
+
+Agreement with direct spm1d calls does not establish false-positive control for these extensions across arbitrary data distributions. See the [finite-scenario Monte Carlo protocol](monte-carlo-protocol.md). In particular, variance violations and nonsphericity are robustness challenges, not supported alternatives to the stated assumptions.

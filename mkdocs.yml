@@ -20,7 +20,8 @@ nav:
   - Clinical guide: guide.md
   - Statistical designs: statistics.md
   - Tutorials: tutorials.md
-  - Validation: validation-guide.md
+  - Numerical concordance: validation-guide.md
+  - Monte Carlo protocol: monte-carlo-protocol.md
   - FAQ: faq.md
   - Publication and outreach: publication.md
 markdown_extensions:
