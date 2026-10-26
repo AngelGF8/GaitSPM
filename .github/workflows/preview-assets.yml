@@ -46,8 +46,9 @@ jobs:
           python scripts/build_preview_gif.py
       - name: Publish only preview images
         run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # Generated preview assets are maintained on behalf of the repository owner.
+          git config user.name 'Ángel González de la Flor'
+          git config user.email '144255993+AngelGF8@users.noreply.github.com'
           git add docs/assets/screenshots/*.png docs/assets/workflow.gif
           if ! git diff --cached --quiet; then
             git commit -m 'docs: refresh screenshots and animated preview in English'

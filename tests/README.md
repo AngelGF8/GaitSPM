@@ -10,8 +10,10 @@ python -m unittest discover -s tests -p test_audit.py -v
 python tests/test_bridge.py
 python tests/test_release.py
 python tests/test_external_upload.py
-npm --prefix tests install
-npm --prefix tests run test:ui
+cd tests
+npm ci
+npm run test:ui
+cd ..
 ```
 
 `test_release.py` generates fixtures with real analysis results in `.test-output/` for `test_ui.cjs`. The DOM test uses jsdom and a mock bridge returning those results; it does not open a browser or verify pixels. Python tests separately validate statistics, import and the real bridge.
