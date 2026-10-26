@@ -22,7 +22,9 @@ jobs:
           node-version: '22'
       - run: pip install -r requirements.txt
       - run: npm install --no-save playwright
+        working-directory: tests
       - run: npx playwright install --with-deps chromium
+        working-directory: tests
       - run: python app/sync_html_engine.py
       - name: Capture English interface
         run: |
@@ -46,7 +48,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add capturas/*.png docs/assets/workflow.gif
+          git add docs/assets/screenshots/*.png docs/assets/workflow.gif
           if ! git diff --cached --quiet; then
             git commit -m 'docs: refresh screenshots and animated preview in English'
             git push origin HEAD:main

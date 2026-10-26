@@ -8,12 +8,8 @@ Both paths use the bundled spm1d implementation. These checks establish numerica
 
 CI runs software checks without publishing research reports. Manuscripts, external multi-dataset findings, figures and numerical report files are maintained outside this public software update.
 
-## Separate evaluation of error rates
+## Further methodological work
 
-The [Monte Carlo protocol](monte-carlo-protocol.md) specifies 38 scenarios and 5,000 replications per scenario for the new adjusted and factorial paths. It separates assumption-respecting models from deliberate variance/sphericity violations, and measures both per-field false-positive events and their familywise union. Factorial effects and cross-variable multiplicity are included; selected partial-null families are also tested.
+Research protocols and reproducibility tools are organized separately in the repository’s [research directory](https://github.com/AngelGF8/GaitSPM/tree/main/research). They are not part of the user application or a claim of general statistical validity. Research results remain separate from public software checks.
 
-Concordance checks are deterministic software regression tests. Monte Carlo error estimates are finite-scenario research results with sampling uncertainty. A rate below 0.05 can be conservative; a nonsignificant inflation test is not proof of equivalence. Neither form of evidence licenses arbitrary GLMs or unrestricted mixed designs. Research outputs stay separate from the public software documentation until explicitly released.
-
-The simulation runner calls the shared production inference and correction functions, with full data-preparation checkpoints, rather than evaluating a newly written statistical implementation. Small CI checks test the harness, not inferential validity. See the protocol for reproducibility, endpoints, assumptions, exact binomial intervals, and reporting rules.
-
-The bundled dependency remains spm1d **0.4.53**. Testing or migrating to 0.5 is deferred until the upstream author supplies it; no compatibility claim is made.
+The bundled dependency remains spm1d **0.4.53**. No evaluation or migration to 0.5 is included.

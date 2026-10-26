@@ -24,7 +24,7 @@ jobs:
       - name: Direct spm1d concordance
         run: python tests/test_spm1d_validation.py
       - name: Monte Carlo harness (not a statistical validity test)
-        run: python tests/test_monte_carlo.py
+        run: python research/monte_carlo/test_harness.py
       - run: python tests/test_bridge.py
       - run: python tests/test_release.py
       - run: python tests/test_external_upload.py
@@ -32,5 +32,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm install
-      - run: npm run test:ui
+      - run: npm --prefix tests install
+      - run: npm --prefix tests run test:ui

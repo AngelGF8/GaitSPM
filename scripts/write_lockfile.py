@@ -20,5 +20,5 @@ if missing:
     raise SystemExit('Install missing declared dependencies before freezing: '+', '.join(sorted(missing)))
 text='# Tested Python 3.12 Linux dependency closure; platform-specific extras may differ.\n'
 text+='\n'.join(f'{n}=={v}' for n,v in sorted(pins.items()))+'\n'
-(root/'requirements-lock.txt').write_text(text,encoding='utf-8')
+(root/'config/requirements/lock.txt').write_text(text,encoding='utf-8')
 print(f'Frozen {len(pins)} tested dependencies')

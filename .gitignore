@@ -27,3 +27,6 @@ audit/
 audit-v*/
 MANIFEST.sha256
 outreach/
+
+# Local working materials
+.local/

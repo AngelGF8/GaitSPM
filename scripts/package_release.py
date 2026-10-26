@@ -8,17 +8,17 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = re.search(r'^VERSION = "([^"]+)"', (ROOT/'app/gaitspm_app.py').read_text(encoding='utf-8'), re.M).group(1)
-ROOT_FILES = ('launch.py', 'Iniciar_GaitSPM.bat', 'Iniciar_GaitSPM.command',
+RUNTIME_FILES = ('launch.py', 'Iniciar_GaitSPM.bat', 'Iniciar_GaitSPM.command',
               'iniciar_gaitspm.sh', 'streamlit_app.py', 'requirements.txt',
-              'requirements-streamlit.txt', 'requirements-lock.txt', 'LICENSE',
-              'THIRD_PARTY_NOTICES.md', 'CITATION.cff', 'CHANGELOG.md', 'LEEME_PRIMERO.md')
+              'requirements-streamlit.txt', 'config/requirements/lock.txt', 'LICENSE',
+              'docs/licenses/THIRD_PARTY_NOTICES.md', 'CITATION.cff', 'docs/project/changelog.md', 'LEEME_PRIMERO.md')
 USER_DOCS = ('guide.md', 'statistics.md', 'faq.md', 'GUIA_EJEMPLOS.md',
-             'publication.md', 'validation-guide.md', 'monte-carlo-protocol.md')
+             'publication.md', 'validation-guide.md')
 
 
 def package_files(root=ROOT):
     """Explicit public runtime roots; never collect arbitrary local project files."""
-    files = [root/name for name in ROOT_FILES]
+    files = [root/name for name in RUNTIME_FILES]
     files += [root/'docs'/name for name in USER_DOCS]
     for folder in ('app', 'vendor', 'datasets/synthetic', 'docs/licenses'):
         files.extend(p for p in (root/folder).rglob('*') if p.is_file()

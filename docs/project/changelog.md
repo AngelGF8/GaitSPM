@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Repository layout
+
+- Grouped project documentation, configuration, screenshots and research tools into dedicated subdirectories. Research simulations are no longer promoted on the homepage or documentation navigation. Launchers and the Spanish installation guide remain compatible.
+
 ### Added
 
 - Reproducible 38-scenario Monte Carlo protocol and runner for adjusted/factorial inference and multiplicity; research results remain separate from public software checks.

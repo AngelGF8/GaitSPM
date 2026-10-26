@@ -1,4 +1,6 @@
 site_name: GaitSPM
+docs_dir: ../docs
+site_dir: ../site
 site_url: https://AngelGF8.github.io/GaitSPM/
 repo_url: https://github.com/AngelGF8/GaitSPM
 site_description: Reproducible kinematic SPM1D analysis
@@ -21,9 +23,11 @@ nav:
   - Statistical designs: statistics.md
   - Tutorials: tutorials.md
   - Numerical concordance: validation-guide.md
-  - Monte Carlo protocol: monte-carlo-protocol.md
   - FAQ: faq.md
-  - Publication and outreach: publication.md
+  - Project:
+      - Changelog: project/changelog.md
+      - Roadmap: project/roadmap.md
+      - Publication and outreach: publication.md
 markdown_extensions:
   - admonition
   - tables

@@ -22,9 +22,12 @@ class UserPackageTests(unittest.TestCase):
                 names = z.namelist()
                 for name in names:
                     self.assertFalse(any(part in {'tests','scripts','paper','outreach', '.github',
-                        '.test-output','node_modules','.venv','capturas'} or part.startswith('audit')
+                        '.test-output','node_modules','.venv','capturas','research','.local'} or part.startswith('audit')
                         for part in Path(name).parts), name)
                     self.assertNotIn('docs/validation/',name)
+                self.assertIn('gaitspm/docs/licenses/THIRD_PARTY_NOTICES.md', names)
+                self.assertIn('gaitspm/docs/project/changelog.md', names)
+                self.assertIn('gaitspm/config/requirements/lock.txt', names)
                 lines=z.read('gaitspm/MANIFEST.sha256').decode('utf-8').splitlines()
                 self.assertEqual(len(lines),len(names)-1)
                 for line in lines:

@@ -1,5 +1,5 @@
 /* Capture actual application states in English. Requires Playwright and a running native server. */
-const {chromium}=require('playwright');
+const {chromium}=require(require.resolve('playwright', {paths:[__dirname,require('path').resolve(__dirname,'../tests')]}));
 const fs=require('node:fs');
 (async()=>{
  const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
@@ -10,12 +10,12 @@ const fs=require('node:fs');
  await page.locator('#app').waitFor({state:'visible'});
  await page.locator('[data-lang=en]').click();
  await page.waitForFunction(()=>document.documentElement.lang==='en'&&document.querySelectorAll('[data-load]').length===9);
- fs.mkdirSync('capturas',{recursive:true});
+ fs.mkdirSync('docs/assets/screenshots',{recursive:true});
  async function shot(name){
   await page.waitForFunction(()=>!document.querySelector('#labPanels')?.classList.contains('busy'));
   await page.evaluate(()=>document.fonts.ready);
   await page.waitForFunction(()=>Array.from(document.images).every(i=>i.complete));
-  await page.screenshot({path:'capturas/'+name,animations:'disabled'});
+  await page.screenshot({path:'docs/assets/screenshots/'+name,animations:'disabled'});
  }
  async function load(key){
   await page.locator('.rail [data-t=datos]').click();

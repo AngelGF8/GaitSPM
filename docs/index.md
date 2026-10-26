@@ -28,7 +28,7 @@ Load an example, inspect subject IDs, choose the design and review the exported 
 python -m pip install -r requirements.txt
 python app/sync_html_engine.py
 python tests/test_spm1d_validation.py
-python -m pip install -r requirements-docs.txt
+python -m pip install -r config/requirements/docs.txt
 python -m mkdocs serve
 ```
 
