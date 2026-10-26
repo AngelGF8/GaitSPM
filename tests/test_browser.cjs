@@ -24,10 +24,10 @@ const fs=require('fs');const path=require('path');
   console.log(JSON.stringify(summary));
   if(['03_hip_oa','07_ms_fatigue','08_acl_retest'].includes(key))await page.screenshot({path:'/tmp/gait_'+key+'.png',fullPage:true});
  }
- await page.locator('[data-lang=en]').click();
+ await page.evaluate(async()=>await setLanguage('en'));
  await page.waitForFunction(()=>document.documentElement.lang==='en'&&!RUNNING);
  await page.locator('#modeLab').click();await page.locator('#modeGuided').click();
- await page.locator('[data-lang=es]').click();
+ await page.evaluate(async()=>await setLanguage('es'));
  await page.waitForFunction(()=>document.documentElement.lang==='es');
  for(const key of keys){
   const file=path.resolve(__dirname,'../datasets/synthetic',key,key+'.xlsx');
